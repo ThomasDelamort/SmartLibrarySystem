@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Header</title>
+</head>
+<body>
+<section class="accordion-header container-fluid">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-1 mb-4 border-bottom">
+        <nav class="navbar navbar-expand-md">
+<!--            <a class="nav-link active" href="/">-->
+<!--                <img src="/images/logo.png" width="65" height="65" alt="logo">-->
+<!--            </a>-->
+            <div class="navbar-collapse">
+                <ul class="navbar-nav gap-1">
+
+                    <li class="nav-item">
+                        <a class="nav-link " href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/About">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/Services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="">Download</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <form class="d-flex justify-content-between" role="search">
+            <button class="btn me-2" type="submit">🔍︎</button>
+            <input class="form-control me-1 py-2 col-md-3" type="search" placeholder="Search" aria-label="Search"/>
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
+        </form>
+
+        <div class="col-md-3 text-end">
+
+<!--            <button type="button" class="btn btn-outline-dark me-2">Login</button>-->
+            <a href="/Login" class="btn btn-outline-dark">Log-in</a>
+
+<!--            <button type="button" class="btn btn-dark me-3">Sign-up</button>-->
+        </div>
+    </header>
+</section>
+</body>
+</html>
