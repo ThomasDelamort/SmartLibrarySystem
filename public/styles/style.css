@@ -1,0 +1,13 @@
+@media (max-width: 430px) {
+    .login-btn {
+        height: 40px;
+        width: 80px;
+    }
+}
+
+@media (max-width: 500px) {
+    .login-btn {
+        height: 40px;
+        width: 100px;
+    }
+}

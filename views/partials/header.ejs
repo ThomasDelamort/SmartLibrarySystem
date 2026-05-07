@@ -4,28 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Header</title>
+    <link rel="stylesheet" href="/styles/style.css"/>
 </head>
 <body>
 <section class="accordion-header container-fluid">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-1 mb-4 border-bottom">
-        <nav class="navbar navbar-expand-md">
-<!--            <a class="nav-link active" href="/">-->
-<!--                <img src="/images/logo.png" width="65" height="65" alt="logo">-->
-<!--            </a>-->
-            <div class="navbar-collapse">
-                <ul class="navbar-nav gap-1">
+    <header class="d-flex flex-nowrap align-items-center justify-content-center justify-content-md-between py-1 mb-4 border-bottom">
+        <nav class="navbar navbar-expand-md navbar-light">
 
+            <button class="navbar-toggler d-md-none"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav gap-1">
                     <li class="nav-item">
-                        <a class="nav-link " href="/">Home</a>
+                        <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/About">About</a>
+                        <a class="nav-link" href="/About">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/Services">Services</a>
+                        <a class="nav-link" href="/Services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="">Download</a>
+                        <a class="nav-link" href="">Download</a>
                     </li>
                 </ul>
             </div>
@@ -45,10 +54,12 @@
             </div>
         </form>
 
-        <div class="col-md-3 text-end">
-            <a href="/Login" class="btn btn-outline-dark">Log-in</a>
+        <div class="col-md-3 text-end mt-2 mt-md-0">
+            <a href="/Login" class="btn btn-outline-dark login-btn">Log-in</a>
         </div>
     </header>
 </section>
+
+
 </body>
 </html>
