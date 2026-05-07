@@ -24,8 +24,8 @@ i {
   position: relative;
 }
 #navbarSupportedContent ul {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 #navbarSupportedContent ul li a i {
   margin-right: 10px;
