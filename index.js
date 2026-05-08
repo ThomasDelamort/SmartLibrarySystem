@@ -33,7 +33,7 @@ app.get("/Login", (req, res) => {
 
 app.post("/Dashboard", (req, res) => {
     const email = req.body['eMail'];
-    const pass = req.body['passWord'];
+    // const pass = req.body['passWord'];
 
     const studentReg = /^[a-z0-9._%+-]+@students\.nu-cebu\.edu\.ph$/i;
     const reg = /^[a-z0-9._%+-]+@nu-cebu\.edu\.ph$/i;
