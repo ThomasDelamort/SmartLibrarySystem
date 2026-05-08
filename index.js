@@ -1,13 +1,14 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3000;
 
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render('index.ejs', {loggedIn: false});
 });
 
 app.get('/About', (req, res) => {
@@ -27,7 +28,9 @@ app.get("/Login", (req, res) => {
 });
 
 app.get('/Student', (req, res) => {
-   res.render('student.ejs');
+   res.render('student.ejs', {
+      loggedIn: true
+   });
 });
 
 app.listen(port, () => {
