@@ -12,26 +12,48 @@ app.get('/', (req, res) => {
 });
 
 app.get('/About', (req, res) => {
-    res.render('about.ejs');
+    res.render('about.ejs', {
+        loggedIn: false
+    });
 });
 
 app.get('/Services', (req, res) => {
-    res.render('services.ejs');
+    res.render('services.ejs', {loggedIn: false});
 });
 
 app.get('/Contact', (req, res) => {
-    res.render('contact.ejs');
+    res.render('contact.ejs', { loggedIn: false});
 });
+
 
 app.get("/Login", (req, res) => {
     res.render('login.ejs');
 });
 
-app.get('/Student', (req, res) => {
-   res.render('student.ejs', {
-      loggedIn: true
-   });
+
+app.post("/Dashboard", (req, res) => {
+    const email = req.body['eMail'];
+    const pass = req.body['passWord'];
+
+    const studentReg = /^[a-z0-9._%+-]+@students\.nu-cebu\.edu\.ph$/i;
+    const reg = /^[a-z0-9._%+-]+@nu-cebu\.edu\.ph$/i;
+
+    if (!studentReg.test(email.toString()) && !reg.test(email.toString())) {
+        return res.send("Invalid email address");
+    }
+
+    // console.log("email: " + email);
+    // console.log("pass: " + pass);
+
+    if (studentReg.test(email.toString())) {
+        return res.render('student.ejs', {
+            loggedIn: true
+        });
+    } else {
+        return res.send("Teaching");
+    }
 });
+
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
