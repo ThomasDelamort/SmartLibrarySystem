@@ -25,7 +25,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav gap-1">
                     <li class="nav-item">
+                        <% if (loggedIn) { %>
+                        <a class="nav-link" href="/Students">Home</a>
+                        <% } else { %>
                         <a class="nav-link" href="/">Home</a>
+                        <% } %>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/About">About</a>
@@ -40,7 +44,7 @@
             </div>
         </nav>
 
-        <form class="d-flex" role="search">
+        <form class="d-flex position-absolute start-50 translate-middle-x" role="search">
             <button class="btn me-2" type="submit">🔍︎</button>
             <input class="form-control me-1 py-2 col-md-3" type="search" placeholder="Search" aria-label="Search"/>
             <div class="dropdown">
@@ -71,7 +75,7 @@
                 <li><a class="dropdown-item" href="#">Preferences</a></li>
                 <li><a class="dropdown-item" href="#">Status</a></li>
                 <li><a class="dropdown-item" href="#">History</a></li>
-                <li><a class="dropdown-item" href="#">Log Out</a></li>
+                <li><a class="dropdown-item" href="/">Log Out</a></li>
             </ul>
         </div>
 

@@ -46,12 +46,14 @@ app.post("/Dashboard", (req, res) => {
     // console.log("pass: " + pass);
 
     if (studentReg.test(email.toString())) {
-        return res.render('student.ejs', {
-            loggedIn: true
-        });
+        return res.redirect('/Students');
     } else {
         return res.send("Teaching");
     }
+});
+
+app.get('/Students', (req, res) => {
+    res.render("student.ejs", {loggedIn: true});
 });
 
 
