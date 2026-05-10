@@ -11,3 +11,13 @@
         width: 100px;
     }
 }
+
+#borrowButton:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#manageButton:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}

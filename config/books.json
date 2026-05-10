@@ -1,0 +1,115 @@
+[
+  {
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "category": ["Self Help"]
+  },
+
+  {
+    "title": "Harry Potter and the Philosoher's Stone",
+    "author": "J.K. Rowling",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Harry Potter and the Prisoner of Azkaban",
+    "author": "J.K. Rowling",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Harry Potter and the Goblet of Fire",
+    "author": "J.K. Rowling",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Harry Potter and the Deathly Hallows",
+    "author": "J.K. Rowling",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Harry Potter and the Half-Blood Prince",
+    "author": "J.K. Rowling",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "category": ["ScienceFiction"]
+  },
+
+  {
+    "title": "Dune Messiah",
+    "author": "Frank Herbert",
+    "category": ["ScienceFiction"]
+  },
+
+  {
+    "title": "Children of Dune",
+    "author": "Frank Herbert",
+    "category": ["Science Fiction"]
+  },
+
+  {
+    "title": "Think and grow rich",
+    "author": "Robert Kiosaki",
+    "category": ["Business"]
+  },
+
+  {
+    "title": "Lord of the Rings: The fellowship of the ring",
+    "author": "J.R.R. Tolkien",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Lord of the Rings: The two towers",
+    "author": "J.R.R. Tolkien",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Lord of the Rings: The return of the king",
+    "author": "J.R.R. Tolkien",
+    "category": ["Fantasy"]
+  },
+
+  {
+    "title": "Goosebumps Welcome to Dead House",
+    "author": "R.L. Stine",
+    "category": ["Horror", "Thriller"]
+  },
+
+  {
+    "title": "$100M Offers: How to make offers so good people feel stupid saying no",
+    "author": "Alex Hormozi",
+    "category": ["Business"]
+  },
+
+  {
+    "title": "The Fault in Our Stars",
+    "author": "John Green",
+    "category": ["Romance"]
+  },
+
+  {
+    "title": "The 48 Laws of Power",
+    "author": "Robert Greene",
+    "category": ["Self Help"]
+  },
+
+  {
+    "title": "The 33 Strategies of War",
+    "author": "Robert Greene",
+    "category": ["Self Help"]
+  },
+
+  {
+    "title": "The Art of Seduction",
+    "author": "Robert Greene",
+    "category": ["Self Help"]
+  }
+]
