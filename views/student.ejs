@@ -16,11 +16,11 @@
 <%- include("partials/header.ejs") %>
 
 
-<div class="card p-4 shadow">
-    <div class="row">
+<div class="d-inline-flex justify-content-center align-items-center">
+    <div class="row vh-100">
 
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="bg-primary text-white text-center p-2">
                 <h4 class="fw-bold mb-0">Advanced Filtering</h4>
             </div>
@@ -90,8 +90,13 @@
                                     </p>
                                     <br><br><br><br>
                                     <div class="d-inline">
-                                        <a class="btn btn-outline-primary" href="/Student/Book">Borrow</a>
-                                        <a class="btn btn-danger" href="">Download PDF</a>
+                                        <form action="/Submit" method="POST">
+                                            <button class="btn btn-outline-primary" type="submit" name="action" value="borrow">Borrow</button>
+                                            <button class="btn btn-danger" type="submit" name="action" value="downloadPdf">Download PDF</button>
+                                        </form>
+
+<!--                                        <a class="btn btn-outline-primary" href="/Student/Book">Borrow</a>-->
+<!--                                        <a class="btn btn-danger" href="">Download PDF</a>-->
                                     </div>
                                 </div>
                             </div>
