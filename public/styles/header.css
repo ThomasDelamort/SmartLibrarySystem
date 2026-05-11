@@ -1,0 +1,69 @@
+header {
+    position: relative;
+}
+
+@media (max-width: 992px) {
+    header {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .navbar {
+        width: 100%;
+    }
+    form.d-flex.position-absolute {
+        position: relative !important;
+        left: auto !important;
+        transform: none !important;
+
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    form.d-flex input.form-control {
+        width: 60%;
+    }
+    .text-end {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .dropdown {
+        margin-top: 5px;
+    }
+}
+
+
+@media (max-width: 576px) {
+    header {
+        flex-direction: row;
+        align-items: center;
+    }
+    .navbar {
+        width: 100%;
+    }
+    form.d-flex.position-absolute {
+        flex-direction: row;
+        width: 100%;
+        gap: 5px;
+    }
+    form.d-flex input.form-control {
+        width: 100px;
+    }
+    form.d-flex .btn,
+    form.d-flex .dropdown button {
+        flex-shrink: 0;
+    }
+    .login-btn {
+        width: 80px;
+    }
+    .dropdown {
+        display: flex;
+        justify-content: center;
+        width: 20%;
+    }
+    .dropdown-toggle img {
+        width: 45px;
+        height: 45px;
+    }
+}

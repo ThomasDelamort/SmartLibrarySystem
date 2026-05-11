@@ -11,3 +11,42 @@
         width: 100px;
     }
 }
+
+#book-image{
+    width: 160px;
+    object-fit: cover;
+}
+
+#borrowButton:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#manageButton:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#borrowButton {
+    border-radius: 15px;
+}
+
+#book-card:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#book-card:active {
+    transform: scale(0.9);
+}
+
+#book-card img {
+    width: 160px;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 1913px) {
+    #borrowButton a{
+        height: 10px;
+    }
+}
