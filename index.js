@@ -29,6 +29,10 @@ app.get('/Contact', (req, res) => {
     res.render('contact.ejs', { loggedIn: false });
 });
 
+app.get('/Librarian-Dashboard', (req, res) => {
+    res.render("librarian.ejs", { loggedIn: false });
+});
+
 app.get("/Login", (req, res) => {
     res.render('login.ejs');
 });
@@ -62,7 +66,6 @@ app.get('/Students', (req, res) => {
     const end = start + booksPerPage;
 
     const paginatedBooks = books.slice(start, end);
-
     const totalPages = Math.ceil(books.length / booksPerPage);
 
     res.render("student.ejs", {
@@ -74,6 +77,18 @@ app.get('/Students', (req, res) => {
 
 });
 
+
+app.get('/Student/Book', (req, res) => {
+
+    const book = books[0];
+
+    console.log(book);
+
+    res.render("book.ejs", {
+        loggedIn: true,
+        book: book
+    });
+})
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);

@@ -122,7 +122,7 @@ const books = [
         "title": "The 48 Laws of Power",
         "author": "Robert Greene",
         "category": ["Self Help"],
-        "image": "https://www.nateliason.com/_next/image?url=%2Fassets%2Fnotes%2F48-laws-power-robert-greene%2F48-laws-power-robert-greene-cover.jpg&w=640&q=75"
+        "image": "https://covers.openlibrary.org/b/id/15177890-L.jpg"
     },
 
     {
