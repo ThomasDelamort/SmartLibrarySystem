@@ -1,5 +1,5 @@
 import { app } from "./index.js"
-import devann from "./models/database.js"
+import devann from "./database.js"
 
 const port = 3000;
 
