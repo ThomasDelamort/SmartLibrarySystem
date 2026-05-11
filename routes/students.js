@@ -3,8 +3,8 @@ import books from "../data/books.js";
 
 const router = express.Router();
 
-router.get('/Students', (req, res) => {
 
+router.get("/Students", (req, res) => {
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
@@ -14,7 +14,7 @@ router.get('/Students', (req, res) => {
     const paginatedBooks = books.slice(start, end);
     const totalPages = Math.ceil(books.length / booksPerPage);
 
-    res.render('student.ejs', {
+    res.render("student.ejs", {
         loggedIn: true,
         books: paginatedBooks,
         currentPage: page,
@@ -23,7 +23,45 @@ router.get('/Students', (req, res) => {
 });
 
 
-router.post('/Submit', (req, res) => {
+
+router.get("/Filter", (req, res) => {
+
+    let categories = req.query.category;
+    const booksPerPage = 9;
+    const page = parseInt(req.query.page) || 1;
+
+    let filteredBooks = [...books];
+
+
+    if (categories) {
+
+        if (!Array.isArray(categories)) {
+            categories = [categories];
+        }
+
+        filteredBooks = books.filter(book =>
+            book.category.some(cat => categories.includes(cat))
+        );
+    }
+
+    const start = (page - 1) * booksPerPage;
+    const end = start + booksPerPage;
+
+    const paginatedBooks = filteredBooks.slice(start, end);
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+    res.render("student.ejs", {
+        loggedIn: true,
+        books: paginatedBooks,
+        currentPage: page,
+        totalPages
+    });
+});
+
+
+
+router.post("/Submit", (req, res) => {
+
     console.log("BODY RECEIVED:", req.body);
 
     const { id, action } = req.body;
@@ -31,7 +69,7 @@ router.post('/Submit', (req, res) => {
     const book = books.find(b => b.id === Number(id));
 
     if (!book) {
-        console.log("BOOK NOT FOUND FOR ID:", id);
+        console.log("BOOK NOT FOUND:", id);
         return res.status(404).send("Book not found");
     }
 
@@ -40,10 +78,17 @@ router.post('/Submit', (req, res) => {
     if (action === "borrow") {
         return res.redirect(`/Students/Book/${book.id}`);
     }
+
+    if (action === "downloadPdf") {
+        return res.send(`Downloading PDF for ${book.title}`);
+    }
+
+    res.redirect("/Students");
 });
 
 
-router.get('/Students/Book/:id', (req, res) => {
+
+router.get("/Students/Book/:id", (req, res) => {
 
     const { id } = req.params;
 
@@ -58,5 +103,6 @@ router.get('/Students/Book/:id', (req, res) => {
         book
     });
 });
+
 
 export default router;

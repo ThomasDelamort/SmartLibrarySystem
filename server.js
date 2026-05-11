@@ -1,7 +1,10 @@
 import { app } from "./index.js"
 import devann from "./database.js"
+import dotenv from "dotenv"
 
-const port = 3000;
+dotenv.config()
+
+const port = process.env.PORT || 3000;
 
 devann();
 

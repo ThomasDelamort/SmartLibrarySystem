@@ -39,7 +39,7 @@ const books = [
         title: "Harry Potter and the Half-Blood Prince",
         author: "J.K. Rowling",
         category: ["Fantasy"],
-        image: "https://m.media-amazon.com/images/I/91OINeHnJGL._SL1500_.jpg"
+        image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1627043894i/58613345.jpg"
     },
     {
         id: 7,

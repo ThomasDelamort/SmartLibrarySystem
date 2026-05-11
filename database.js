@@ -11,7 +11,7 @@ async function devann(){
     try{
         await mongoose.connect(mongoURI);
         console.log("Connected to DB");
-        app.listen(port, () => console.log('Listening on port ${port}'));
+        app.listen(port, () => console.log("All set"));
     }catch(err){
         console.log(err);
         process.exit(1);
