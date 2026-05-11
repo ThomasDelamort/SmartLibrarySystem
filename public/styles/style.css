@@ -36,9 +36,9 @@
     transform: scale(1.05);
 }
 
-#book-card:active {
-    transform: scale(0.9);
-}
+/*#book-card:active {*/
+/*    transform: scale(0.9);*/
+/*}*/
 
 #book-card img {
     width: 160px;

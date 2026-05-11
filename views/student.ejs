@@ -91,12 +91,16 @@
                                     <br><br><br><br>
                                     <div class="d-inline">
                                         <form action="/Submit" method="POST">
-                                            <button class="btn btn-outline-primary" type="submit" name="action" value="borrow">Borrow</button>
-                                            <button class="btn btn-danger" type="submit" name="action" value="downloadPdf">Download PDF</button>
-                                        </form>
+                                            <input type="hidden" name="id" value="<%= book.id %>">
 
-<!--                                        <a class="btn btn-outline-primary" href="/Student/Book">Borrow</a>-->
-<!--                                        <a class="btn btn-danger" href="">Download PDF</a>-->
+                                            <button type="submit" name="action" value="borrow" class="btn btn-outline-primary">
+                                                Borrow
+                                            </button>
+
+                                            <button type="submit" name="action" value="downloadPdf" class="btn btn-danger">
+                                                Download PDF
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
