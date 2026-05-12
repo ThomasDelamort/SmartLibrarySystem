@@ -11,46 +11,62 @@
 </head>
 <body>
 
-
-
 <%- include("partials/header.ejs") %>
 
-
 <div class="d-flex">
-    <div class="row">
-
-
+    <div class="row w-100">
         <div class="col-md-2">
-            <div class="bg-primary text-white text-center p-2">
-                <h4 class="fw-bold mb-0">Advanced Filtering</h4>
+            <div class="bg-dark text-white text-center p-2">
+                <h4 class="fw-medium mb-0">Filter</h4>
             </div>
             <div class="border p-3">
                 <h5 class="mb-3">Categories</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Fantasy" id="fantasy">
-                    <label class="form-check-label" for="fantasy">Fantasy</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Science Fiction" id="Sci-Fi">
-                    <label class="form-check-label" for="Sci-Fi">Science Fiction</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Romance" id="romance">
-                    <label class="form-check-label" for="romance">Romance</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Horror" id="horror">
-                    <label class="form-check-label" for="horror">Horror</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Business" id="business">
-                    <label class="form-check-label" for="business">Business</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Self Help" id="selfhelp">
-                    <label class="form-check-label" for="selfhelp">Self Help</label>
-                </div>
+                <form method="GET" action="/Filter">
 
+
+                    <input type="hidden" name="page" value="1">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Fantasy" id="fantasy">
+                        <label class="form-check-label" for="fantasy">Fantasy</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Science Fiction" id="sci-fi">
+                        <label class="form-check-label" for="sci-fi">Science Fiction</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Romance" id="romance">
+                        <label class="form-check-label" for="romance">Romance</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Horror" id="horror">
+                        <label class="form-check-label" for="horror">Horror</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Business" id="business">
+                        <label class="form-check-label" for="business">Business</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Self Help" id="selfhelp">
+                        <label class="form-check-label" for="selfhelp">Self Help</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="Biography" id="biography">
+                        <label class="form-check-label" for="biography">Biography</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3 w-50">
+                        Apply
+                    </button>
+
+
+                </form>
             </div>
         </div>
 
@@ -59,62 +75,51 @@
             <div class="border p-3">
                 <div class="row g-4">
                     <% books.forEach(book => { %>
-                    <div class="col-md-4" id="book-card">
-                        <div class="card h-100 shadow-sm">
-
-                            <div class="d-flex">
-
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm" id="book-card">
+                            <div class="d-flex ">
 
                                 <img src="<%= book.image %>"
                                      alt="<%= book.title %>"
-                                     id="book-image"
-                                     class="img-thumbnail">
-
-
+                                     class="img-thumbnail"
+                                     style="width: 160px; object-fit: cover;">
 
                                 <div class="card-body py-2">
+
                                     <h6 class="card-title mb-1">
                                         <%= book.title %>
                                     </h6>
-                                    <p class="card-text mb-1">
-                                        <small>
-                                            <strong>Author:</strong>
-                                            <%= book.author %>
-                                        </small>
-                                    </p>
-                                    <p class="card-text mb-0">
-                                        <small>
-                                            <strong>Category:</strong>
-                                            <%= book.category.join(", ") %>
-                                        </small>
-                                    </p>
-                                    <br><br><br><br>
-                                    <div class="d-inline">
-                                        <form action="/Submit" method="POST">
-                                            <input type="hidden" name="id" value="<%= book.id %>">
 
-                                            <button type="submit" name="action" value="borrow" class="btn btn-outline-primary">
-                                                Borrow
-                                            </button>
+                                    <p class="mb-1">
+                                        <small><strong>Author:</strong> <%= book.author %></small>
+                                    </p>
 
-                                            <button type="submit" name="action" value="downloadPdf" class="btn btn-danger">
-                                                Download PDF
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <p class="mb-2">
+                                        <small><strong>Category:</strong> <%= book.category %></small>
+                                    </p>
+                                    <br><br>
+                                    <form action="/Submit" method="POST">
+                                        <input type="hidden" name="id" value="<%= book.id %>">
+
+                                        <button type="submit" name="action" value="borrow" class="btn btn-outline-primary">
+                                            Borrow
+                                        </button>
+
+                                        <button type="submit" name="action" value="downloadPdf" class="btn btn-danger">
+                                            PDF
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <% }) %>
-
                 </div>
-                <br>
 
 
-                <div class="d-flex justify-content-center align-items-center">
-                    <nav aria-label="Page navigation example">
+                <div class="d-flex justify-content-center mt-4">
+                    <nav>
                         <ul class="pagination">
 
                             <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
@@ -135,13 +140,17 @@
                         </ul>
                     </nav>
                 </div>
+
+
             </div>
         </div>
     </div>
 </div>
+<div class="space"></div>
+<div class="space"></div>
 
-<div class="space"></div>
-<div class="space"></div>
+
+<!--Footer-->
 <section class="card-footer">
     <footer>
         <ul class="social_icon col-md">
@@ -162,6 +171,7 @@
         <p class="copyright"> © <%= new Date().getFullYear() %> SmartLibSys 📚</p>
     </footer>
 </section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
