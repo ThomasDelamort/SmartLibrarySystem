@@ -12,7 +12,7 @@ router.post("/Dashboard", (req, res) => {
     if (studentReg.test(email.toString())) {
         return res.redirect('/Students');
     } else {
-        return res.send("Teaching");
+        return res.redirect("/Librarian-Dashboard");
     }
 });
 

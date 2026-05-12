@@ -10,7 +10,7 @@ router.get('/About', (req, res) => {
     res.render("about.ejs", {loggedIn: false});
 });
 
-router.get('Services', (req, res) => {
+router.get('/Services', (req, res) => {
     res.render("services.ejs", {loggedIn: false});
 });
 

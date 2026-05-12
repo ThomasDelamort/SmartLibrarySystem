@@ -145,6 +145,20 @@ const books = [
         author: "Robert Kiyosaki",
         category: ["Business", "Self Help"],
         image: "https://m.media-amazon.com/images/I/81bsw6fnUiL._SL1500_.jpg"
+    },
+    {
+        id: 22,
+        title: "The Hobbit",
+        author: "J.R.R. Tolkien",
+        category: ["Fantasy"],
+        image: "https://www.newportbeachca.gov/home/showpublishedimage/52130/637273800534970000"
+    },
+    {
+        id: 23,
+        title: "Steve Jobs",
+        author: "Walter Isaacson",
+        category: ["Biography"],
+        image: "https://ia600100.us.archive.org/view_archive.php?archive=/5/items/l_covers_0012/l_covers_0012_68.zip&file=0012680694-L.jpg"
     }
 ];
 
