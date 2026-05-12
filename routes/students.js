@@ -129,7 +129,7 @@ router.get("/Search-Book", (req, res) => {
 
     const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
 
-    res.render("books.ejs", {
+    res.render("student.ejs", {
         loggedIn: true,
         books: paginatedBooks,
         currentPage: page,
