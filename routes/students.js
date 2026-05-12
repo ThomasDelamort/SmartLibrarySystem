@@ -104,5 +104,39 @@ router.get("/Students/Book/:id", (req, res) => {
     });
 });
 
+router.get("/Search-Book", (req, res) => {
+
+    const qry = req.query.q?.toLowerCase() || "";
+
+    const booksPerPage = 9;
+    const page = parseInt(req.query.page) || 1;
+
+    const filteredBooks = books.filter(book =>
+
+        book.title.toLowerCase().includes(qry) ||
+
+        book.author.toLowerCase().includes(qry) ||
+
+        book.category.some(cat =>
+            cat.toLowerCase().includes(qry)
+        )
+    );
+
+    const start = (page - 1) * booksPerPage;
+    const end = start + booksPerPage;
+
+    const paginatedBooks = filteredBooks.slice(start, end);
+
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+    res.render("books.ejs", {
+        loggedIn: true,
+        books: paginatedBooks,
+        currentPage: page,
+        totalPages,
+        searchQuery: qry
+    });
+});
+
 
 export default router;

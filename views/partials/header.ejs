@@ -43,10 +43,20 @@
                 </ul>
             </div>
         </nav>
-
-        <form class="d-flex justify-content-center" role="search">
+        <% if (loggedIn) { %>
+        <form class="d-flex justify-content-center"
+              role="search"
+              action="/Search-Book"
+              method="GET">
             <button class="btn me-2" type="submit">🔍︎</button>
-            <input class="form-control me-1 py-2 col-md-3" type="search" placeholder="Search" aria-label="Search"/>
+            <input class="form-control me-1 py-2 col-md-3"
+                   type="search"
+                   name="q"
+                   placeholder="Search Books"
+                   aria-label="Search"
+                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            />
+
             <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
@@ -57,6 +67,31 @@
                 </ul>
             </div>
         </form>
+        <% } else { %>
+        <form class="d-flex justify-content-center"
+              role="search"
+              action="/Search"
+              method="GET">
+            <button class="btn me-2" type="submit">🔍︎</button>
+            <input class="form-control me-1 py-2 col-md-3"
+                   type="search"
+                   name="q"
+                   placeholder="Search Books"
+                   aria-label="Search"
+                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            />
+
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
+        </form>
+        <% } %>
 
         <% if (loggedIn) { %>
 
