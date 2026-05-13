@@ -23,7 +23,6 @@
                  class="img-thumbnail"
                  style="width: 300px">
 
-
         </div>
         <div>
             <h2>
@@ -37,7 +36,13 @@
             <p class="mb-2">
                 <small><strong>Category:</strong> <%= book.category %></small>
             </p>
-            <br><br><br><br>
+
+            <p class="mb-2 1h-lg">
+                <strong>Description:</strong>
+                <span><%= book.description %></span>
+            </p>
+
+            <br><br><br>
             <div>
                 <form action="/Submit" method="POST">
                     <input type="hidden" name="id" value="<%= book.id %>">
