@@ -37,10 +37,12 @@
                 <small><strong>Category:</strong> <%= book.category %></small>
             </p>
 
-            <p class="mb-1">
-
+            <p class="mb-2 1h-lg">
+                <strong>Description:</strong>
+                <span><%= book.description %></span>
             </p>
-            <br><br><br><br>
+
+            <br><br><br>
             <div>
                 <form action="/Submit" method="POST">
                     <input type="hidden" name="id" value="<%= book.id %>">
