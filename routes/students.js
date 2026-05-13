@@ -64,19 +64,19 @@ router.post("/Submit", (req, res) => {
 
     console.log("BODY RECEIVED:", req.body);
 
-    const { id, action } = req.body;
+    const { title, action } = req.body;
 
-    const book = books.find(b => b.id === Number(id));
+    const book = books.find(b => b.title === title);
 
     if (!book) {
-        console.log("BOOK NOT FOUND:", id);
+        console.log("BOOK NOT FOUND:", title);
         return res.status(404).send("Book not found");
     }
 
     console.log("FOUND BOOK:", book);
 
     if (action === "borrow") {
-        return res.redirect(`/Students/Book/${book.id}`);
+        return res.redirect(`/Students/Book/${book.title}`);
     }
 
     if (action === "downloadPdf") {
@@ -87,12 +87,11 @@ router.post("/Submit", (req, res) => {
 });
 
 
+router.get("/Students/Book/:title", (req, res) => {
 
-router.get("/Students/Book/:id", (req, res) => {
+    const { title } = req.params;
 
-    const { id } = req.params;
-
-    const book = books.find(b => b.id === Number(id));
+    const book = books.find(b => b.title === title);
 
     if (!book) {
         return res.status(404).send("Book not found");

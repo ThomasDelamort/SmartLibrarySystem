@@ -114,19 +114,19 @@ router.get("/BookFilter", (req, res) => {
 });
 
 router.post("/View", (req, res) => {
-    const {id, action} = req.body;
+    const {title, action} = req.body;
 
-    const book = books.find(b => b.id === Number(id));
+    const book = books.find(b => b.title === title);
 
     if (!book) {
-        console.log(`BOOK NOT FOUND ${id}`);
+        console.log(`BOOK NOT FOUND ${title}`);
         return res.status(404).send("Book not found");
     }
 
     console.log("FOUND BOOK:", book);
 
     if (action === "borrow") {
-        return res.redirect(`/Books/Book/${book.id}`);
+        return res.redirect(`/Books/Book/${book.title}`);
     }
 
     if (action === "downloadPdf") {
@@ -136,11 +136,11 @@ router.post("/View", (req, res) => {
     res.redirect("/Books");
 });
 
-router.get("/Books/Book/:id", (req, res) => {
+router.get("/Books/Book/:title", (req, res) => {
 
-    const { id } = req.params;
+    const { title } = req.params;
 
-    const book = books.find(b => b.id === Number(id));
+    const book = books.find(b => b.title === title);
 
     if (!book) {
         return res.status(404).send("Book not found");
