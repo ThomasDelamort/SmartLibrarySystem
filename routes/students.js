@@ -7,18 +7,18 @@ const router = express.Router();
 
 router.get("/Students", async (req, res) => {
 
-    const booksPerPage = 9;
+    const bpp = 9;
     const page = parseInt(req.query.page) || 1;
 
-    const start = (page - 1) * booksPerPage;
+    const start = (page - 1) * bpp;
 
     const books = await Book.find()
         .skip(start)
-        .limit(booksPerPage);
+        .limit(bpp);
 
     const totalBooks = await Book.countDocuments();
 
-    const totalPages = Math.ceil(totalBooks / booksPerPage);
+    const totalPages = Math.ceil(totalBooks / bpp);
 
     res.render("student.ejs", {
         loggedIn: true,
