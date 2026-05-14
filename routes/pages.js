@@ -1,5 +1,6 @@
 import express from "express";
-import books from "../data/books.js";
+import Book from "../models/book.model.js";
+// import books from "../data/books.js";
 
 const router = express.Router();
 
@@ -27,96 +28,106 @@ router.get('/Login', (req, res) => {
    res.render("login.ejs", {loggedIn: true});
 });
 
-router.get("/Books", (req, res) => {
+router.get("/Books", async (req, res) => {
+
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
     const start = (page - 1) * booksPerPage;
-    const end = start + booksPerPage;
 
-    const paginatedBooks = books.slice(start, end);
-    const totalPages = Math.ceil(books.length / booksPerPage);
+    const books = await Book.find()
+        .skip(start)
+        .limit(booksPerPage);
+
+    const totalBooks = await Book.countDocuments();
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("books.ejs", {
         loggedIn: false,
-        books: paginatedBooks,
+        books,
         currentPage: page,
         totalPages
     });
 });
 
-router.get("/Search", (req, res) => {
+router.get("/Search", async (req, res) => {
 
-    const query = req.query.q?.toLowerCase() || "";
+    const query = req.query.q || "";
 
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
-    const filteredBooks = books.filter(book =>
-
-        book.title.toLowerCase().includes(query) ||
-
-        book.author.toLowerCase().includes(query) ||
-
-        book.category.some(cat =>
-            cat.toLowerCase().includes(query)
-        )
-    );
-
     const start = (page - 1) * booksPerPage;
-    const end = start + booksPerPage;
 
-    const paginatedBooks = filteredBooks.slice(start, end);
+    const filter = {
+        $or: [
+            { title: { $regex: query, $options: "i" } },
+            { author: { $regex: query, $options: "i" } },
+            { category: { $regex: query, $options: "i" } },
+        ]
+    }
 
-    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+    const books = await Book.find()
+        .skip(start)
+        .limit(booksPerPage);
+
+    const totalBooks = await Book.countDocuments(filter)
+
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("books.ejs", {
         loggedIn: false,
-        books: paginatedBooks,
+        books,
         currentPage: page,
         totalPages,
         searchQuery: query
     });
 });
 
-router.get("/BookFilter", (req, res) => {
+
+
+router.get("/BookFilter", async (req, res) => {
 
     let categ = req.query.category;
+
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
-    let filteredBooks = [...books];
-
-
-    if (categ) {
-
-        if (!Array.isArray(categ)) {
-            categ = [categ];
-        }
-
-        filteredBooks = books.filter(book =>
-            book.category.some(cat => categ.includes(cat))
-        );
+    if (categ && !Array.isArray(categ)) {
+        categ = [categ];
     }
 
-    const start = (page - 1) * booksPerPage;
-    const end = start + booksPerPage;
+    const filter = categ
+        ? { category: { $in: categ} }
+        : {};
 
-    const paginatedBooks = filteredBooks.slice(start, end);
-    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+    const start = (page - 1) * booksPerPage;
+
+    const books = await Book.find(filter)
+        .skip(start)
+        .limit(booksPerPage);
+
+
+    const totalBooks = await Book.countDocuments(filter);
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("books.ejs", {
         loggedIn: false,
-        books: paginatedBooks,
+        books,
         currentPage: page,
         totalPages
     });
 });
 
-router.post("/View", (req, res) => {
+
+
+router.post("/View", async (req, res) => {
+
+    console.log("BODY RECEIVED:", req.body);
+
     const {title, action} = req.body;
 
-    const book = books.find(b => b.title === title);
+    const book = await Book.findOne({ title });
 
     if (!book) {
         console.log(`BOOK NOT FOUND ${title}`);
@@ -136,11 +147,13 @@ router.post("/View", (req, res) => {
     res.redirect("/Books");
 });
 
-router.get("/Books/Book/:title", (req, res) => {
+
+
+router.get("/Books/Book/:title", async (req, res) => {
 
     const { title } = req.params;
 
-    const book = books.find(b => b.title === title);
+    const book = await Book.findOne({ title });
 
     if (!book) {
         return res.status(404).send("Book not found");

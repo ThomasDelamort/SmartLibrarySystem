@@ -52,7 +52,6 @@ router.get("/Filter", async (req, res) => {
         .limit(booksPerPage);
 
     const totalBooks = await Book.countDocuments(filter);
-
     const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("student.ejs", {
@@ -62,6 +61,8 @@ router.get("/Filter", async (req, res) => {
         totalPages
     });
 });
+
+
 
 router.post("/Submit", async (req, res) => {
 
