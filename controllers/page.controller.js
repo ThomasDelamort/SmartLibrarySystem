@@ -58,7 +58,16 @@ export const searchBooks = async (req, res) => {
     const filter = {
         $or: [
             { title: { $regex: query, $options: "i" } },
-            { author: { $regex: query, $options: "i" } },
+
+            {
+                author: {
+                    $elemMatch: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                }
+            },
+
             { category: { $regex: query, $options: "i" } }
         ]
     };
