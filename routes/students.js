@@ -1,22 +1,28 @@
 import express from "express";
-import books from "../data/books.js";
+import Book from "../models/book.model.js"
+// import books from "../data/books.js";
 
 const router = express.Router();
 
 
-router.get("/Students", (req, res) => {
+router.get("/Students", async (req, res) => {
+
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
     const start = (page - 1) * booksPerPage;
-    const end = start + booksPerPage;
 
-    const paginatedBooks = books.slice(start, end);
-    const totalPages = Math.ceil(books.length / booksPerPage);
+    const books = await Book.find()
+        .skip(start)
+        .limit(booksPerPage);
+
+    const totalBooks = await Book.countDocuments();
+
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("student.ejs", {
         loggedIn: true,
-        books: paginatedBooks,
+        books,
         currentPage: page,
         totalPages
     });
@@ -24,35 +30,33 @@ router.get("/Students", (req, res) => {
 
 
 
-router.get("/Filter", (req, res) => {
+router.get("/Filter", async (req, res) => {
 
     let categories = req.query.category;
+
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
 
-    let filteredBooks = [...books];
-
-
-    if (categories) {
-
-        if (!Array.isArray(categories)) {
-            categories = [categories];
-        }
-
-        filteredBooks = books.filter(book =>
-            book.category.some(cat => categories.includes(cat))
-        );
+    if (categories && !Array.isArray(categories)) {
+        categories = [categories];
     }
 
-    const start = (page - 1) * booksPerPage;
-    const end = start + booksPerPage;
+    const filter = categories
+        ? { category: { $in: categories } }
+        : {};
 
-    const paginatedBooks = filteredBooks.slice(start, end);
-    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+    const start = (page - 1) * booksPerPage;
+
+    const books = await Book.find(filter)
+        .skip(start)
+        .limit(booksPerPage);
+
+    const totalBooks = await Book.countDocuments(filter);
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
 
     res.render("student.ejs", {
         loggedIn: true,
-        books: paginatedBooks,
+        books,
         currentPage: page,
         totalPages
     });
@@ -60,13 +64,13 @@ router.get("/Filter", (req, res) => {
 
 
 
-router.post("/Submit", (req, res) => {
+router.post("/Submit", async (req, res) => {
 
     console.log("BODY RECEIVED:", req.body);
 
     const { title, action } = req.body;
 
-    const book = books.find(b => b.title === title);
+    const book = await Book.findOne({ title });
 
     if (!book) {
         console.log("BOOK NOT FOUND:", title);
@@ -87,11 +91,47 @@ router.post("/Submit", (req, res) => {
 });
 
 
-router.get("/Students/Book/:title", (req, res) => {
+router.get("/Search-Book", async (req, res) => {
+
+    const qry = req.query.q || "";
+
+    const booksPerPage = 9;
+    const page = parseInt(req.query.page) || 1;
+
+    const start = (page - 1) * booksPerPage;
+
+    const filter = {
+        $or: [
+            { title: { $regex: qry, $options: "i" } },
+            { author: { $regex: qry, $options: "i" } },
+            { category: { $regex: qry, $options: "i" } }
+        ]
+    };
+
+    const books = await Book.find(filter)
+        .skip(start)
+        .limit(booksPerPage);
+
+    const totalBooks = await Book.countDocuments(filter);
+
+    const totalPages = Math.ceil(totalBooks / booksPerPage);
+
+    res.render("student.ejs", {
+        loggedIn: true,
+        books,
+        currentPage: page,
+        totalPages,
+        searchQuery: qry
+    });
+});
+
+
+
+router.get("/Students/Book/:title", async (req, res) => {
 
     const { title } = req.params;
 
-    const book = books.find(b => b.title === title);
+    const book = await Book.findOne({ title });
 
     if (!book) {
         return res.status(404).send("Book not found");
@@ -102,6 +142,8 @@ router.get("/Students/Book/:title", (req, res) => {
         book
     });
 });
+
+
 
 router.get("/Search-Book", (req, res) => {
 
