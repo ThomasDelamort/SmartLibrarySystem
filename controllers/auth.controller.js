@@ -1,3 +1,5 @@
+import student from "../models/student.model.js"
+
 export const dashboard = (req, res) => {
     const email = req.body.eMail;
 
