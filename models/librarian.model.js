@@ -27,3 +27,7 @@ const librarianSchema = new mongoose.Schema({
         required: true,
     },
 });
+
+const librarian  = mongoose.model('Librarian', librarianSchema);
+
+export default librarian;
