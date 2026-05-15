@@ -1,4 +1,5 @@
 import student from "../models/student.model.js"
+import librarian  from "../models/librarian.model.js"
 
 export const dashboard = (req, res) => {
     const email = req.body.eMail;
