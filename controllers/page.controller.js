@@ -16,9 +16,6 @@ export const contact = (req, res) => {
     res.render("contact.ejs", { loggedIn: false });
 };
 
-export const librarianDashboard = (req, res) => {
-    res.render("librarian.ejs", { loggedIn: true });
-};
 
 export const login = (req, res) => {
     res.render("login.ejs", { loggedIn: false });
