@@ -1,14 +1,10 @@
 import express from "express";
 import {
-    librarianBooks,
-    librarianDashboard,
-    librarianStudents
+    getLibrarian,
 } from "../controllers/librarian.controller.js";
 
 const router = express.Router();
 
-router.get("/Librarian-Dashboard", librarianDashboard);
-router.get("/Librarian-Books", librarianBooks);
-router.get("/Librarian-Students", librarianStudents);
+router.get("/Librarian-Dashboard", getLibrarian);
 
 export default router;
