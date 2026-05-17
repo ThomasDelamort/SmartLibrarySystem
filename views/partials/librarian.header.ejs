@@ -3,122 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Header</title>
+    <title>Librarian Header</title>
+
     <link rel="stylesheet" href="/styles/style.css"/>
     <link rel="stylesheet" href="/styles/header.css"/>
+
 </head>
 <body>
-<section class="accordion-header container-fluid">
-    <header class="d-flex flex-nowrap align-items-center justify-content-center justify-content-md-between py-1 mb-4 border-bottom">
-        <nav class="navbar navbar-expand-md navbar-light">
 
-            <button class="navbar-toggler d-md-none"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<section class="container-fluid px-3">
+    <header class="main-header d-flex flex-wrap align-items-center justify-content-between">
 
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav gap-1">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/About">About</a>
-                    </li>
+        <div class="d-flex align-items-center gap-4">
+            <a href="/Librarian-Dashboard"
+               class="brand">
+                📚 SmartLibSys
+            </a>
 
-                </ul>
-            </div>
 
-        </nav>
-        <% if (loggedIn) { %>
-        <form class="d-flex justify-content-center"
-              role="search"
-              action="/Search-Book"
-              method="GET">
-            <button class="btn me-2" type="submit">🔍︎</button>
-            <input class="form-control me-1 py-2 col-md-3"
-                   type="search"
-                   name="q"
-                   placeholder="Search Books"
-                   aria-label="Search"
-                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
-            />
+            <nav class="navbar navbar-expand-md navbar-light p-0">
 
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-        </form>
-        <% } else { %>
-        <form class="d-flex justify-content-center"
+
+
+                <div class="collapse navbar-collapse"
+                     id="navbarNav">
+                    <ul class="navbar-nav gap-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="/Librarian-Dashboard">
+                                Home
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="#">
+                                Books
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="#">
+                                Students
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="#">
+                                Borrowings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+
+        <form class="search-form d-flex align-items-center"
               role="search"
               action="/Search"
               method="GET">
-            <button class="btn me-2" type="submit">🔍︎</button>
-            <input class="form-control me-1 py-2 col-md-3"
+
+            <button class="search-btn"
+                    type="submit">
+                🔍
+            </button>
+            <input class="form-control search-input"
                    type="search"
                    name="q"
                    placeholder="Search Books"
                    aria-label="Search"
-                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
-            />
-
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
+                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
         </form>
-        <% } %>
 
-        <% if (loggedIn) { %>
-        <div class="d-flex align-items-center gap-2">
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
 
-                    <img class="rounded-circle me-3"
-                         src="/images/user.png"
-                         alt="user"
-                         width="40">
-                </button>
+        <div class="dropdown">
+            <button class="btn dropdown-toggle profile-btn"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
 
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">My Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Preferences</a></li>
-                    <li><a class="dropdown-item" href="#">Status</a></li>
-                    <li><a class="dropdown-item" href="#">History</a></li>
-                    <li><a class="dropdown-item text-danger" href="/">Log Out</a></li>
-                </ul>
-            </div>
+                <img class="profile-image"
+                     src="/images/user.png"
+                     alt="user">
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item"
+                       href="#">
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       href="#">
+                        Preferences
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       href="#">
+                        Status
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       href="#">
+                        History
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item text-danger"
+                       href="/">
+                        Log Out
+                    </a>
+                </li>
+            </ul>
         </div>
-
-        <% } else { %>
-        <div class="col-md-3 text-end mt-2 mt-md-0">
-            <a href="/Login" class="btn btn-outline-dark login-btn">
-                Log-in
-            </a>
-        </div>
-        <% } %>
     </header>
 </section>
-
 
 </body>
 </html>

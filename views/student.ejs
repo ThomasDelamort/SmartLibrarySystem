@@ -17,7 +17,6 @@
 
 <div class="container-fluid mt-4">
     <div class="row g-4">
-
         <div class="col-md-2">
             <div class="filter-card">
                 <div class="filter-header text-center">
@@ -85,86 +84,63 @@
                             </label>
                         </div>
 
-                        <button type="submit" class="btn btn-dark mt-3 w-100">
+                        <button type="submit" class="btn btn-outline-success mt-3 w-100">
                             Apply Filter
                         </button>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
 
 
 
         <div class="col-md-10">
-
             <div class="dashboard-container">
-
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h3 class="fw-bold mb-1">
                             Resources
                         </h3>
-
                     </div>
                 </div>
 
 
                 <div class="row g-4">
-
                     <% books.forEach(book => { %>
-
                     <div class="col-md-4">
-
                         <div class="card h-100" id="book-card">
-
                             <div class="d-flex h-100">
-
                                 <img src="<%= book.image %>"
                                      alt="<%= book.title %>"
                                      class="img-thumbnail">
-
                                 <div class="card-body d-flex flex-column py-3">
-
                                     <h6 class="card-title mb-2">
                                         <%= book.title %>
                                     </h6>
-
                                     <p class="mb-1 book-info">
                                         <strong>Author:</strong>
                                         <%= book.author.join(", ") %>
                                     </p>
-
                                     <p class="mb-3 book-info">
                                         <strong>Category:</strong>
                                         <%= book.category %>
                                     </p>
-
                                     <div class="book-actions">
-
                                         <form action="/Submit" method="POST">
-
                                             <input type="hidden" name="title" value="<%= book.title %>">
-
                                             <div class="d-flex gap-2">
-
                                                 <button type="submit"
                                                         name="action"
                                                         value="borrow"
                                                         class="btn btn-outline-primary btn-sm">
                                                     Borrow
                                                 </button>
-
                                                 <button type="submit"
                                                         name="action"
                                                         value="downloadPdf"
                                                         class="btn btn-danger btn-sm">
                                                     PDF
                                                 </button>
-
                                             </div>
                                         </form>
                                     </div>
@@ -178,58 +154,37 @@
 
 
                 <div class="d-flex justify-content-center mt-5">
-
                     <nav>
-
                         <ul class="pagination">
-
                             <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-
                                 <a class="page-link"
                                    href="/Students?page=<%= currentPage - 1 %>">
-
                                     Previous
-
                                 </a>
-
                             </li>
 
                             <% for (let i = 1; i <= totalPages; i++) { %>
-
                             <li class="page-item <%= currentPage === i ? 'active' : '' %>">
 
                                 <a class="page-link"
                                    href="/Students?page=<%= i %>">
-
                                     <%= i %>
-
                                 </a>
-
                             </li>
-
                             <% } %>
 
                             <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
 
                                 <a class="page-link"
                                    href="/Students?page=<%= currentPage + 1 %>">
-
                                     Next
-
                                 </a>
-
                             </li>
-
                         </ul>
-
                     </nav>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -290,6 +245,5 @@
         src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js">
 </script>
 <script src="/transition.js"></script>
-
 </body>
 </html>

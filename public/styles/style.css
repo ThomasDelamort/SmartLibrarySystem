@@ -12,41 +12,13 @@
     }
 }
 
-#book-image{
-    width: 160px;
-    object-fit: cover;
-}
-
-#borrowButton:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-}
-
-#manageButton:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-}
-
-#borrowButton {
-    border-radius: 15px;
-}
-
-#book-card:hover {
-    cursor: pointer;
-    transform: scale(1.08);
-}
-
-
-#book-card img {
-    width: 160px;
-    object-fit: cover;
-}
-
 @media screen and (max-width: 1913px) {
     #borrowButton a{
         height: 10px;
     }
 }
+
+
 
 body{
     background-color: #f5f7fb;
@@ -92,8 +64,8 @@ body{
 }
 
 #book-card:hover{
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transform: translateY(-6px);
+    box-shadow: 10px 12px 24px rgba(0,0,0,0.12);
 }
 
 #book-card img{
