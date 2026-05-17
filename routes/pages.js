@@ -5,7 +5,6 @@ import {
     about,
     services,
     contact,
-    librarianDashboard,
     login,
     getBooks,
     searchBooks,
@@ -20,7 +19,6 @@ router.get("/", home);
 router.get("/About", about);
 router.get("/Services", services);
 router.get("/Contact", contact);
-router.get("/Librarian-Dashboard", librarianDashboard);
 router.get("/Login", login);
 
 router.get("/Books", getBooks);

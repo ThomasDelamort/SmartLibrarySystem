@@ -36,9 +36,6 @@
     transform: scale(1.08);
 }
 
-/*#book-card:active {*/
-/*    transform: scale(0.9);*/
-/*}*/
 
 #book-card img {
     width: 160px;
@@ -49,4 +46,118 @@
     #borrowButton a{
         height: 10px;
     }
+}
+
+body{
+    background-color: #f5f7fb;
+}
+
+
+.filter-card{
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.filter-header{
+    background-color: #212529;
+    color: white;
+    padding: 15px;
+}
+
+.filter-body{
+    padding: 20px;
+}
+
+.form-check{
+    padding: 5px 0;
+}
+
+
+.dashboard-container{
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+
+#book-card{
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.25s ease;
+    background: white;
+}
+
+#book-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+#book-card img{
+    border: none;
+    border-radius: 0;
+    width: 160px;
+    object-fit: cover;
+}
+
+.card-body{
+    min-height: 240px;
+}
+
+.card-title{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.book-info{
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.book-actions{
+    margin-top: auto;
+}
+
+
+.btn{
+    border-radius: 10px;
+}
+
+
+.pagination .page-link{
+    border: none;
+    margin: 0 4px;
+    border-radius: 10px;
+    color: #212529;
+}
+
+.pagination .active .page-link{
+    background-color: #212529;
+    color: white;
+}
+
+
+.card-footer{
+    margin-top: 60px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.form-check-input {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    flex-shrink: 0;
+}
+
+.form-check-label {
+    margin-bottom: 0;
+    font-size: 1.1rem;
 }

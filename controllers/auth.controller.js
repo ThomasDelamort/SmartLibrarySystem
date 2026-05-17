@@ -1,19 +1,35 @@
-import student from "../models/student.model.js"
-import librarian  from "../models/librarian.model.js"
+import Student from "../models/student.model.js";
+import librarian from "../models/librarian.model.js";
 
-export const dashboard = (req, res) => {
-    const email = req.body.eMail;
+export const dashboard = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    const studentReg = /^[a-z0-9._%+-]+@students\.nu-cebu\.edu\.ph$/i;
-    const librarianReg = /^[a-z0-9._%+-]+@nu-cebu\.edu\.ph$/i;
+        console.log(`email: ${email}`);
+        console.log(`password: ${password}`);
 
-    if (!studentReg.test(email) && !librarianReg.test(email)) {
-        return res.send("Invalid email address");
+        const student = await Student.findOne({ email });
+
+        if (student) {
+
+            if (student.password === password) {
+                return res.redirect("/Students");
+            } else {
+                return res.render("login.ejs", {
+                    error: "Incorrect email or password"
+                })
+            }
+        }
+
+        res.render("login.ejs", {
+            error: "User not found"
+        });
+
+    } catch (error) {
+        console.log(`error: ${error}`);
+
+        res.render("login.ejs", {
+            error: "Server Error"
+        });
     }
-
-    if (studentReg.test(email)) {
-        return res.redirect("/Students");
-    }
-
-    res.redirect("/Librarian-Dashboard");
 };
