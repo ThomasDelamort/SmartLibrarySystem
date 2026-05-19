@@ -1,0 +1,124 @@
+body{
+    background-color: #f5f7fb;
+}
+
+.books-container{
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.books-header{
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+
+
+.books-list{
+    background: white;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.book-item{
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    padding: 18px;
+    transition: 0.25s ease;
+    background: white;
+}
+
+.book-item:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.book-cover{
+    width: 90px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.title-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.book-title{
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.status-borrowed {
+    background: #ffe600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.status-available {
+    background: #22c55e;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+
+.book-meta{
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+
+.book-category{
+    display: inline-block;
+    background: #f1f3f5;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.book-actions .btn{
+    border-radius: 12px;
+}
+
+.pagination .page-link{
+    border-radius: 10px !important;
+    margin: 0 4px;
+    border: none;
+    color: #212529;
+}
+
+.pagination .active .page-link{
+    background: #212529;
+    color: white;
+}
+
+@media(max-width: 768px){
+
+    .book-item{
+        text-align: center;
+    }
+
+    .book-cover{
+        margin-bottom: 15px;
+    }
+
+    .book-actions{
+        margin-top: 15px;
+    }
+
+}

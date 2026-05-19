@@ -18,17 +18,6 @@
 
 
         <div class="d-flex align-items-center gap-4">
-            <% if (loggedIn) { %>
-            <a href="/Students"
-               class="navbar-brand text-decoration-none">
-                📚 SmartLibSys
-            </a>
-            <% } else { %>
-            <a href="/"
-               class="navbar-brand text-decoration-none">
-                📚 SmartLibSys
-            </a>
-            <% } %>
 
             <nav class="navbar navbar-expand-md navbar-light p-0">
                 <button class="navbar-toggler"
@@ -44,6 +33,17 @@
                 <div class="collapse navbar-collapse"
                      id="navbarNav">
                     <ul class="navbar-nav gap-1">
+                        <% if (loggedIn) { %>
+                        <a href="/Students"
+                           class="navbar-brand text-decoration-none">
+                            📚 SmartLibSys
+                        </a>
+                        <% } else { %>
+                        <a href="/"
+                           class="navbar-brand text-decoration-none">
+                            📚 SmartLibSys
+                        </a>
+                        <% } %>
 
                         <% if (loggedIn) { %>
                         <li class="nav-item">
@@ -110,6 +110,7 @@
             <input class="form-control search-input"
                    type="search"
                    name="q"
+                   id="searchbar"
                    placeholder="Search Books"
                    aria-label="Search"
                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
@@ -128,6 +129,7 @@
             <input class="form-control search-input"
                    type="search"
                    name="q"
+                   id="searchbarSearch"
                    placeholder="Search Books"
                    aria-label="Search"
                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
