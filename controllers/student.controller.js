@@ -49,6 +49,6 @@ export const getStudentBook = async (req, res) => {
     await renderSingleBook({
         req,
         res,
-        loggedIn: true
+        loggedIn: true,
     });
 };
