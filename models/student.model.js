@@ -34,12 +34,10 @@ const studentSchema = new mongoose.Schema(
             required: true,
         },
 
-        borrowedBooks: [
-            {
+        borrowedBooks: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Book",
-            }
-        ],
+        }],
 
         reservations: [
             {
