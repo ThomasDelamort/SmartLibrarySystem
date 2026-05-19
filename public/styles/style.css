@@ -9,6 +9,8 @@
     .login-btn {
         height: 40px;
         width: 100px;
+        font-size: 0.7rem;
+        align-content: center;
     }
 }
 
