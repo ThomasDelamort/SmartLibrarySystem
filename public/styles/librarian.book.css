@@ -2,10 +2,14 @@ body{
     background-color: #f5f7fb;
 }
 
+
+
 .books-container{
     margin-top: 30px;
     margin-bottom: 50px;
 }
+
+
 
 .books-header{
     background: white;
@@ -24,6 +28,8 @@ body{
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
+
+
 .book-item{
     border: 1px solid #e9ecef;
     border-radius: 18px;
@@ -31,6 +37,8 @@ body{
     transition: 0.25s ease;
     background: white;
 }
+
+
 
 .book-item:hover{
     transform: translateY(-2px);
