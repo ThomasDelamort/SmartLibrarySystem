@@ -7,3 +7,7 @@ export const getLibrarian = (req, res) => {
 export const booksLibrarian = (req, res) => {
     res.render("librarian.books.ejs", { loggedIn: true });
 };
+
+export const studentsLists = (req, res) => {
+    res.render("librarian.students.ejs", { loggedIn: true });
+}
