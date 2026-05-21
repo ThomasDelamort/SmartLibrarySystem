@@ -2,12 +2,237 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLib Admin Dashboard</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/styles/admin.css">
 </head>
 <body>
 
-<h1> Welcome Admin</h1>
+<div class="dashboard-container">
 
+    <!-- SIDEBAR -->
+    <%- include("partials/admin.sidebar.ejs") %>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Dashboard Overview</h1>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="notification-btn">
+                    <i class="bi bi-bell"></i>
+                </button>
+                <button class="add-btn">
+                    <i class="bi bi-file-earmark-plus"></i>
+                    Generate Report
+                </button>
+            </div>
+        </header>
+
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Total Users</span>
+                    <h2>3,210</h2>
+                    <small>Students & Staff</small>
+                </div>
+
+                <div class="stat-icon users">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>User Permissions</span>
+                    <h2>128</h2>
+                    <small>Active access roles</small>
+                </div>
+                <div class="stat-icon permissions">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Monthly Reports</span>
+                    <h2>12</h2>
+                    <small>Generated this year</small>
+                </div>
+                <div class="stat-icon reports">
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>System Alerts</span>
+                    <h2>4</h2>
+                    <small>Require attention</small>
+                </div>
+                <div class="stat-icon alerts">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="content-grid">
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Administrative Activity</h3>
+                    <button>
+                        View All
+                    </button>
+                </div>
+
+                <div class="activity-list">
+                    <div class="activity-item">
+
+                        <div class="activity-left">
+                            <div class="activity-circle blue">
+                                <i class="bi bi-file-earmark-bar-graph"></i>
+                            </div>
+                            <div>
+                                <h6>Monthly Report Generated</h6>
+                                <p>April 2026 usage report exported successfully.</p>
+                            </div>
+                        </div>
+                        <span>5m ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-left">
+                            <div class="activity-circle green">
+                                <i class="bi bi-person-check-fill"></i>
+                            </div>
+                            <div>
+                                <h6>Permission Updated</h6>
+                                <p>Librarian access privileges were modified.</p>
+                            </div>
+                        </div>
+                        <span>20m ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-left">
+                            <div class="activity-circle red">
+                                <i class="bi bi-exclamation-circle-fill"></i>
+                            </div>
+                            <div>
+                                <h6>System Alert</h6>
+                                <p>Failed login attempts detected.</p>
+                            </div>
+                        </div>
+                        <span>1h ago</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Quick Actions</h3>
+                </div>
+
+                <div class="quick-actions">
+                    <button>
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        Generate Report
+                    </button>
+
+                    <button>
+                        <i class="bi bi-person-gear"></i>
+                        Manage Permissions
+                    </button>
+
+                    <button>
+                        <i class="bi bi-people"></i>
+                        User Accounts
+                    </button>
+
+                    <button>
+                        <i class="bi bi-shield-check"></i>
+                        System Logs
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="dashboard-card table-card">
+            <div class="card-header">
+                <h3>Recent Permission Changes</h3>
+                <button>
+                    View Logs
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table custom-table align-middle">
+
+                    <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Permission Updated</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Librarian</td>
+                        <td>Catalog Management Access</td>
+                        <td>
+                            <span class="status success">
+                                Updated
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>Student</td>
+                        <td>Study Room Reservation Access</td>
+                        <td>
+                            <span class="status pending">
+                                Pending
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Michael Cruz</td>
+                        <td>Administrator</td>
+                        <td>Report Generation Privileges</td>
+                        <td>
+                            <span class="status danger">
+                                Revoked
+                            </span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
 </body>
 </html>
