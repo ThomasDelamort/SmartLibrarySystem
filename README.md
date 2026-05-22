@@ -25,7 +25,6 @@ npm commands
 - npm install body-parser
 - npm install dotenv
 
-In order to connect to databse make a .env file.
-Within the .env file store the following
+In order to connect to databse make a .env file and store the following.
 - address
 - port
