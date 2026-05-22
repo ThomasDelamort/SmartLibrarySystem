@@ -5,9 +5,10 @@
 <br><br>
 
 
-<h2>Tech Stack</h2>
+
 
 <div style="display: inline-flex;">
+  <h2>Tech Stack</h2>
   <img width="100" height="100" alt="MongoDB" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEN6fDm89O6g-B0h3eEPmVlxQyhlU1cNS7tQ&s" />
   <img width="100" height="100" alt="ExpressJS" src="https://images.seeklogo.com/logo-png/65/1/express-js-icon-logo-png_seeklogo-653222.png" />
   <img width="100" height="100" alt="EJS" src="https://ayushchugh.gallerycdn.vsassets.io/extensions/ayushchugh/ejs-snippets-and-color-highlighting/0.0.5/1625124300861/Microsoft.VisualStudio.Services.Icons.Default" />
