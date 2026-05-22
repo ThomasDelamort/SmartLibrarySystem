@@ -23,6 +23,8 @@ npm commands
 - npm install dotenv
 - or just "npm i"
 
+<br>
+
 In order to connect to databse make a .env file and store the following.
 - address
 - port
