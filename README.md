@@ -21,6 +21,7 @@ npm commands
 - npm install mongoose
 - npm install body-parser
 - npm install dotenv
+- or just "npm i"
 
 In order to connect to databse make a .env file and store the following.
 - address
