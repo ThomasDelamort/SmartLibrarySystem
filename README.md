@@ -5,7 +5,7 @@
 <br><br>
 
 
-<h2>Tech Stack</h3>
+<h3>Tech Stack</h3>
 
 <div style="display: inline-flex;">
   <img width="100" height="100" alt="MongoDB" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEN6fDm89O6g-B0h3eEPmVlxQyhlU1cNS7tQ&s" />
