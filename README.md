@@ -17,3 +17,8 @@ npm commands
 - npm install express
 - npm install ejs
 - npm install mongoose
+
+In order to connect to databse make a .env file
+Within the .env file store the following
+- address
+- port
