@@ -70,7 +70,7 @@ body{
     border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: 7px;
+    margin-bottom: 1px;
 }
 
 .status-available {
@@ -80,7 +80,7 @@ body{
     border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: 7px;
+    margin-bottom: 1px;
 }
 
 
@@ -88,6 +88,10 @@ body{
     color: #6c757d;
     font-size: 0.95rem;
     margin-bottom: 6px;
+}
+
+#jawkey {
+    margin-bottom: 5rem;
 }
 
 .book-category{

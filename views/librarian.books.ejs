@@ -66,15 +66,16 @@
                                 : book.author
                                 %>
                             </p>
-                            <p class="book-meta">
-                                <strong>Category:</strong>
-                                <span class="book-category">
-                                <%= Array.isArray(book.category)
-                                    ? book.category.join(", ")
-                                    : book.category
-                                %>
-                            </span>
-                            </p>
+
+                            <div id="jawkey">
+                                <p class="mb-3 book-info">
+                                    <strong>Category:</strong>
+                                    <% book.category.forEach((cat) => { %>
+                                    <span class="cat"><%= cat %></span>
+                                    <% }) %>
+                                </p>
+                            </div>
+
                         </div>
 
                         <div class="col-md-3">
