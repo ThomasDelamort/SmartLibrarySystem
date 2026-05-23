@@ -27,9 +27,21 @@
             </div>
 
             <div class="flex-grow-1">
-                <h1 class="book-title">
-                    <%= book.title %>
-                </h1>
+
+
+                <div class="title-status">
+                    <h1 class="book-title">
+                        <%= book.title %>
+                    </h1>
+                    <span class="status-pill
+                    <%= book.status === 'available'
+                    ? 'status-available'
+                    : 'status-borrowed'
+                    %>">
+                    <%= book.status %>
+                </span>
+                </div>
+
 
                 <p class="book-meta mb-2">
                     <strong>Author:</strong>

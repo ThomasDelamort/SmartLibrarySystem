@@ -1,11 +1,24 @@
+import {
+    paginateBooks,
+    createSearchFilter,
+    createCategoryFilter,
+    handleBookAction,
+    renderSingleBook
+} from "./helpers/book.helper.js";
 import librarianModel from "../models/librarian.model.js";
 
 export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true });
 };
 
-export const booksLibrarian = (req, res) => {
-    res.render("librarian.books.ejs", { loggedIn: true });
+
+export const booksLibrarian = async (req, res) => {
+    await paginateBooks({
+        req,
+        res,
+        view: "librarian.books.ejs",
+        loggedIn: true
+    });
 };
 
 export const studentsLists = (req, res) => {

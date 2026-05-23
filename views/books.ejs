@@ -24,10 +24,8 @@
                 <div class="filter-header text-center">
                     <h4 class="fw-medium mb-0">Filter</h4>
                 </div>
-
                 <div class="filter-body">
                     <h5 class="mb-3">Categories</h5>
-
                     <form method="GET" action="/BookFilter">
                         <input type="hidden" name="page" value="1">
 
@@ -49,31 +47,22 @@
 
         <!-- BOOKS -->
         <div class="col-md-10">
-
             <div class="dashboard-container">
-
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold mb-1">Books</h3>
                 </div>
-
                 <div class="row g-4">
 
                     <% books.forEach(book => { %>
                     <div class="col-md-4">
-
-
                         <a href="/Books/Book/<%= encodeURIComponent(book.title) %>"
                            class="text-decoration-none text-dark">
-
                             <div class="card h-100 book-card" id="book-card">
-
                                 <div class="d-flex h-100">
                                     <img src="<%= book.image %>"
                                          alt="<%= book.title %>"
                                          class="img-thumbnail">
-
                                     <div class="card-body d-flex flex-column py-3">
-
                                         <h6 class="card-title mb-2">
                                             <%= book.title %>
                                         </h6>
@@ -91,8 +80,12 @@
                                         </div>
 
 
-                                        <span class="status <%= book.status === 'Available' ? 'available' : 'unavailable' %>">
-                                            <%= book.status || 'Available' %>
+                                        <span class="status-pill
+                                            <%= book.status === 'available'
+                                                ? 'status-available'
+                                                : 'status-borrowed'
+                                            %>">
+                                            <%= book.status %>
                                         </span>
                                     </div>
                                 </div>
@@ -100,6 +93,8 @@
                         </a>
                     </div>
                     <% }) %>
+
+
                 </div>
 
 
