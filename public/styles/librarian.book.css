@@ -110,6 +110,11 @@ body{
     color: #212529;
 }
 
+.img-container {
+    height: 95%;
+    width: 70%;
+}
+
 .pagination .active .page-link{
     background: #212529;
     color: white;

@@ -105,7 +105,11 @@
                                         </div>
 
 
-                                        <span class="status <%= book.status === 'Available' ? 'available' : 'unavailable' %>">
+                                        <span class="status-pill
+                                            <%= book.status === 'available'
+                                                ? 'status-available'
+                                                : 'status-borrowed'
+                                            %>">
                                             <%= book.status %>
                                         </span>
                                     </div>

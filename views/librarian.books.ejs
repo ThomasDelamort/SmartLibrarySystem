@@ -9,16 +9,14 @@
     <link rel="stylesheet" href="/styles/layout.css">
     <link rel="stylesheet" href="/styles/librarian.css">
     <link rel="stylesheet" href="/styles/librarian.book.css">
-
 </head>
 <body>
 
-
 <%- include("partials/librarian.header.ejs") %>
-
 
 <div class="container-fluid mt-4">
     <div class="container books-container">
+
         <div class="books-header">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
@@ -26,79 +24,57 @@
                         Books
                     </h2>
                 </div>
+
                 <button class="btn btn-dark btn-lg rounded-4 px-4">
                     Add New Book
                 </button>
             </div>
         </div>
+
         <div class="books-list">
             <div class="d-flex flex-column gap-3">
+
+                <% books.forEach(book => { %>
                 <div class="book-item">
                     <div class="row align-items-center">
+
                         <div class="col-md-2 text-center">
-                            <img src="https://m.media-amazon.com/images/I/81wgcld4wxL.jpg"
-                                 alt="book"
-                                 class="book-cover">
+                            <img
+                                    src="<%= book.image %>"
+                                    alt="<%= book.title %>"
+                                    class="img-container"
+                            >
                         </div>
                         <div class="col-md-7">
                             <div class="title-status">
                                 <h5 class="book-title">
-                                    Atomic Habits
-                                </h5><span class="status-borrowed">Borrowed</span>
-                            </div>
+                                    <%= book.title %>
+                                </h5>
 
-                            <p class="book-meta">
-                                <strong>Author:</strong>
-                                James Clear
-                            </p>
-                            <p class="book-meta">
-                                <strong>Description:</strong>
-                                A practical guide to building good habits and breaking bad ones.
-                            </p>
-                            <span class="book-category">
-                            Self Help
-                        </span>
-
-                        </div>
-                        <div class="col-md-3">
-                            <div class="book-actions d-flex flex-column gap-2">
-                                <button class="btn btn-outline-dark">
-                                    View
-                                </button>
-                                <button class="btn btn-outline-primary">
-                                    Edit
-                                </button>
-                                <button class="btn btn-outline-danger">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="book-item">
-                    <div class="row align-items-center">
-                        <div class="col-md-2 text-center">
-                            <img src="https://m.media-amazon.com/images/I/91bYsX41DVL.jpg"
-                                 alt="book"
-                                 class="book-cover">
-                        </div>
-                        <div class="col-md-7">
-                            <div class="title-status">
-                                <h5 class="book-title">
-                                    Harry Potter
-                                </h5><span class="status-available">Available</span>
+                                <span class="status-pill
+                                    <%= book.status === 'available'
+                                        ? 'status-available'
+                                        : 'status-borrowed'
+                                    %>">
+                                    <%= book.status %>
+                                </span>
                             </div>
                             <p class="book-meta">
                                 <strong>Author:</strong>
-                                J.K. Rowling
+                                <%= Array.isArray(book.author)
+                                ? book.author.join(", ")
+                                : book.author
+                                %>
                             </p>
                             <p class="book-meta">
-                                <strong>Description:</strong>
-                                A young wizard discovers his magical destiny at Hogwarts.
+                                <strong>Category:</strong>
+                                <span class="book-category">
+                                <%= Array.isArray(book.category)
+                                    ? book.category.join(", ")
+                                    : book.category
+                                %>
+                            </span>
                             </p>
-                            <span class="book-category">
-                            Fantasy
-                        </span>
                         </div>
 
                         <div class="col-md-3">
@@ -114,79 +90,48 @@
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
+                <% }) %>
 
-
-                <div class="book-item">
-                    <div class="row align-items-center">
-                        <div class="col-md-2 text-center">
-                            <img src="https://m.media-amazon.com/images/I/71UwSHSZRnS.jpg"
-                                 alt="book"
-                                 class="book-cover">
-                        </div>
-                        <div class="col-md-7">
-                            <h5 class="book-title">
-                                Rich Dad Poor Dad
-                            </h5>
-                            <p class="book-meta">
-                                <strong>Author:</strong>
-                                Robert Kiyosaki
-                            </p>
-                            <p class="book-meta">
-                                <strong>Description:</strong>
-                                Learn financial literacy and investing strategies.
-                            </p>
-                            <span class="book-category">
-                            Business
-                        </span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="book-actions d-flex flex-column gap-2">
-                                <button class="btn btn-outline-dark">
-                                    View
-                                </button>
-                                <button class="btn btn-outline-primary">
-                                    Edit
-                                </button>
-                                <button class="btn btn-outline-danger">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
 
             <div class="d-flex justify-content-center mt-5">
                 <nav>
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a
+                                    class="page-link"
+                                    href="?page=<%= currentPage - 1 %>&q=<%= searchQuery %>"
+                            >
                                 Previous
                             </a>
                         </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">
-                                1
+
+                        <!-- PAGE NUMBERS -->
+                        <% for(let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a
+                                    class="page-link"
+                                    href="?page=<%= i %>&q=<%= searchQuery %>"
+                            >
+                                <%= i %>
                             </a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                2
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                3
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
+                        <% } %>
+
+
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a
+                                    class="page-link"
+                                    href="?page=<%= currentPage + 1 %>&q=<%= searchQuery %>"
+                            >
                                 Next
                             </a>
                         </li>
+
                     </ul>
                 </nav>
             </div>
@@ -195,5 +140,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+</script>
 </body>
 </html>
