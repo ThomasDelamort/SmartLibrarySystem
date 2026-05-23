@@ -111,7 +111,6 @@
                             </a>
                         </li>
 
-                        <!-- PAGE NUMBERS -->
                         <% for(let i = 1; i <= totalPages; i++) { %>
                         <li class="page-item <%= currentPage === i ? 'active' : '' %>">
                             <a
@@ -132,7 +131,6 @@
                                 Next
                             </a>
                         </li>
-
                     </ul>
                 </nav>
             </div>
@@ -140,9 +138,35 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
 
-</script>
+<section class="card-footer">
+    <footer>
+        <ul class="social_icon col-md">
+            <li><a href="#"><ion-icon name="logo-facebook"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-discord"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-github"></ion-icon></a></li>
+        </ul>
+
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/About">About</a></li>
+            <li><a href="/Contact">Services</a></li>
+            <li><a href="#">Team</a></li>
+            <li><a href="/Contact">Contact</a></li>
+        </ul>
+
+        <p class="copyright">
+            © <%= new Date().getFullYear() %> SmartLibSys 📚
+        </p>
+    </footer>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
