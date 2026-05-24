@@ -1,6 +1,13 @@
 import mongoose from 'mongoose'
 
 const librarianSchema = new mongoose.Schema({
+    librarianId: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true
+    },
+
     firstName: {
         type: String,
         required: true,
@@ -26,7 +33,16 @@ const librarianSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-});
+
+    role: {
+        type: String,
+        default: 'librarian',
+    }
+},
+    {
+        timestamps: true
+    }
+);
 
 const librarian  = mongoose.model('Librarian', librarianSchema);
 

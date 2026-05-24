@@ -21,6 +21,7 @@ npm commands
 - npm install mongoose
 - npm install dotenv
 - or just "npm i"
+- npm connect-db
 
 <br>
 

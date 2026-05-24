@@ -5,7 +5,6 @@ import {
     handleBookAction,
     renderSingleBook
 } from "./helpers/book.helper.js";
-import session from "express-session";
 
 export const getStudents = async (req, res) => {
     await paginateBooks({
