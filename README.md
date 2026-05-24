@@ -22,6 +22,7 @@ npm commands
 - npm install body-parser
 - npm install dotenv
 - or just "npm i"
+- npm connect-db
 
 <br>
 
