@@ -19,7 +19,6 @@ npm commands
 - npm install express
 - npm install ejs
 - npm install mongoose
-- npm install body-parser
 - npm install dotenv
 - or just "npm i"
 
