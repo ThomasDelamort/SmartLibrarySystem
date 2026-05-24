@@ -149,11 +149,7 @@ body{
     font-weight:500;
 }
 
-.title-status{
-    display:flex;
-    align-items:center;
-    gap:1rem;
-}
+
 
 .book-title{
     margin:0;

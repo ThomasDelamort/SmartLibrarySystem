@@ -104,16 +104,13 @@ header {
 
 .search-form{
     background: #f8f9fa;
-
     border-radius: 14px;
-
     padding: 5px 10px;
 }
 
 .search-input{
     border: none !important;
     background: transparent !important;
-
     box-shadow: none !important;
 }
 
@@ -142,6 +139,10 @@ header {
     border-radius: 50%;
 
     border: 2px solid #dee2e6;
+}
+
+.user-name {
+    margin-right: 5px;
 }
 
 .dropdown-menu{
@@ -180,8 +181,11 @@ header {
     }
 
     .search-form{
-        width: 100%;
-        margin-top: 12px;
+        width: 45%;
+        margin-top: 5px;
     }
 
+    .profile{
+        margin-right: 14px;
+    }
 }
