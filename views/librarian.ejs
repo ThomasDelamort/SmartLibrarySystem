@@ -19,7 +19,9 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
                 <h1 class="fw-bold mb-2">
-                    Welcome, Librarian
+                    Welcome,
+                    <%= user.sex === "male" ? "Mr." : user.sex === "female" ? "Ms." : "" %>
+                    <%= user.lastName %>
                 </h1>
             </div>
         </div>

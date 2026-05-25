@@ -21,6 +21,19 @@ const librarianSchema = new mongoose.Schema({
         trim: true
     },
 
+    sex: {
+        type: String,
+        enum: [
+            "male",
+            "female",
+        ]
+    },
+
+    married: {
+        type: Boolean,
+        default: false
+    },
+
     email: {
         type: String,
         required: true,
