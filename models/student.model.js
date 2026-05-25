@@ -43,7 +43,7 @@ const studentSchema = new mongoose.Schema(
             {
             room: String,
             timeSlot: String,
-            data: Date
+            date: Date
             }
         ],
 
