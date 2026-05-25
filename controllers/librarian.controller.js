@@ -1,12 +1,10 @@
-import {
-    paginateBooks,
-} from "./helpers/book.helper.js";
+import { paginateBooks } from "./helpers/book.helper.js";
+import { paginateStudents } from "./helpers/student.list.helper.js";
 import librarianModel from "../models/librarian.model.js";
 
 export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true });
 };
-
 
 export const booksLibrarian = async (req, res) => {
     await paginateBooks({
@@ -17,10 +15,15 @@ export const booksLibrarian = async (req, res) => {
     });
 };
 
-export const studentsLists = (req, res) => {
-    res.render("librarian.students.ejs", { loggedIn: true });
-}
+export const studentsLists = async (req, res) => {
+    await paginateStudents({
+        req,
+        res,
+        view: "librarian.students.ejs",
+        loggedIn: true
+    });
+};
 
 export const transactions = (req, res) => {
     res.render("librarian.transactions.ejs", { loggedIn: true });
-}
+};

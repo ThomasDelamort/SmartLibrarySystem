@@ -22,7 +22,6 @@
     <div class="container">
         <div class="list-container">
 
-
             <div class="list-header">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
@@ -35,81 +34,69 @@
 
             <div class="list-students">
                 <div class="d-flex flex-column gap-3">
+
+                    <% if (students.length === 0) { %>
+                    <p class="text-muted">No students found.</p>
+                    <% } %>
+
+                    <% students.forEach(student => { %>
                     <div class="student">
                         <div class="row align-items-center">
 
                             <div class="col-md-2 text-center">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                                      alt="student"
-                                     class="student-image">
+                                     class="student-image"
+                                >
                             </div>
 
                             <div class="col-md-7">
                                 <div class="student-name">
-                                    <h5>
-                                        John Carter
-                                    </h5>
+                                    <h5><%= student.firstName %> <%= student.lastName %></h5>
                                 </div>
-                                <p class="student-email">
-                                    johncarter@gmail.com
-                                </p>
-                                <span class="student-id">
-                                ID: 2026-001
-                            </span>
+                                <p class="student-email"><%= student.email %></p>
+                                <span class="student-id">ID: <%= student.studentId %></span>
                             </div>
-
 
                             <div class="col-md-3">
                                 <div class="student-actions d-flex flex-column gap-2">
-                                    <button class="btn btn-outline-dark">
-                                        View
-                                    </button>
-                                    <button class="btn btn-outline-primary">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-outline-danger">
-                                        Remove
-                                    </button>
+                                    <button class="btn btn-outline-dark">View</button>
+                                    <button class="btn btn-outline-primary">Edit</button>
+                                    <button class="btn btn-outline-danger">Remove</button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <% }) %>
 
                 </div>
 
 
-<!--            Pagination-->
+                <% if (totalPages > 1) { %>
                 <div class="d-flex justify-content-center mt-5">
                     <nav>
                         <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">
-                                    Previous
-                                </a>
+
+                            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <a class="page-link" href="/Librarian-SL?page=<%= currentPage - 1 %>">Previous</a>
                             </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">
-                                    1
-                                </a>
+
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="/Librarian-SL?page=<%= i %>"><%= i %></a>
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    2
-                                </a>
+                            <% } %>
+
+                            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                <a class="page-link" href="/Librarian-SL?page=<%= currentPage + 1 %>">Next</a>
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    3
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    Next
-                                </a>
-                            </li>
+
                         </ul>
                     </nav>
                 </div>
+                <% } %>
+
             </div>
         </div>
     </div>
@@ -117,13 +104,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<script type="module"
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js">
-</script>
-
-<script nomodule
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js">
-</script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 </body>
 </html>
