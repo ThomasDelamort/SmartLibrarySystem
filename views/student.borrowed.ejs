@@ -38,7 +38,7 @@
                         <img src="<%= txn.book.image %>"
                              alt="<%= txn.book.title %>"
                              class="img-fluid rounded"
-                             style="max-height: 70px; object-fit: cover;">
+                             style="max-height: 120px; object-fit: cover;">
                     </div>
 
                     <div class="col-md-6">
@@ -64,7 +64,7 @@
                         <form action="/Students/Return" method="POST">
                             <input type="hidden" name="transactionId" value="<%= txn._id %>">
                             <button type="submit" class="btn btn-outline-dark w-100">
-                                Request Return
+                                Return
                             </button>
                         </form>
                         <% } %>
