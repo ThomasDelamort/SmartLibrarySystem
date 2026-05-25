@@ -7,15 +7,15 @@ import {
     submitBook,
     getStudentBook
 } from "../controllers/student.controller.js";
-import {studentAuth} from "../controllers/middleware/auth.middleware.js";
+import { studentAuth } from "../controllers/middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/Students", studentAuth, getStudents);
 
-router.get("/Filter", filterStudentBooks);
+router.get("/Filter", studentAuth, filterStudentBooks);
 
-router.get("/Search-Book", searchStudentBooks);
+router.get("/Search-Book", studentAuth, searchStudentBooks);
 
 router.post("/Submit", submitBook);
 

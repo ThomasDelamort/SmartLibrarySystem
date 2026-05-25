@@ -1,3 +1,3 @@
 export const admin = (req, res) => {
-    res.render("admin.ejs");
+    res.render("admin.ejs", { user: req.session.user });
 }
