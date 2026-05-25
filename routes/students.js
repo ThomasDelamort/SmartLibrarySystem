@@ -17,7 +17,7 @@ router.get("/Filter", studentAuth, filterStudentBooks);
 
 router.get("/Search-Book", studentAuth, searchStudentBooks);
 
-router.post("/Submit", submitBook);
+router.post("/Submit", studentAuth, submitBook);
 
 router.get("/Students/Book/:title", getStudentBook);
 

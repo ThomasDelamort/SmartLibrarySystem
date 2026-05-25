@@ -1,4 +1,5 @@
 import Book from "../../models/book.model.js";
+import { borrowBook } from "./transaction.helper.js"
 
 export const paginateBooks = async ({
                                         req,
@@ -68,21 +69,15 @@ export const createCategoryFilter = (categories) => {
     };
 };
 
-export const handleBookAction = async ({
-                                           req,
-                                           res,
-                                           redirectBase
-                                       }) => {
-    const { title, action } = req.body;
+export const handleBookAction = async ({ req, res, redirectBase }) => {
+    const { id, action } = req.body;
 
-    const book = await Book.findOne({ title });
+    const book = await Book.findById(id);
 
-    if (!book) {
-        return res.status(404).send("Book not found");
-    }
+    if (!book) return res.status(404).send("Book not found");
 
     if (action === "borrow") {
-        return res.redirect(`${redirectBase}/Book/${book.title}`);
+        return await borrowBook({ req, res });
     }
 
     if (action === "downloadPdf") {

@@ -25,7 +25,7 @@ const BookTransactionSchema = new mongoose.Schema(
         librarian: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Librarian",
-            required: true,
+            default: null,
         },
 
         transactionType: {
