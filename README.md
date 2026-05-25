@@ -20,8 +20,10 @@ npm commands
 - npm install ejs
 - npm install mongoose
 - npm install dotenv
-- or just "npm i"
+- npm insatll express-session
 - npm connect-db
+- or just "npm i"
+
 
 <br>
 
