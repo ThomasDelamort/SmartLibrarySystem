@@ -5,7 +5,8 @@ import {
     studentsLists,
     transactions,
     approveTransaction,
-    rejectTransaction
+    rejectTransaction,
+    confirmReturn
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -17,5 +18,6 @@ router.get("/Librarian-SL", librarianAuth, studentsLists); // SL -> Students Lis
 router.get("/Librarian-Transactions", librarianAuth, transactions);
 router.post( "/Librarian-Transactions/Approve/:id", librarianAuth, approveTransaction);
 router.post("/Librarian-Transactions/Reject/:id", librarianAuth, rejectTransaction);
+router.post("/Librarian-Transactions/Return/:id", librarianAuth, confirmReturn);
 
 export default router;

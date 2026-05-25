@@ -5,7 +5,9 @@ import {
     filterStudentBooks,
     searchStudentBooks,
     submitBook,
-    getStudentBook
+    getStudentBook,
+    getBorrowedBooks,
+    returnBook
 } from "../controllers/student.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -20,5 +22,9 @@ router.get("/Search-Book", studentAuth, searchStudentBooks);
 router.post("/Submit", studentAuth, submitBook);
 
 router.get("/Students/Book/:title", getStudentBook);
+
+router.get("/Students/Borrowed", studentAuth, getBorrowedBooks);
+
+router.post("/Students/Return", studentAuth, returnBook);
 
 export default router;

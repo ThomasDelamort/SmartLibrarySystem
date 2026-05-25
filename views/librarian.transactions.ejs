@@ -62,7 +62,7 @@
                     <div class="row align-items-center">
 
                         <div class="col-md-1 text-center">
-                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg"
                                  alt="student"
                                  class="transaction-image">
                         </div>
@@ -72,7 +72,8 @@
                                 <%= txn.student.firstName %> <%= txn.student.lastName %>
                             </h5>
                             <p class="transaction-book">
-                                Requesting to borrow: <strong><%= txn.book.title %></strong>
+                                <%= txn.transactionType === 'return' ? 'Requesting to return' : 'Requesting to borrow' %>:
+                                <strong><%= txn.book.title %></strong>
                             </p>
                             <span class="transaction-date">
                                     Due: <%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
@@ -80,18 +81,30 @@
                         </div>
 
                         <div class="col-md-3">
-                            <span class="status-borrowed">Pending</span>
+                                <span class="<%= txn.transactionType === 'return' ? 'status-returned' : 'status-borrowed' %>">
+                                    <%= txn.transactionType === 'return' ? 'Return Request' : 'Borrow Request' %>
+                                </span>
                         </div>
 
                         <div class="col-md-3">
                             <div class="transaction-actions d-flex flex-column gap-2">
+                                <% if (txn.transactionType === 'return') { %>
+                                <form action="/Librarian-Transactions/Return/<%= txn._id %>" method="POST">
+                                    <button type="submit" class="btn btn-outline-success w-100">
+                                        Confirm Return
+                                    </button>
+                                </form>
+                                <% } else { %>
                                 <form action="/Librarian-Transactions/Approve/<%= txn._id %>" method="POST">
                                     <button type="submit" class="btn btn-outline-success w-100">
                                         Approve
                                     </button>
                                 </form>
+                                <% } %>
                                 <form action="/Librarian-Transactions/Reject/<%= txn._id %>" method="POST">
-                                    <button type="submit" class="btn btn-outline-danger">Reject</button>
+                                    <button type="submit" class="btn btn-outline-danger w-100">
+                                        Reject
+                                    </button>
                                 </form>
                             </div>
                         </div>
