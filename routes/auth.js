@@ -1,6 +1,7 @@
 import express from "express";
 import { dashboard, logout } from "../controllers/auth.controller.js";
 
+
 const router = express.Router();
 
 router.post("/Dashboard", dashboard);

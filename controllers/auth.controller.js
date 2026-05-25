@@ -33,7 +33,8 @@ export const dashboard = async (req, res) => {
         name: `${user.firstName}`,
         lastName: `${user.lastName}`,
         email: user.email,
-        role: user.role
+        role: user.role,
+        sex: user.sex
     };
 
 
@@ -41,6 +42,8 @@ export const dashboard = async (req, res) => {
         return res.redirect("/Admin");
     }
     if (user.role === "librarian") {
+
+
         return res.redirect("/Librarian-Dashboard");
     }
     return res.redirect("/Students");
