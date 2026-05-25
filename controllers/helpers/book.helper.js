@@ -69,9 +69,9 @@ export const createCategoryFilter = (categories) => {
     };
 };
 
+
 export const handleBookAction = async ({ req, res, redirectBase }) => {
     const { id, action } = req.body;
-
     const book = await Book.findById(id);
 
     if (!book) return res.status(404).send("Book not found");
@@ -87,15 +87,11 @@ export const handleBookAction = async ({ req, res, redirectBase }) => {
     if (action === "downloadPdf") {
         return res.send(`Downloading PDF for ${book.title}`);
     }
-
     res.redirect(redirectBase);
 };
 
-export const renderSingleBook = async ({
-                                           req,
-                                           res,
-                                           loggedIn
-                                       }) => {
+
+export const renderSingleBook = async ({ req, res, loggedIn }) => {
     const { title } = req.params;
 
     const book = await Book.findOne({ title });
@@ -106,6 +102,7 @@ export const renderSingleBook = async ({
 
     res.render("book.ejs", {
         loggedIn,
-        book
+        book,
+        error: req.query.error || null   // ← add this line
     });
 };

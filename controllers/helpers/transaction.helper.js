@@ -14,9 +14,14 @@ export const borrowBook = async ({ req, res }) => {
 
     if (!book) return res.status(404).send("Book not found");
 
-    if (book.status === "borrowed") {
-        return res.status(400).send("Book is already borrowed");
-    }
+    const redirectWithError = (msg) =>
+        res.redirect(`/Students/Book/${encodeURIComponent(book.title)}?error=${encodeURIComponent(msg)}`);
+
+    if (book.status === "borrowed")
+        return redirectWithError("This book is already borrowed.");
+
+    if (new Date(dueDate).getTime() <= Date.now())
+        return redirectWithError("Invalid due date. Please select a future date.");
 
     const existing = await BookTransaction.findOne({
         book: id,
@@ -24,9 +29,8 @@ export const borrowBook = async ({ req, res }) => {
         status: "pending"
     });
 
-    if (existing) {
-        return res.status(400).send("You already have a pending request for this book");
-    }
+    if (existing)
+        return redirectWithError("You already have a pending borrow request for this book.");
 
     await BookTransaction.create({
         referenceNumber: generateReference(),
@@ -38,5 +42,5 @@ export const borrowBook = async ({ req, res }) => {
         dueDate: new Date(dueDate)
     });
 
-    res.redirect(`/Students/Book/${book.title}`);
+    res.redirect(`/Students/Book/${encodeURIComponent(book.title)}`);
 };

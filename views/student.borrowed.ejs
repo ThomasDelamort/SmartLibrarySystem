@@ -56,12 +56,18 @@
                     </div>
 
                     <div class="col-md-3">
+                        <% if (txn.pendingReturn) { %>
+                        <button class="btn btn-secondary w-100" disabled>
+                            Return Pending...
+                        </button>
+                        <% } else { %>
                         <form action="/Students/Return" method="POST">
                             <input type="hidden" name="transactionId" value="<%= txn._id %>">
                             <button type="submit" class="btn btn-outline-dark w-100">
-                                Return
+                                Request Return
                             </button>
                         </form>
+                        <% } %>
                     </div>
 
                 </div>

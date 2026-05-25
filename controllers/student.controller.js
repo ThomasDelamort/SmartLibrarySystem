@@ -55,12 +55,26 @@ export const getStudentBook = async (req, res) => {
 };
 
 export const getBorrowedBooks = async (req, res) => {
+    const studentId = req.session.user.id;
+
+    const pendingReturns = await BookTransaction.find({
+        student: studentId,
+        transactionType: "return",
+        status: "pending"
+    }).distinct("book");
+
     const transactions = await BookTransaction.find({
-        student: req.session.user.id,
+        student: studentId,
         status: { $in: ["approved", "overdue"] }
     }).populate("book");
 
-    res.render("student.borrowed.ejs", { loggedIn: true, transactions });
+    // Flag which books have a pending return
+    const transactionsWithStatus = transactions.map(txn => ({
+        ...txn.toObject(),
+        pendingReturn: pendingReturns.some(id => id.equals(txn.book._id))
+    }));
+
+    res.render("student.borrowed.ejs", { loggedIn: true, transactions: transactionsWithStatus });
 };
 
 export const returnBook = async (req, res) => {
@@ -69,6 +83,15 @@ export const returnBook = async (req, res) => {
     const transaction = await BookTransaction.findById(transactionId);
 
     if (!transaction) return res.status(404).send("Transaction not found");
+
+    const existingReturn = await BookTransaction.findOne({
+        book: transaction.book,
+        student: req.session.user.id,
+        transactionType: "return",
+        status: "pending"
+    });
+
+    if (existingReturn) return res.redirect("/Students/Borrowed");
 
     await BookTransaction.create({
         referenceNumber: `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`,

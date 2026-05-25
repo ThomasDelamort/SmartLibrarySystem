@@ -69,7 +69,7 @@
 
                         <div class="col-md-5">
                             <h5 class="transaction-name">
-                                <%= txn.student.firstName %> <%= txn.student.lastName %>
+                                <%= txn.student ? `${txn.student.firstName} ${txn.student.lastName}` : 'Unknown Student' %>
                             </h5>
                             <p class="transaction-book">
                                 <%= txn.transactionType === 'return' ? 'Requesting to return' : 'Requesting to borrow' %>:

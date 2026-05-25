@@ -34,6 +34,7 @@ export const transactions = async (req, res) => {
         BookTransaction.countDocuments({ status: "overdue" }),
         BookTransaction.countDocuments({
             status: "returned",
+            transactionType: "return",
             returnDate: { $gte: new Date().setHours(0, 0, 0, 0) }
         })
     ]);
@@ -76,18 +77,25 @@ export const rejectTransaction = async (req, res) => {
 };
 
 export const confirmReturn = async (req, res) => {
-    const transaction = await BookTransaction.findById(req.params.id);
+    const returnTransaction = await BookTransaction.findById(req.params.id);
 
-    if (!transaction) return res.status(404).send("Transaction not found");
+    if (!returnTransaction) return res.status(404).send("Transaction not found");
 
-    transaction.status = "returned";
-    transaction.returnDate = new Date();
-    await transaction.save();
 
-    await Book.findByIdAndUpdate(transaction.book, { status: "available" });
+    returnTransaction.status = "returned";
+    returnTransaction.returnDate = new Date();
+    await returnTransaction.save();
 
-    await Student.findByIdAndUpdate(transaction.student, {
-        $pull: { borrowedBooks: transaction.book }
+
+    await BookTransaction.findOneAndUpdate(
+        { book: returnTransaction.book, student: returnTransaction.student, status: "approved", transactionType: "borrow" },
+        { status: "returned", returnDate: new Date() }
+    );
+
+    await Book.findByIdAndUpdate(returnTransaction.book, { status: "available" });
+
+    await Student.findByIdAndUpdate(returnTransaction.student, {
+        $pull: { borrowedBooks: returnTransaction.book }
     });
 
     res.redirect("/Librarian-Transactions");
