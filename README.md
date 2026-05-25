@@ -4,6 +4,10 @@
 <h1>Smart Library System</h1>
 <br>
 
+<h3>Screenshots</h3>
+
+
+
 <div style="display: inline-flex;">
   <h3>Tech Stack</h3>
   <img width="100" height="100" alt="MongoDB" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEN6fDm89O6g-B0h3eEPmVlxQyhlU1cNS7tQ&s" />
@@ -13,7 +17,6 @@
   <img width="120" height="100" alt="Bootstrap" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo-shadow.png" />
 </div>
 
-<h3>Screenshots</h3>
 
 <br>
 
