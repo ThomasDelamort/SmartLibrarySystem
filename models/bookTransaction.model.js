@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TransactionSchema = new mongoose.Schema(
+const BookTransactionSchema = new mongoose.Schema(
     {
         referenceNumber: {
             type: String,
@@ -65,8 +65,9 @@ const TransactionSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true, // adds createdAt and updatedAt
+        timestamps: true
     }
 );
 
-export default mongoose.model("Transaction", TransactionSchema);
+
+export default mongoose.model("BookTransaction", BookTransactionSchema);

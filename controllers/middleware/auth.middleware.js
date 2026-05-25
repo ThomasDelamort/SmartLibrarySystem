@@ -28,6 +28,8 @@ export const adminAuth = (req, res, next) => {
             error: "Admin Access Only"
         })
     }
+
+    next();
 }
 
 export const studentAuth = (req, res, next) => {
