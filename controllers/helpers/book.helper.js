@@ -76,6 +76,10 @@ export const handleBookAction = async ({ req, res, redirectBase }) => {
 
     if (!book) return res.status(404).send("Book not found");
 
+    if (book.status === "borrowed") {
+        res.status(404).send("Book already borrowed");
+    }
+
     if (action === "borrow") {
         return await borrowBook({ req, res });
     }
