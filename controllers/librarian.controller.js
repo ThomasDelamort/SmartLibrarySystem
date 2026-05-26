@@ -10,6 +10,7 @@ export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true });
 };
 
+
 export const booksLibrarian = async (req, res) => {
     await paginateBooks({
         req,
@@ -19,6 +20,7 @@ export const booksLibrarian = async (req, res) => {
     });
 };
 
+
 export const studentsLists = async (req, res) => {
     await paginateStudents({
         req,
@@ -27,6 +29,7 @@ export const studentsLists = async (req, res) => {
         loggedIn: true
     });
 };
+
 
 export const transactions = async (req, res) => {
     const [pending, borrowed, overdue, returnedToday] = await Promise.all([
@@ -47,6 +50,7 @@ export const transactions = async (req, res) => {
     });
 };
 
+
 export const approveTransaction = async (req, res) => {
     const transaction = await BookTransaction.findById(req.params.id).populate("book");
 
@@ -56,16 +60,16 @@ export const approveTransaction = async (req, res) => {
     transaction.librarian = req.session.user.id;
     await transaction.save();
 
-    await Book.findByIdAndUpdate(transaction.book, { status: "borrowed" });
+    await Book.findByIdAndUpdate(transaction.book._id, { status: "borrowed" });
 
     await Student.findByIdAndUpdate(transaction.student, {
-        $push: { borrowedBooks: transaction.book }
+        $push: { borrowedBooks: transaction.book._id }
     });
 
     await createNotification(
-      transaction.student,
-      `Your borrow request for "${transaction.book.title}" has been approved`,
-      "borrow_approved"
+        transaction.student,
+        `Your borrow request for "${transaction.book.title}" has been approved`,
+        "borrow_approved"
     );
 
     res.redirect("/Librarian-Transactions");
@@ -81,9 +85,9 @@ export const rejectTransaction = async (req, res) => {
     await transaction.save();
 
     await createNotification(
-      transaction.student,
-      `Your borrow request for "${transaction.book.title}" has been rejected`,
-      "borrow_rejected"
+        transaction.student,
+        `Your borrow request for "${transaction.book.title}" has been rejected`,
+        "borrow_rejected"
     );
 
     res.redirect("/Librarian-Transactions");
