@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Reservations</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+</head>
+
+<body>
+
+<%- include("partials/header.ejs") %>
+
+<div class="container-fluid mt-4">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">My Reservations</h2>
+            <span class="badge bg-dark fs-6"><%= reservations.length %> Active</span>
+        </div>
+
+        <% if (reservations.length === 0) { %>
+        <div class="text-center mt-5">
+            <p class="text-muted fs-5">You have no active reservations.</p>
+            <a href="/Students/Rooms" class="btn btn-outline-dark mt-2">Reserve a Room</a>
+        </div>
+        <% } %>
+
+        <div class="d-flex flex-column gap-3">
+            <% reservations.forEach(res => { %>
+            <div class="card border-0 shadow-sm p-3">
+                <div class="row align-items-center">
+
+                    <div class="col-md-1 text-center">
+                        <ion-icon name="business-outline" style="font-size: 2.5rem; color: #6c757d;"></ion-icon>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-1">Room <%= res.room.number %></h5>
+                        <p class="text-muted mb-1">
+                            <%= new Date(res.reservationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                        </p>
+                        <small class="text-muted">
+                            Time: <strong><%= res.startTime %> - <%= res.endTime %></strong>
+                        </small>
+                        <% if (res.purpose) { %>
+                        <br><small class="text-muted">Purpose: <%= res.purpose %></small>
+                        <% } %>
+                    </div>
+
+                    <div class="col-md-2">
+                            <span class="badge <%=
+                                res.status === 'approved' ? 'bg-success' :
+                                res.status === 'pending' ? 'bg-warning text-dark' :
+                                res.status === 'rejected' ? 'bg-danger' :
+                                'bg-secondary'
+                            %> fs-6">
+                                <%= res.status.charAt(0).toUpperCase() + res.status.slice(1) %>
+                            </span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <% if (res.status === 'pending' || res.status === 'approved') { %>
+                        <form action="/Students/Reservation/Cancel/<%= res._id %>" method="POST">
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                Cancel
+                            </button>
+                        </form>
+                        <% } else { %>
+                        <button class="btn btn-secondary w-100" disabled>
+                            <%= res.status.charAt(0).toUpperCase() + res.status.slice(1) %>
+                        </button>
+                        <% } %>
+                    </div>
+
+                </div>
+            </div>
+            <% }) %>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

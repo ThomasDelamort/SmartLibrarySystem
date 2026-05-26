@@ -164,3 +164,38 @@ export const reserveRoom = async (req, res) => {
 
     res.redirect("/Students/Rooms");
 }
+
+
+
+// Room Reservations
+export const getReservations = async (req, res) => {
+    const reservations = await RoomTransaction.find({
+        reservee: req.session.user.id,
+        status: { $in: ["pending", "approved"] }
+    }).populate("room");
+
+    res.render("student.rr.ejs", { loggedIn: true, reservations });
+};
+
+export const cancelReservation = async (req, res) => {
+    const reservation = await RoomTransaction.findById(req.params.id);
+
+    if (!reservation) return res.status(404).send("Reservation not found");
+
+    const wasApproved = reservation.status === "approved";
+
+    reservation.status = "cancelled";
+    await reservation.save();
+
+    if (wasApproved) {
+        await Room.findByIdAndUpdate(reservation.room, {
+            status: "available",
+            reservee: null,
+            reserveDate: null,
+            reserveTimeStart: null,
+            reserveTimeEnd: null
+        });
+    }
+
+    res.redirect("/Students/Reservations");
+};

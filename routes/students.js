@@ -10,7 +10,9 @@ import {
     returnBook,
     markNotificationRead,
     getRooms,
-    reserveRoom
+    reserveRoom,
+    getReservations,
+    cancelReservation
 } from "../controllers/student.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -27,5 +29,8 @@ router.post("/Notifications/Read/:id", studentAuth, markNotificationRead);
 
 router.get("/Students/Rooms", studentAuth, getRooms);
 router.post("/Students/Rooms/Reserve", studentAuth, reserveRoom);
+
+router.get("/Students/Reservations", studentAuth, getReservations);
+router.post("/Students/Reservation/Cancel/:id", studentAuth, cancelReservation);
 
 export default router;

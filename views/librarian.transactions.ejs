@@ -27,7 +27,7 @@
             </div>
         </div>
 
-
+        <!-- Stats -->
         <div class="row g-4 mb-4">
             <div class="col-md-4">
                 <div class="stats-card">
@@ -49,15 +49,16 @@
             </div>
         </div>
 
-
-        <div class="transactions-list">
+        <!-- Book Transactions -->
+        <h5 class="fw-bold mb-3">Book Transactions</h5>
+        <div class="transactions-list mb-5">
             <div class="d-flex flex-column gap-3">
 
-                <% if (transactions.length === 0) { %>
-                <p class="text-muted">No pending transactions.</p>
+                <% if (bookTransactions.length === 0) { %>
+                <p class="text-muted">No pending book transactions.</p>
                 <% } %>
 
-                <% transactions.forEach(txn => { %>
+                <% bookTransactions.forEach(txn => { %>
                 <div class="transaction-item">
                     <div class="row align-items-center">
 
@@ -90,21 +91,15 @@
                             <div class="transaction-actions d-flex flex-column gap-2">
                                 <% if (txn.transactionType === 'return') { %>
                                 <form action="/Librarian-Transactions/Return/<%= txn._id %>" method="POST">
-                                    <button type="submit" class="btn btn-outline-success w-100">
-                                        Confirm Return
-                                    </button>
+                                    <button type="submit" class="btn btn-outline-success w-100">Confirm Return</button>
                                 </form>
                                 <% } else { %>
                                 <form action="/Librarian-Transactions/Approve/<%= txn._id %>" method="POST">
-                                    <button type="submit" class="btn btn-outline-success w-100">
-                                        Approve
-                                    </button>
+                                    <button type="submit" class="btn btn-outline-success w-100">Approve</button>
                                 </form>
                                 <% } %>
                                 <form action="/Librarian-Transactions/Reject/<%= txn._id %>" method="POST">
-                                    <button type="submit" class="btn btn-outline-danger w-100">
-                                        Reject
-                                    </button>
+                                    <button type="submit" class="btn btn-outline-danger w-100">Reject</button>
                                 </form>
                             </div>
                         </div>
@@ -115,6 +110,65 @@
 
             </div>
         </div>
+
+        <!-- Room Transactions -->
+        <h5 class="fw-bold mb-3">Room Reservations</h5>
+        <div class="transactions-list">
+            <div class="d-flex flex-column gap-3">
+
+                <% if (roomTransactions.length === 0) { %>
+                <p class="text-muted">No pending room reservations.</p>
+                <% } %>
+
+                <% roomTransactions.forEach(txn => { %>
+                <div class="transaction-item">
+                    <div class="row align-items-center">
+
+                        <div class="col-md-1 text-center">
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                 alt="student"
+                                 class="transaction-image">
+                        </div>
+
+                        <div class="col-md-5">
+                            <h5 class="transaction-name">
+                                <%= txn.reservee ? `${txn.reservee.firstName} ${txn.reservee.lastName}` : 'Unknown Student' %>
+                            </h5>
+                            <p class="transaction-book">
+                                Requesting to reserve: <strong>Room <%= txn.room.number %></strong>
+                            </p>
+                            <span class="transaction-date">
+                                    <%= new Date(txn.reservationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                    &nbsp;|&nbsp;
+                                    <%= txn.startTime %> - <%= txn.endTime %>
+                                </span>
+                            <% if (txn.purpose) { %>
+                            <br><small class="text-muted">Purpose: <%= txn.purpose %></small>
+                            <% } %>
+                        </div>
+
+                        <div class="col-md-3">
+                            <span class="status-borrowed">Room Request</span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="transaction-actions d-flex flex-column gap-2">
+                                <form action="/Librarian-Transactions/Room/Approve/<%= txn._id %>" method="POST">
+                                    <button type="submit" class="btn btn-outline-success w-100">Approve</button>
+                                </form>
+                                <form action="/Librarian-Transactions/Room/Reject/<%= txn._id %>" method="POST">
+                                    <button type="submit" class="btn btn-outline-danger w-100">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <% }) %>
+
+            </div>
+        </div>
+
     </div>
 </div>
 

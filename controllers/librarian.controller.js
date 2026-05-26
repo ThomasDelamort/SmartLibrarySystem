@@ -5,6 +5,8 @@ import Book from "../models/book.model.js"
 import Student from "../models/student.model.js"
 import librarianModel from "../models/librarian.model.js";
 import { createNotification } from "./helpers/notification.helper.js";
+import Room from "../models/room.model.js";
+import RoomTransaction from "../models/roomTransaction.model.js";
 
 export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true });
@@ -32,8 +34,9 @@ export const studentsLists = async (req, res) => {
 
 
 export const transactions = async (req, res) => {
-    const [pending, borrowed, overdue, returnedToday] = await Promise.all([
+    const [pendingBooks, pendingRooms, borrowed, overdue, returnedToday] = await Promise.all([
         BookTransaction.find({ status: "pending" }).populate("book").populate("student"),
+        RoomTransaction.find({ status: "pending" }).populate("room").populate("reservee"),
         BookTransaction.countDocuments({ status: "approved" }),
         BookTransaction.countDocuments({ status: "overdue" }),
         BookTransaction.countDocuments({
@@ -45,12 +48,13 @@ export const transactions = async (req, res) => {
 
     res.render("librarian.transactions.ejs", {
         loggedIn: true,
-        transactions: pending,
+        bookTransactions: pendingBooks,
+        roomTransactions: pendingRooms,
         stats: { borrowed, overdue, returnedToday }
     });
 };
 
-
+// BOOK TRANSACTIONS
 export const approveTransaction = async (req, res) => {
     const transaction = await BookTransaction.findById(req.params.id).populate("book");
 
@@ -123,3 +127,51 @@ export const confirmReturn = async (req, res) => {
 
     res.redirect("/Librarian-Transactions");
 };
+// END OF BOOK TRANSACTIONs
+
+
+
+// ROOM TRANSACTIONS
+export const approveRoomTransaction = async (req, res) => {
+    const transaction = await RoomTransaction.findById(req.params.id).populate("room");
+
+    if (!transaction) return res.status(404).send("Transaction not found");
+
+    transaction.status = "approved";
+    transaction.approvedBy = req.session.user.id;
+    await transaction.save();
+
+    await Room.findByIdAndUpdate(transaction.room._id, {
+        status: "reserved",
+        reservee: transaction.reservee,
+        reserveDate: transaction.reservationDate,
+        reserveTimeStart: transaction.startTime,
+        reserveTimeEnd: transaction.endTime
+    });
+
+    await createNotification(
+        transaction.reservee,
+        `Your reservation for Room ${transaction.room.number} on ${new Date(transaction.reservationDate).toLocaleDateString()} has been approved.`,
+        "borrow_approved"
+    );
+
+    res.redirect("/Librarian-Transactions");
+};
+
+export const rejectRoomTransaction = async (req, res) => {
+    const transaction = await RoomTransaction.findById(req.params.id).populate("room");
+
+    if (!transaction) return res.status(404).send("Transaction not found");
+
+    transaction.status = "rejected";
+    await transaction.save();
+
+    await createNotification(
+        transaction.reservee,
+        `Your reservation for Room ${transaction.room.number} has been rejected.`,
+        "borrow_rejected"
+    );
+
+    res.redirect("/Librarian-Transactions");
+};
+
