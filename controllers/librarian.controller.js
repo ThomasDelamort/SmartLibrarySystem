@@ -4,6 +4,7 @@ import BookTransaction from "../models/bookTransaction.model.js";
 import Book from "../models/book.model.js"
 import Student from "../models/student.model.js"
 import librarianModel from "../models/librarian.model.js";
+import { createNotification } from "./helpers/notification.helper.js";
 
 export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true });
@@ -47,7 +48,7 @@ export const transactions = async (req, res) => {
 };
 
 export const approveTransaction = async (req, res) => {
-    const transaction = await BookTransaction.findById(req.params.id);
+    const transaction = await BookTransaction.findById(req.params.id).populate("book");
 
     if (!transaction) return res.status(404).send("Transaction not found");
 
@@ -61,29 +62,42 @@ export const approveTransaction = async (req, res) => {
         $push: { borrowedBooks: transaction.book }
     });
 
+    await createNotification(
+      transaction.student,
+      `Your borrow request for "${transaction.book.title}" has been approved`,
+      "borrow_approved"
+    );
+
     res.redirect("/Librarian-Transactions");
 };
 
 
 export const rejectTransaction = async (req, res) => {
-    const transaction = await BookTransaction.findById(req.params.id);
+    const transaction = await BookTransaction.findById(req.params.id).populate("book");
 
     if (!transaction) return res.status(404).send("Transaction not found");
 
     transaction.status = "cancelled";
     await transaction.save();
 
+    await createNotification(
+      transaction.student,
+      `Your borrow request for "${transaction.book.title}" has been rejected`,
+      "borrow_rejected"
+    );
+
     res.redirect("/Librarian-Transactions");
 };
+
 
 export const confirmReturn = async (req, res) => {
     const returnTransaction = await BookTransaction.findById(req.params.id);
 
     if (!returnTransaction) return res.status(404).send("Transaction not found");
 
-
     returnTransaction.status = "returned";
     returnTransaction.returnDate = new Date();
+    returnTransaction.librarian = req.session.user.id;
     await returnTransaction.save();
 
 
