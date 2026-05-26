@@ -3,230 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartLib Admin Dashboard</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
+    <title>SmartLib Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles/admin.css">
 </head>
 <body>
 
-<div class="dashboard-container">
+<div class="shell">
 
-    <!-- SIDEBAR -->
     <%- include("partials/admin.sidebar.ejs") %>
 
-
-    <main class="main-content">
-        <header class="topbar">
-            <div>
-                <h1>Dashboard Overview</h1>
+    <div class="main">
+        <div class="topbar">
+            <div class="page-title">Dashboard Overview</div>
+            <div class="topbar-right">
+                <div class="bell-btn"><i class="ti ti-bell" style="font-size:16px"></i></div>
+                <button class="gen-btn"><i class="ti ti-file-export"></i> Generate Report</button>
             </div>
-            <div class="topbar-actions">
-                <button class="notification-btn">
-                    <i class="bi bi-bell"></i>
-                </button>
-                <button class="add-btn">
-                    <i class="bi bi-file-earmark-plus"></i>
-                    Generate Report
-                </button>
-            </div>
-        </header>
+        </div>
 
+        <div class="content">
 
-        <section class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-info">
-                    <span>Total Users</span>
-                    <h2>3,210</h2>
-                    <small>Students & Staff</small>
-                </div>
-
-                <div class="stat-icon users">
-                    <i class="bi bi-people-fill"></i>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-info">
-                    <span>User Permissions</span>
-                    <h2>128</h2>
-                    <small>Active access roles</small>
-                </div>
-                <div class="stat-icon permissions">
-                    <i class="bi bi-shield-lock-fill"></i>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-info">
-                    <span>Monthly Reports</span>
-                    <h2>12</h2>
-                    <small>Generated this year</small>
-                </div>
-                <div class="stat-icon reports">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-info">
-                    <span>System Alerts</span>
-                    <h2>4</h2>
-                    <small>Require attention</small>
-                </div>
-                <div class="stat-icon alerts">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                </div>
-            </div>
-        </section>
-
-
-        <section class="content-grid">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Recent Administrative Activity</h3>
-                    <button>
-                        View All
-                    </button>
-                </div>
-
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-left">
-                            <div class="activity-circle blue">
-                                <i class="bi bi-file-earmark-bar-graph"></i>
-                            </div>
-                            <div>
-                                <h6>Monthly Report Generated</h6>
-                                <p>April 2026 usage report exported successfully.</p>
-                            </div>
-                        </div>
-                        <span>5m ago</span>
+            <!-- Overview Stats -->
+            <div class="sec">
+                <div class="sec-label">Overview</div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="ti ti-users" style="font-size:13px"></i>Students</div>
+                        <div class="stat-val"><%= stats.totalStudents %></div>
+                        <div class="stat-sub">Active accounts</div>
                     </div>
-
-                    <div class="activity-item">
-                        <div class="activity-left">
-                            <div class="activity-circle green">
-                                <i class="bi bi-person-check-fill"></i>
-                            </div>
-                            <div>
-                                <h6>Permission Updated</h6>
-                                <p>Librarian access privileges were modified.</p>
-                            </div>
-                        </div>
-                        <span>20m ago</span>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="ti ti-user-check" style="font-size:13px"></i>Librarians</div>
+                        <div class="stat-val"><%= stats.totalLibrarians %></div>
+                        <div class="stat-sub">Staff accounts</div>
                     </div>
-
-                    <div class="activity-item">
-                        <div class="activity-left">
-                            <div class="activity-circle red">
-                                <i class="bi bi-exclamation-circle-fill"></i>
-                            </div>
-                            <div>
-                                <h6>System Alert</h6>
-                                <p>Failed login attempts detected.</p>
-                            </div>
-                        </div>
-                        <span>1h ago</span>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="ti ti-book" style="font-size:13px"></i>Books</div>
+                        <div class="stat-val"><%= stats.totalBooks %></div>
+                        <div class="stat-sub">In catalogue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="ti ti-activity" style="font-size:13px"></i>Reservations</div>
+                        <div class="stat-val"><%= reservations.processed %></div>
+                        <div class="stat-sub">Processed total</div>
                     </div>
                 </div>
             </div>
 
+            <!-- Analytics -->
+            <div class="sec">
+                <div class="sec-label">Analytics</div>
 
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Quick Actions</h3>
+                <div class="panel" style="margin-bottom:10px">
+                    <div class="panel-hdr">
+                        <div class="panel-title"><i class="ti ti-chart-line"></i>User traffic</div>
+                        <div class="pbtn-group">
+                            <button class="pbtn active" onclick="setTraffic('14d',this)">14d</button>
+                            <button class="pbtn" onclick="setTraffic('30d',this)">30d</button>
+                        </div>
+                    </div>
+                    <div class="legend">
+                        <span><span class="ldot" style="background:#1e293b"></span>Students</span>
+                        <span><span class="ldot" style="background:#64748b"></span>Librarians (dashed)</span>
+                    </div>
+                    <div style="position:relative;width:100%;height:180px">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
                 </div>
 
-                <div class="quick-actions">
-                    <button>
-                        <i class="bi bi-file-earmark-bar-graph"></i>
-                        Generate Report
-                    </button>
+                <div class="two-col">
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title"><i class="ti ti-bookmark"></i>Reservations</div>
+                            <div class="pbtn-group">
+                                <button class="pbtn active" onclick="setRes('weekly',this)">Weekly</button>
+                                <button class="pbtn" onclick="setRes('monthly',this)">Monthly</button>
+                            </div>
+                        </div>
+                        <div class="sum-row">
+                            <div class="sum-card">
+                                <div class="sum-lbl">Processed</div>
+                                <div class="sum-val" id="sumP"><%= reservations.processed %></div>
+                                <div class="sum-sub" style="color:#16a34a">Approved</div>
+                            </div>
+                            <div class="sum-card">
+                                <div class="sum-lbl">Cancelled</div>
+                                <div class="sum-val" id="sumC"><%= reservations.cancelled %></div>
+                                <div class="sum-sub" style="color:#ca8a04">Cancelled</div>
+                            </div>
+                        </div>
+                        <div class="legend">
+                            <span><span class="ldot" style="background:#1e293b"></span>Processed</span>
+                            <span><span class="ldot" style="background:#94a3b8"></span>Cancelled</span>
+                        </div>
+                        <div style="position:relative;width:100%;height:140px">
+                            <canvas id="resChart"></canvas>
+                        </div>
+                    </div>
 
-                    <button>
-                        <i class="bi bi-person-gear"></i>
-                        Manage Permissions
-                    </button>
-
-                    <button>
-                        <i class="bi bi-people"></i>
-                        User Accounts
-                    </button>
-
-                    <button>
-                        <i class="bi bi-shield-check"></i>
-                        System Logs
-                    </button>
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title"><i class="ti ti-file-text"></i>Daily log</div>
+                        </div>
+                        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                            Exports all activity for the selected date as a
+                            <span style="font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary)">.csv</span> file.
+                        </div>
+                        <div style="margin-top:10px">
+                            <label style="font-size:11px;color:var(--text-muted)">Log date</label>
+                            <input type="date" style="width:100%;margin-top:4px;font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#f8fafc;color:var(--text-primary)">
+                        </div>
+                        <button class="dl-btn"><i class="ti ti-download"></i> Download CSV</button>
+                    </div>
                 </div>
             </div>
-        </section>
 
+            <!-- Statistics -->
+            <div class="sec">
+                <div class="sec-label">Statistics</div>
+                <div class="two-col">
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title"><i class="ti ti-refresh"></i>Most borrowed</div>
+                        </div>
+                        <% if (mostBorrowed.length === 0) { %>
+                        <p style="font-size:12px;color:var(--text-muted)">No data yet.</p>
+                        <% } %>
+                        <% mostBorrowed.forEach(function(item, i) { %>
+                        <div class="stat-book">
+                            <div class="book-rank"><%= i + 1 %></div>
+                            <div class="book-info">
+                                <div class="book-title"><%= item.book.title %></div>
+                                <div class="book-author"><%= Array.isArray(item.book.author) ? item.book.author.join(', ') : item.book.author %></div>
+                            </div>
+                            <div class="book-count"><%= item.count %> x</div>
+                        </div>
+                        <% }) %>
+                    </div>
 
-        <section class="dashboard-card table-card">
-            <div class="card-header">
-                <h3>Recent Permission Changes</h3>
-                <button>
-                    View Logs
-                </button>
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title"><i class="ti ti-users"></i>Recent accounts</div>
+                        </div>
+                        <% recentStudents.forEach(function(s) { %>
+                        <div class="acct-row">
+                            <div class="avatar av-blue"><%= s.firstName[0] %><%= s.lastName[0] %></div>
+                            <div style="flex:1">
+                                <div class="acct-name"><%= s.firstName %> <%= s.lastName %></div>
+                                <div class="acct-email"><%= s.email %></div>
+                            </div>
+                            <span class="badge badge-blue">Student</span>
+                        </div>
+                        <% }) %>
+                        <% recentLibrarians.forEach(function(l) { %>
+                        <div class="acct-row">
+                            <div class="avatar av-green"><%= l.firstName[0] %><%= l.lastName[0] %></div>
+                            <div style="flex:1">
+                                <div class="acct-name"><%= l.firstName %> <%= l.lastName %></div>
+                                <div class="acct-email"><%= l.email %></div>
+                            </div>
+                            <span class="badge badge-green">Librarian</span>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table custom-table align-middle">
+            <!-- Recent Activity -->
+            <div class="sec">
+                <div class="sec-label">Recent Activity</div>
+                <div class="two-col">
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title">Pending transactions</div>
+                            <a href="/Librarian-Transactions" class="view-all">View All</a>
+                        </div>
+                        <% if (recentActivity.length === 0) { %>
+                        <p style="font-size:12px;color:var(--text-muted)">No pending transactions.</p>
+                        <% } %>
+                        <% recentActivity.forEach(function(txn) { %>
+                        <div class="activity-item">
+                            <div class="act-icon ic-blue"><i class="ti ti-book"></i></div>
+                            <div style="flex:1">
+                                <div class="act-title"><%= txn.student ? txn.student.firstName + ' ' + txn.student.lastName : 'Unknown' %></div>
+                                <div class="act-desc"><%= txn.transactionType === 'return' ? 'Return' : 'Borrow' %>: <%= txn.book ? txn.book.title : 'Unknown' %></div>
+                            </div>
+                            <div class="act-time"><%= new Date(txn.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></div>
+                        </div>
+                        <% }) %>
+                    </div>
 
-                    <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Role</th>
-                        <th>Permission Updated</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Librarian</td>
-                        <td>Catalog Management Access</td>
-                        <td>
-                            <span class="status success">
-                                Updated
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Student</td>
-                        <td>Study Room Reservation Access</td>
-                        <td>
-                            <span class="status pending">
-                                Pending
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Michael Cruz</td>
-                        <td>Administrator</td>
-                        <td>Report Generation Privileges</td>
-                        <td>
-                            <span class="status danger">
-                                Revoked
-                            </span>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="panel-title">Quick actions</div>
+                        </div>
+                        <a href="/Admin/Students" class="qa-btn"><i class="ti ti-users"></i> Manage Students</a>
+                        <a href="/Admin/Librarians" class="qa-btn"><i class="ti ti-user-check"></i> Manage Librarians</a>
+                        <a href="/Admin/Books" class="qa-btn"><i class="ti ti-book"></i> Manage Books</a>
+                        <a href="/Admin/Rooms" class="qa-btn"><i class="ti ti-building"></i> Manage Rooms</a>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
+
+        </div>
+    </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="/js/admin.dashboard.js"></script>
 </body>
 </html>
