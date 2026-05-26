@@ -7,6 +7,8 @@ import {
 } from "./helpers/book.helper.js";
 import BookTransaction from "../models/bookTransaction.model.js"
 import Notification from "../models/notification.model.js"
+import Room from "../models/room.model.js";
+import RoomTransaction from "../models/roomTransaction.model.js";
 
 
 export const getStudents = async (req, res) => {
@@ -121,3 +123,44 @@ export const markNotificationRead = async (req, res) => {
     res.redirect("/Students");
 }
 
+
+
+export const getRooms = async (req, res) => {
+    const rooms = await Room.find();
+    res.render("student.rooms.ejs", { loggedIn: true, rooms });
+};
+
+
+
+export const reserveRoom = async (req, res) => {
+    const { roomId, reservationDate, startTime, endTime, purpose, attendeesCount } = req.body;
+
+    const room = await Room.findById(roomId);
+
+    if (!room) return res.status(404).send('Room not found');
+
+    if (room.status !== "available") return res.redirect("/Students/Room");
+
+    const conflict = await RoomTransaction.findOne({
+        room: roomId,
+        reservationDate: new Date(reservationDate),
+        status: { $in: ["pending", "approved"] },
+        $or: [
+            { startTime: { $lt: endTime }, endTime: { $gt: startTime }}
+        ]
+    });
+
+    if (conflict) return res.redirect("/Students/Room");
+
+    await RoomTransaction.create({
+        reservee: req.session.user.id,
+        room: roomId,
+        reservationDate: new Date(reservationDate),
+        startTime,
+        endTime,
+        purpose,
+        attendeesCount: parseInt(attendeesCount)
+    });
+
+    res.redirect("/Students/Rooms");
+}

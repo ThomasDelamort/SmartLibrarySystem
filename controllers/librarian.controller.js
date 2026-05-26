@@ -95,7 +95,7 @@ export const rejectTransaction = async (req, res) => {
 
 
 export const confirmReturn = async (req, res) => {
-    const returnTransaction = await BookTransaction.findById(req.params.id);
+    const returnTransaction = await BookTransaction.findById(req.params.id).populate("book");
 
     if (!returnTransaction) return res.status(404).send("Transaction not found");
 
@@ -104,17 +104,22 @@ export const confirmReturn = async (req, res) => {
     returnTransaction.librarian = req.session.user.id;
     await returnTransaction.save();
 
-
     await BookTransaction.findOneAndUpdate(
-        { book: returnTransaction.book, student: returnTransaction.student, status: "approved", transactionType: "borrow" },
+        { book: returnTransaction.book._id, student: returnTransaction.student, status: "approved", transactionType: "borrow" },
         { status: "returned", returnDate: new Date() }
     );
 
-    await Book.findByIdAndUpdate(returnTransaction.book, { status: "available" });
+    await Book.findByIdAndUpdate(returnTransaction.book._id, { status: "available" });
 
     await Student.findByIdAndUpdate(returnTransaction.student, {
-        $pull: { borrowedBooks: returnTransaction.book }
+        $pull: { borrowedBooks: returnTransaction.book._id }
     });
+
+    await createNotification(
+        returnTransaction.student,
+        `Your return for "${returnTransaction.book.title}" has been confirmed.`,
+        "borrow_approved"
+    );
 
     res.redirect("/Librarian-Transactions");
 };

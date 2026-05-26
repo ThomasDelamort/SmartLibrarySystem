@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import BookTransaction from "../models/bookTransaction.model.js";
 import Student from "../models/student.model.js";
+import Notification from "../models/notification.model.js";
 import { createNotification } from "../controllers/helpers/notification.helper.js";
 
 const FINE_PER_DAY = 10;
@@ -35,21 +36,34 @@ export const startOverdueCron = () => {
 
         for (const txn of overdueTransactions) {
             const daysOverdue = Math.floor((now - txn.dueDate) / (1000 * 60 * 60 * 24));
-            const fine = daysOverdue * FINE_PER_DAY;
+            const newFine = daysOverdue * FINE_PER_DAY;
+            const difference = newFine - (txn.fineAmount || 0);
 
             txn.status = "overdue";
-            txn.fineAmount = fine;
+            txn.fineAmount = newFine;
             await txn.save();
 
-            await Student.findByIdAndUpdate(txn.student, {
-                $inc: { fines: fine }
+
+            if (difference > 0) {
+                await Student.findByIdAndUpdate(txn.student, {
+                    $inc: { fines: difference }
+                });
+            }
+
+
+            const alreadyNotified = await Notification.findOne({
+                student: txn.student,
+                type: "overdue",
+                createdAt: { $gte: todayStart }
             });
 
-            await createNotification(
-                txn.student,
-                `"${txn.book.title}" is overdue by ${daysOverdue} day(s). Fine: ₱${fine}.`,
-                "overdue"
-            );
+            if (!alreadyNotified) {
+                await createNotification(
+                    txn.student,
+                    `"${txn.book.title}" is overdue by ${daysOverdue} day(s). Fine: ₱${newFine}.`,
+                    "overdue"
+                );
+            }
         }
 
         console.log(`Overdue check done. ${overdueTransactions.length} books marked overdue.`);

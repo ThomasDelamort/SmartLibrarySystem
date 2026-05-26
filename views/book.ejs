@@ -47,12 +47,20 @@
 
                 <div class="book-actions d-flex gap-3 flex-wrap">
 
+                    <% if (book.status === 'borrowed') { %>
+                    <button type="button"
+                            class="btn btn-secondary btn-lg"
+                            disabled>
+                        Unavailable
+                    </button>
+                    <% } else { %>
                     <button type="button"
                             class="btn btn-outline-primary btn-lg"
                             data-bs-toggle="modal"
                             data-bs-target="#borrowModal">
                         Borrow Book
                     </button>
+                    <% } %>
 
                     <form action="/Submit" method="POST">
                         <input type="hidden" name="id" value="<%= book.id %>">

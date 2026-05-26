@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const RoomTransactionSchema = new mongoose.Schema(
     {
-        user: {
+        reservee: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "Student",
             required: true,
         },
 
@@ -48,9 +48,7 @@ const RoomTransactionSchema = new mongoose.Schema(
                 "approved",
                 "rejected",
                 "cancelled",
-                "checked-in",
                 "completed",
-                "no-show",
             ],
             default: "pending",
         },
@@ -58,23 +56,6 @@ const RoomTransactionSchema = new mongoose.Schema(
         approvedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Librarian",
-            default: null,
-        },
-
-        approvedAt: Date,
-
-        rejectionReason: String,
-
-        checkInTime: Date,
-        checkOutTime: Date,
-
-        notes: String,
-
-        cancelledAt: Date,
-
-        cancelledBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
             default: null,
         },
     },
