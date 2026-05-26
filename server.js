@@ -10,12 +10,11 @@ dotenv.config();
 const startServer = async () => {
 
     await connectDB();
-
+    startOverdueCron();
+    startRoomCron();
     app.listen(process.env.PORT, () => {
         console.log(`Server running on port ${process.env.PORT}`);
     });
 };
 
 startServer();
-startOverdueCron();
-startRoomCron();

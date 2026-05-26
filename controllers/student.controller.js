@@ -220,6 +220,7 @@ export const getHistory = async (req, res) => {
     const [bookHistory, roomHistory] = await Promise.all([
         BookTransaction.find({
             student: studentId,
+            transactionType: "borrow",
             status: { $in: ["returned", "cancelled"] }
         }).populate("book").sort({ createdAt: -1 }),
 

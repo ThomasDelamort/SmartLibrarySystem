@@ -16,6 +16,7 @@ import {
     getStatus,
     getHistory
 } from "../controllers/student.controller.js";
+import { getBag, addToBag, removeFromBag, borrowFromBag } from "../controllers/Bag.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -29,13 +30,23 @@ router.get("/Students/Borrowed", studentAuth, getBorrowedBooks);
 router.post("/Students/Return", studentAuth, returnBook);
 router.post("/Notifications/Read/:id", studentAuth, markNotificationRead);
 
+
 router.get("/Students/Rooms", studentAuth, getRooms);
 router.post("/Students/Rooms/Reserve", studentAuth, reserveRoom);
+
 
 router.get("/Students/Reservations", studentAuth, getReservations);
 router.post("/Students/Reservation/Cancel/:id", studentAuth, cancelReservation);
 
+
 router.get("/Students/Status", studentAuth, getStatus);
 router.get("/Students/History", studentAuth, getHistory);
+
+
+router.get("/Students/Bag", studentAuth, getBag);
+router.post("/Students/Bag/Add", studentAuth, addToBag);
+router.post("/Students/Bag/Remove/:bookId", studentAuth, removeFromBag);
+router.post("/Students/Bag/BorrowAll", studentAuth, borrowFromBag);
+
 
 export default router;
