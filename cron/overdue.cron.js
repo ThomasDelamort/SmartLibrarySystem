@@ -11,8 +11,9 @@ export const startOverdueCron = () => {
         console.log("Running overdue check...");
 
         const now = new Date();
-        const todayStart = new Date().setHours(0, 0, 0, 0);
-        const todayEnd = new Date().setHours(23, 59, 59, 999);
+        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const today = new Date(now);
+        today.setHours(0, 0, 0, 0); 59, 999);
 
 
         const dueToday = await BookTransaction.find({
