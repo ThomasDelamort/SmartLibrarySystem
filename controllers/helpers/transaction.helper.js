@@ -14,8 +14,10 @@ export const borrowBook = async ({ req, res }) => {
 
     if (!book) return res.status(404).send("Book not found");
 
-    const redirectWithError = (msg) =>
+    const redirectWithError = (msg) => {
         res.redirect(`/Students/Book/${encodeURIComponent(book.title)}?error=${encodeURIComponent(msg)}`);
+        return;
+    };
 
     if (book.status === "borrowed")
         return redirectWithError("This book is already borrowed.");

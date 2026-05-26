@@ -6,6 +6,8 @@ import {
     renderSingleBook
 } from "./helpers/book.helper.js";
 import BookTransaction from "../models/bookTransaction.model.js"
+import Notification from "../models/notification.model.js"
+
 
 export const getStudents = async (req, res) => {
     await paginateBooks({
@@ -15,6 +17,7 @@ export const getStudents = async (req, res) => {
         loggedIn: true
     });
 };
+
 
 export const searchStudentBooks = async (req, res) => {
     const query = req.query.q || "";
@@ -28,6 +31,7 @@ export const searchStudentBooks = async (req, res) => {
     });
 };
 
+
 export const filterStudentBooks = async (req, res) => {
     await paginateBooks({
         req,
@@ -38,6 +42,7 @@ export const filterStudentBooks = async (req, res) => {
     });
 };
 
+
 export const submitBook = async (req, res) => {
     await handleBookAction({
         req,
@@ -46,6 +51,7 @@ export const submitBook = async (req, res) => {
     });
 };
 
+
 export const getStudentBook = async (req, res) => {
     await renderSingleBook({
         req,
@@ -53,6 +59,7 @@ export const getStudentBook = async (req, res) => {
         loggedIn: true,
     });
 };
+
 
 export const getBorrowedBooks = async (req, res) => {
     const studentId = req.session.user.id;
@@ -68,7 +75,7 @@ export const getBorrowedBooks = async (req, res) => {
         status: { $in: ["approved", "overdue"] }
     }).populate("book");
 
-    // Flag which books have a pending return
+
     const transactionsWithStatus = transactions.map(txn => ({
         ...txn.toObject(),
         pendingReturn: pendingReturns.some(id => id.equals(txn.book._id))
@@ -76,6 +83,7 @@ export const getBorrowedBooks = async (req, res) => {
 
     res.render("student.borrowed.ejs", { loggedIn: true, transactions: transactionsWithStatus });
 };
+
 
 export const returnBook = async (req, res) => {
     const { transactionId } = req.body;
@@ -104,3 +112,12 @@ export const returnBook = async (req, res) => {
 
     res.redirect("/Students/Borrowed");
 };
+
+
+
+
+export const markNotificationRead = async (req, res) => {
+    await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
+    res.redirect("/Students");
+}
+
