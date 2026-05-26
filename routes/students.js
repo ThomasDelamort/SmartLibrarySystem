@@ -12,7 +12,9 @@ import {
     getRooms,
     reserveRoom,
     getReservations,
-    cancelReservation
+    cancelReservation,
+    getStatus,
+    getHistory
 } from "../controllers/student.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -32,5 +34,8 @@ router.post("/Students/Rooms/Reserve", studentAuth, reserveRoom);
 
 router.get("/Students/Reservations", studentAuth, getReservations);
 router.post("/Students/Reservation/Cancel/:id", studentAuth, cancelReservation);
+
+router.get("/Students/Status", studentAuth, getStatus);
+router.get("/Students/History", studentAuth, getHistory);
 
 export default router;

@@ -9,6 +9,7 @@ import BookTransaction from "../models/bookTransaction.model.js"
 import Notification from "../models/notification.model.js"
 import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
+import Student from "../models/student.model.js"
 
 
 export const getStudents = async (req, res) => {
@@ -198,4 +199,35 @@ export const cancelReservation = async (req, res) => {
     }
 
     res.redirect("/Students/Reservations");
+};
+
+
+export const getStatus = async (req, res) => {
+    const student = await Student.findById(req.session.user.id);
+
+    const overdueBooks = await BookTransaction.find({
+        student: req.session.user.id,
+        status: "overdue"
+    }).populate("book");
+
+    res.render("student.status.ejs", { loggedIn: true, student, overdueBooks });
+};
+
+
+export const getHistory = async (req, res) => {
+    const studentId = req.session.user.id;
+
+    const [bookHistory, roomHistory] = await Promise.all([
+        BookTransaction.find({
+            student: studentId,
+            status: { $in: ["returned", "cancelled"] }
+        }).populate("book").sort({ createdAt: -1 }),
+
+        RoomTransaction.find({
+            reservee: studentId,
+            status: { $in: ["completed", "cancelled", "rejected"] }
+        }).populate("room").sort({ createdAt: -1 })
+    ]);
+
+    res.render("student.history.ejs", { loggedIn: true, bookHistory, roomHistory });
 };
