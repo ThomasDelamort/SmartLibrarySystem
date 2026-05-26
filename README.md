@@ -27,13 +27,16 @@ npm commands
 - npm install ejs
 - npm install mongoose
 - npm install dotenv
-- npm insatll express-session
+- npm insatall express-session
 - npm connect-db
+- npm install node-cron
 - or just "npm i"
 
 
 <br>
 
-In order to connect to databse make a .env file and store the following.
+In order to connect to database make a .env file and store the following.
 - address
 - port
+
+
