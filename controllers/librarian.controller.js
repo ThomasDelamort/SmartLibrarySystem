@@ -225,7 +225,7 @@ export const addBook = async (req, res) => {
         title: title.trim(),
         author: author.split(",").map(a => a.trim()),
         category: category.split(",").map(c => c.trim()),
-        image: image.trim(),
+        image: req.file.location,
         description: description.trim(),
         isbn: isbn?.trim(),
         publisher: publisher?.trim(),
@@ -245,11 +245,13 @@ export const getEditBook = async (req, res) => {
 export const editBook = async (req, res) => {
     const { title, author, category, image, description, isbn, publisher, publishedYear, status } = req.body;
 
+    const existingBook = await Book.findById(req.params.id);
+
     await Book.findByIdAndUpdate(req.params.id, {
         title: title.trim(),
         author: author.split(",").map(a => a.trim()),
         category: category.split(",").map(c => c.trim()),
-        image: image.trim(),
+        image: req.file ? req.file.location : existingBook.image,
         description: description.trim(),
         isbn: isbn?.trim(),
         publisher: publisher?.trim(),
