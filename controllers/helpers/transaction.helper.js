@@ -19,6 +19,11 @@ export const borrowBook = async ({ req, res }) => {
         return;
     };
 
+    const student = await Student.findById(studentId);
+
+    if (!student.canBorrow)
+        return redirectWithError("Your borrowing privileges have been revoked due to unpaid fines. Please contact an admin.");
+
     if (book.status === "borrowed")
         return redirectWithError("This book is already borrowed.");
 

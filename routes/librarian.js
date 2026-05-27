@@ -9,7 +9,8 @@ import {
     confirmReturn,
     approveRoomTransaction,
     rejectRoomTransaction,
-
+    searchLibrarianBooks,
+    searchLibrarianStudents
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -25,5 +26,10 @@ router.post("/Librarian-Transactions/Return/:id", librarianAuth, confirmReturn);
 
 router.post("/Librarian-Transactions/Room/Approve/:id", librarianAuth, approveRoomTransaction);
 router.post("/Librarian-Transactions/Room/Reject/:id", librarianAuth, rejectRoomTransaction);
+
+router.get("/Librarian-Books/Search", librarianAuth, searchLibrarianBooks);
+router.get("/Librarian-SL/Search", librarianAuth, searchLibrarianStudents);
+
+
 
 export default router;

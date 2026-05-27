@@ -43,6 +43,11 @@ const studentSchema = new mongoose.Schema(
             required: true,
         },
 
+        canBorrow: {
+            type: Boolean,
+            default: true
+        },
+
         borrowedBooks: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Book",

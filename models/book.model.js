@@ -33,6 +33,7 @@ const bookSchema = new mongoose.Schema({
         enum: [
             "available",
             "borrowed",
+            "overdue",
             "lost",
             "damaged"
         ],

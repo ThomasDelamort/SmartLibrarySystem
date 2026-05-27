@@ -1,5 +1,5 @@
-import { paginateBooks } from "./helpers/book.helper.js";
-import { paginateStudents } from "./helpers/student.list.helper.js";
+import { paginateBooks, createSearchFilter } from "./helpers/book.helper.js";
+import { paginateStudents, createStudentSearchFilter } from "./helpers/student.list.helper.js";
 import BookTransaction from "../models/bookTransaction.model.js";
 import Book from "../models/book.model.js"
 import Student from "../models/student.model.js"
@@ -9,7 +9,7 @@ import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
 
 export const getLibrarian = (req, res) => {
-    res.render("librarian.ejs", { loggedIn: true });
+    res.render("librarian.ejs", { loggedIn: true, searchAction: "/Librarian-Books/Search" });
 };
 
 
@@ -17,20 +17,47 @@ export const booksLibrarian = async (req, res) => {
     await paginateBooks({
         req,
         res,
+        filter: createSearchFilter(req.query.q || ""),
         view: "librarian.books.ejs",
-        loggedIn: true
+        loggedIn: true,
+        extra: { searchAction: "/Librarian-Books/Search" }
     });
 };
-
 
 export const studentsLists = async (req, res) => {
     await paginateStudents({
         req,
         res,
         view: "librarian.students.ejs",
-        loggedIn: true
+        loggedIn: true,
+        extra: { searchAction: "/Librarian-SL/Search" }
     });
 };
+
+export const searchLibrarianBooks = async (req, res) => {
+    const query = req.query.q || "";
+    await paginateBooks({
+        req,
+        res,
+        filter: createSearchFilter(query),
+        view: "librarian.books.ejs",
+        loggedIn: true,
+        extra: { searchAction: "/Librarian-Books/Search" }
+    });
+};
+
+export const searchLibrarianStudents = async (req, res) => {
+    const query = req.query.q || "";
+    await paginateStudents({
+        req,
+        res,
+        filter: createStudentSearchFilter(query),
+        view: "librarian.students.ejs",
+        loggedIn: true,
+        extra: { searchAction: "/Librarian-SL/Search" }
+    });
+};
+
 
 
 export const transactions = async (req, res) => {
@@ -50,9 +77,12 @@ export const transactions = async (req, res) => {
         loggedIn: true,
         bookTransactions: pendingBooks,
         roomTransactions: pendingRooms,
-        stats: { borrowed, overdue, returnedToday }
+        stats: { borrowed, overdue, returnedToday },
+        searchAction: "/Librarian-Book/Search"
     });
 };
+
+
 
 // BOOK TRANSACTIONS
 export const approveTransaction = async (req, res) => {

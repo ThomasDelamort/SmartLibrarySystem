@@ -45,6 +45,10 @@
                         <h5 class="fw-bold mb-1"><%= txn.book.title %></h5>
                         <p class="text-muted mb-1"><%= txn.book.author %></p>
                         <small class="text-muted">
+                            Borrowed: <strong><%= new Date(txn.borrowDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></strong>
+                        </small>
+                        <br>
+                        <small class="text-muted">
                             Due: <strong><%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></strong>
                         </small>
                     </div>

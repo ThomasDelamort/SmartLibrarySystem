@@ -1,22 +1,12 @@
 import Book from "../../models/book.model.js";
 import { borrowBook } from "./transaction.helper.js"
 
-export const paginateBooks = async ({
-                                        req,
-                                        res,
-                                        filter = {},
-                                        view,
-                                        loggedIn
-                                    }) => {
+export const paginateBooks = async ({ req, res, filter = {}, view, loggedIn, extra = {} }) => {
     const booksPerPage = 9;
     const page = parseInt(req.query.page) || 1;
-
     const start = (page - 1) * booksPerPage;
 
-    const books = await Book.find(filter)
-        .skip(start)
-        .limit(booksPerPage);
-
+    const books = await Book.find(filter).skip(start).limit(booksPerPage);
     const totalBooks = await Book.countDocuments(filter);
     const totalPages = Math.ceil(totalBooks / booksPerPage);
 
@@ -25,7 +15,8 @@ export const paginateBooks = async ({
         books,
         currentPage: page,
         totalPages,
-        searchQuery: req.query.q || ""
+        searchQuery: req.query.q || "",
+        ...extra
     });
 };
 
