@@ -61,7 +61,7 @@ export const searchLibrarianStudents = async (req, res) => {
 
 
 export const transactions = async (req, res) => {
-    const [pendingBooks, pendingRooms, borrowed, overdue, returnedToday] = await Promise.all([
+    const [pendingBooks, pendingRooms, borrowed, overdue, returnedToday, students, books, rooms] = await Promise.all([
         BookTransaction.find({ status: "pending" }).populate("book").populate("student"),
         RoomTransaction.find({ status: "pending" }).populate("room").populate("reservee"),
         BookTransaction.countDocuments({ status: "approved" }),
@@ -70,7 +70,10 @@ export const transactions = async (req, res) => {
             status: "returned",
             transactionType: "return",
             returnDate: { $gte: new Date().setHours(0, 0, 0, 0) }
-        })
+        }),
+        Student.find({}, "firstName lastName studentId").sort({ firstName: 1 }),
+        Book.find({ status: "available" }, "title").sort({ title: 1 }),
+        Room.find({ status: "available" }, "number capacity").sort({ number: 1 }),
     ]);
 
     res.render("librarian.transactions.ejs", {
@@ -78,7 +81,10 @@ export const transactions = async (req, res) => {
         bookTransactions: pendingBooks,
         roomTransactions: pendingRooms,
         stats: { borrowed, overdue, returnedToday },
-        searchAction: "/Librarian-Book/Search"
+        searchAction: "/Librarian-Book/Search",
+        students,
+        books,
+        rooms,
     });
 };
 
@@ -257,4 +263,101 @@ export const editBook = async (req, res) => {
 export const deleteBook = async (req, res) => {
     await Book.findByIdAndDelete(req.params.id);
     res.redirect("/Librarian-Books");
+};
+
+// MANUAL TRANSACTION (walk-in)
+export const manualTransaction = async (req, res) => {
+    const { type, studentId, bookId, dueDate, roomId, reservationDate, startTime, endTime, purpose, attendeesCount } = req.body;
+    const librarianId = req.session.user.id;
+
+    if (type === "borrow") {
+        const book = await Book.findById(bookId);
+        if (!book || book.status === "borrowed")
+            return res.redirect("/Librarian-Transactions?error=Book+is+unavailable");
+
+        const generateReference = () => `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        await BookTransaction.create({
+            referenceNumber: generateReference(),
+            book: bookId,
+            student: studentId,
+            librarian: librarianId,
+            transactionType: "borrow",
+            status: "approved",
+            dueDate: new Date(dueDate),
+        });
+
+        await Book.findByIdAndUpdate(bookId, { status: "borrowed" });
+
+        await Student.findByIdAndUpdate(studentId, {
+            $push: { borrowedBooks: bookId }
+        });
+
+        await createNotification(
+            studentId,
+            `A librarian has processed a borrow transaction for "${book.title}" on your behalf.`,
+            "borrow_approved"
+        );
+
+    } else if (type === "return") {
+        const borrowTxn = await BookTransaction.findOne({
+            student: studentId,
+            book: bookId,
+            status: "approved",
+            transactionType: "borrow",
+        }).populate("book");
+
+        if (!borrowTxn)
+            return res.redirect("/Librarian-Transactions?error=No+active+borrow+found+for+this+student+and+book");
+
+        borrowTxn.status = "returned";
+        borrowTxn.returnDate = new Date();
+        borrowTxn.librarian = librarianId;
+        await borrowTxn.save();
+
+        await Book.findByIdAndUpdate(bookId, { status: "available" });
+
+        await Student.findByIdAndUpdate(studentId, {
+            $pull: { borrowedBooks: bookId }
+        });
+
+        await createNotification(
+            studentId,
+            `A librarian has processed the return of "${borrowTxn.book.title}" on your behalf.`,
+            "borrow_approved"
+        );
+
+    } else if (type === "room") {
+        const room = await Room.findById(roomId);
+        if (!room || room.status !== "available")
+            return res.redirect("/Librarian-Transactions?error=Room+is+not+available");
+
+        await RoomTransaction.create({
+            reservee: studentId,
+            room: roomId,
+            reservationDate: new Date(reservationDate),
+            startTime,
+            endTime,
+            purpose: purpose || "",
+            attendeesCount: attendeesCount || 1,
+            status: "approved",
+            approvedBy: librarianId,
+        });
+
+        await Room.findByIdAndUpdate(roomId, {
+            status: "reserved",
+            reservee: studentId,
+            reserveDate: new Date(reservationDate),
+            reserveTimeStart: startTime,
+            reserveTimeEnd: endTime,
+        });
+
+        await createNotification(
+            studentId,
+            `A librarian has reserved Room ${room.number} for you on ${new Date(reservationDate).toLocaleDateString()}.`,
+            "borrow_approved"
+        );
+    }
+
+    res.redirect("/Librarian-Transactions");
 };
