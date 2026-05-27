@@ -140,7 +140,7 @@ export const reserveRoom = async (req, res) => {
 
     if (!room) return res.status(404).send('Room not found');
 
-    if (room.status !== "available") return res.redirect("/Students/Room");
+    if (room.status !== "available") return res.redirect("/Students/Rooms");
 
     const conflict = await RoomTransaction.findOne({
         room: roomId,
@@ -151,7 +151,7 @@ export const reserveRoom = async (req, res) => {
         ]
     });
 
-    if (conflict) return res.redirect("/Students/Room");
+    if (conflict) return res.redirect("/Students/Rooms");
 
     await RoomTransaction.create({
         reservee: req.session.user.id,
