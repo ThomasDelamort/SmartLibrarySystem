@@ -22,6 +22,24 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
 
+    isbn: {
+        type: String,
+        trim: true,
+        unique: true,
+        sparse: true
+    },
+
+    publisher: {
+        type: String,
+        trim: true
+    },
+
+    publishedYear: {
+        type: Number,
+        min: 1000,
+        max: new Date().getFullYear()
+    },
+
     description: {
         type: String,
         required: true
