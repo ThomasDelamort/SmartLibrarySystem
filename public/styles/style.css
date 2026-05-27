@@ -184,12 +184,50 @@ body{
 
 
 
-@media(max-width:768px){
-
-    .title-status{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:.7rem;
+@media (max-width: 768px) {
+    .col-md-4 {
+        width: 100%;
     }
 
+    #book-card img {
+        width: 90px;
+        min-height: 120px;
+    }
+
+    .card-body {
+        min-height: auto;
+        padding: 10px !important;
+    }
+
+    .card-title {
+        font-size: 0.85rem;
+    }
+
+    .book-info {
+        font-size: 0.75rem;
+    }
+
+    #chicken {
+        margin-bottom: 1rem;
+    }
+
+    .cat {
+        font-size: 0.72rem;
+        padding: 3px 8px;
+    }
+
+    .status-available,
+    .status-borrowed {
+        font-size: 0.72rem;
+        padding: 4px 10px;
+    }
+
+
+    .col-md-2 {
+        display: none;
+    }
+
+    .col-md-10 {
+        width: 100%;
+    }
 }
