@@ -10,7 +10,12 @@ import {
     approveRoomTransaction,
     rejectRoomTransaction,
     searchLibrarianBooks,
-    searchLibrarianStudents
+    searchLibrarianStudents,
+    getAddBook,
+    addBook,
+    getEditBook,
+    editBook,
+    deleteBook,
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -30,6 +35,10 @@ router.post("/Librarian-Transactions/Room/Reject/:id", librarianAuth, rejectRoom
 router.get("/Librarian-Books/Search", librarianAuth, searchLibrarianBooks);
 router.get("/Librarian-SL/Search", librarianAuth, searchLibrarianStudents);
 
-
+router.get("/Librarian-Books/Add", librarianAuth, getAddBook);
+router.post("/Librarian-Books/Add", librarianAuth, addBook);
+router.get("/Librarian-Books/Edit/:id", librarianAuth, getEditBook);
+router.post("/Librarian-Books/Edit/:id", librarianAuth, editBook);
+router.post("/Librarian-Books/Delete/:id", librarianAuth, deleteBook);
 
 export default router;

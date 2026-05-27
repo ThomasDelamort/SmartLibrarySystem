@@ -205,3 +205,56 @@ export const rejectRoomTransaction = async (req, res) => {
     res.redirect("/Librarian-Transactions");
 };
 
+
+// C R U D
+// BOOK CRUD
+export const getAddBook = (req, res) => {
+    res.render("librarian.book.add.ejs", { loggedIn: true, searchAction: "/Librarian-Books/Search" });
+};
+
+export const addBook = async (req, res) => {
+    const { title, author, category, image, description, isbn, publisher, publishedYear } = req.body;
+
+    await Book.create({
+        title: title.trim(),
+        author: author.split(",").map(a => a.trim()),
+        category: category.split(",").map(c => c.trim()),
+        image: image.trim(),
+        description: description.trim(),
+        isbn: isbn?.trim(),
+        publisher: publisher?.trim(),
+        publishedYear: publishedYear ? parseInt(publishedYear) : null,
+        status: "available"
+    });
+
+    res.redirect("/Librarian-Books");
+};
+
+export const getEditBook = async (req, res) => {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).send("Book not found");
+    res.render("librarian.book.edit.ejs", { loggedIn: true, book, searchAction: "/Librarian-Books/Search" });
+};
+
+export const editBook = async (req, res) => {
+    const { title, author, category, image, description, isbn, publisher, publishedYear, status } = req.body;
+
+    await Book.findByIdAndUpdate(req.params.id, {
+        title: title.trim(),
+        author: author.split(",").map(a => a.trim()),
+        category: category.split(",").map(c => c.trim()),
+        image: image.trim(),
+        description: description.trim(),
+        isbn: isbn?.trim(),
+        publisher: publisher?.trim(),
+        publishedYear: publishedYear ? parseInt(publishedYear) : null,
+        status
+    });
+
+    res.redirect("/Librarian-Books");
+};
+
+export const deleteBook = async (req, res) => {
+    await Book.findByIdAndDelete(req.params.id);
+    res.redirect("/Librarian-Books");
+};
