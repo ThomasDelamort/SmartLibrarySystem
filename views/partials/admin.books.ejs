@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<div class="sec-divider"></div>
+
+<div class="sec">
+    <div class="sec-label">Books</div>
+
+    <!-- Stats Row -->
+    <div class="two-col mb-10">
+
+        <!-- Most Borrowed -->
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-refresh"></i>Most Borrowed</div>
+            </div>
+            <% if (mostBorrowed.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No data yet.</p>
+            <% } %>
+            <% mostBorrowed.forEach(function(item, i) { %>
+            <div class="stat-book">
+                <div class="book-rank"><%= i + 1 %></div>
+                <div class="book-info">
+                    <div class="book-title"><%= item.book.title %></div>
+                    <div class="book-author"><%= Array.isArray(item.book.author) ? item.book.author.join(', ') : item.book.author %></div>
+                </div>
+                <div class="book-count"><%= item.count %> x</div>
+            </div>
+            <% }) %>
+        </div>
+
+        <!-- Most Liked -->
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-star"></i>Most Liked</div>
+            </div>
+            <% if (mostLiked.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No data yet.</p>
+            <% } %>
+            <% mostLiked.forEach(function(book, i) { %>
+            <div class="stat-book">
+                <div class="book-rank"><%= i + 1 %></div>
+                <div class="book-info">
+                    <div class="book-title"><%= book.title %></div>
+                    <div class="book-author"><%= Array.isArray(book.author) ? book.author.join(', ') : book.author %></div>
+                </div>
+                <div class="book-count">⭐ <%= book.likes %></div>
+            </div>
+            <% }) %>
+        </div>
+
+    </div>
+
+    <!-- Search -->
+    <div class="panel mb-10">
+        <form method="GET" action="/Admin" style="display:flex;gap:8px;">
+            <input type="hidden" name="section" value="books">
+            <input type="text" name="bq" placeholder="Search by title or author..."
+                   value="<%= typeof bookSearchQuery !== 'undefined' ? bookSearchQuery : '' %>"
+                   style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <button type="submit"
+                    style="background:#0f172a;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;">
+                <i class="ti ti-search"></i> Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Books Table -->
+    <div class="panel">
+        <div class="panel-hdr">
+            <div class="panel-title"><i class="ti ti-book"></i>All Books</div>
+            <span style="font-size:11px;color:var(--text-muted)"><%= books.length %> total</span>
+        </div>
+
+        <% if (books.length === 0) { %>
+        <p style="font-size:12px;color:var(--text-muted)">No books found.</p>
+        <% } %>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                <tr style="background:#f8fafc;">
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Book</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Author</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Category</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Status</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Likes</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% books.forEach(function(book) { %>
+                <tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:10px 12px;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <img src="<%= book.image %>" alt="<%= book.title %>"
+                                 style="width:32px;height:42px;object-fit:cover;border-radius:4px;">
+                            <div class="book-title" style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                <%= book.title %>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);">
+                        <%= Array.isArray(book.author) ? book.author.join(', ') : book.author %>
+                    </td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);">
+                        <%= Array.isArray(book.category) ? book.category.join(', ') : book.category %>
+                    </td>
+                    <td style="padding:10px 12px;">
+                                <span class="badge <%=
+                                    book.status === 'available' ? 'badge-green' :
+                                    book.status === 'borrowed' ? 'badge-warn' :
+                                    'badge-red'
+                                %>">
+                                    <%= book.status %>
+                                </span>
+                    </td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);">⭐ <%= book.likes %></td>
+                    <td style="padding:10px 12px;">
+                        <form action="/Admin/Books/Delete/<%= book._id %>" method="POST"
+                              onsubmit="return confirm('Delete this book?')">
+                            <button type="submit"
+                                    style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid #fecdd3;background:#fff1f2;color:#e11d48;cursor:pointer;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

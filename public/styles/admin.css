@@ -532,6 +532,16 @@ body {
     flex-shrink: 0;
 }
 
+.sec-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
 .ic-blue {
     background: #f1f5f9;
     color: #0f172a;
@@ -599,6 +609,10 @@ body {
 .qa-btn i {
     font-size: 14px;
 }
+
+.badge-red { background: #fee2e2; color: #e11d48; }
+
+.badge-gray { background: #f1f5f9; color: #64748b }
 
 @media (max-width: 992px) {
     .sidebar {

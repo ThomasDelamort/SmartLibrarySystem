@@ -13,6 +13,7 @@ import Student from "../models/student.model.js"
 import Book from "../models/book.model.js"
 
 
+
 export const getStudents = async (req, res) => {
     await paginateBooks({
         req,
@@ -259,5 +260,74 @@ export const toggleLike = async (req, res) => {
 export const getLikedBooks = async (req, res) => {
     const student = await Student.findById(req.session.user.id).populate("likedBooks");
     res.render("student.liked.ejs", { loggedIn: true, likedBooks: student.likedBooks });
+};
+
+
+// Student Profile
+
+export const getStudentProfile = async (req, res) => {
+    const student = await Student.findById(req.session.user.id);
+    res.render("student.profile.ejs", {
+        loggedIn: true,
+        student,
+        error: req.query.error || null,
+        success: req.query.success || null,
+    });
+};
+
+export const updateStudentProfile = async (req, res) => {
+    const { firstName, lastName, email, sex } = req.body;
+
+    const emailTaken = await Student.findOne({
+        email: email.toLowerCase().trim(),
+        _id: { $ne: req.session.user.id }
+    });
+
+    if (emailTaken)
+        return res.redirect("/Students/Profile?error=Email+is+already+in+use");
+
+    await Student.findByIdAndUpdate(req.session.user.id, {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.toLowerCase().trim(),
+        sex,
+    });
+
+    // Update session name
+    req.session.user.name = firstName.trim();
+    req.session.user.lastName = lastName.trim();
+
+    res.redirect("/Students/Profile?success=Profile+updated+successfully");
+};
+
+export const changeStudentPassword = async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    const student = await Student.findById(req.session.user.id);
+
+    if (student.password !== currentPassword)
+        return res.redirect("/Students/Profile?error=Current+password+is+incorrect");
+
+    if (newPassword !== confirmPassword)
+        return res.redirect("/Students/Profile?error=New+passwords+do+not+match");
+
+    if (newPassword.length < 6)
+        return res.redirect("/Students/Profile?error=Password+must+be+at+least+6+characters");
+
+    await Student.findByIdAndUpdate(req.session.user.id, { password: newPassword });
+
+    res.redirect("/Students/Profile?success=Password+changed+successfully");
+};
+
+
+export const uploadStudentProfilePicture = async (req, res) => {
+    if (!req.file)
+        return res.redirect("/Students/Profile?error=No+file+uploaded");
+
+    await Student.findByIdAndUpdate(req.session.user.id, {
+        profilePicture: req.file.location,
+    });
+
+    res.redirect("/Students/Profile?success=Profile+picture+updated");
 };
 

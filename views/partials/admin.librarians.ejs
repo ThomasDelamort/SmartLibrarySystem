@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Librarian</title>
+</head>
+<body>
+<div class="sec-divider"></div>
+
+<div class="sec">
+    <div class="sec-label">Librarians</div>
+
+    <!-- Add Librarian Form -->
+    <div class="panel mb-10">
+        <div class="panel-hdr">
+            <div class="panel-title"><i class="ti ti-user-plus"></i>Add Librarian</div>
+        </div>
+        <form action="/Admin/Librarians/Add" method="POST" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input type="text" name="firstName" placeholder="First Name" required
+                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <input type="text" name="lastName" placeholder="Last Name" required
+                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <input type="email" name="email" placeholder="Email" required
+                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <input type="password" name="password" placeholder="Password" required
+                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <select name="sex" required
+                    style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+                <option value="" disabled selected>Sex</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button type="submit"
+                    style="background:#0f172a;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;">
+                <i class="ti ti-plus"></i> Add Librarian
+            </button>
+        </form>
+    </div>
+
+    <!-- Librarians Table -->
+    <div class="panel">
+        <div class="panel-hdr">
+            <div class="panel-title"><i class="ti ti-user-check"></i>All Librarians</div>
+            <span style="font-size:11px;color:var(--text-muted)"><%= librarians.length %> total</span>
+        </div>
+
+        <% if (librarians.length === 0) { %>
+        <p style="font-size:12px;color:var(--text-muted)">No librarians found.</p>
+        <% } %>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                <tr style="background:#f8fafc;">
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Librarian</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Email</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Sex</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Joined</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% librarians.forEach(function(librarian) { %>
+                <tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:10px 12px;">
+                        <div class="acct-row" style="padding:0;border:none;">
+                            <div class="avatar av-green"><%= librarian.firstName[0] %><%= librarian.lastName[0] %></div>
+                            <div>
+                                <div class="acct-name"><%= librarian.firstName %> <%= librarian.lastName %></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);"><%= librarian.email %></td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);text-transform:capitalize;"><%= librarian.sex %></td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);"><%= new Date(librarian.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+                    <td style="padding:10px 12px;">
+                        <form action="/Admin/Librarians/Delete/<%= librarian._id %>" method="POST"
+                              onsubmit="return confirm('Delete this librarian?')">
+                            <button type="submit"
+                                    style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid #fecdd3;background:#fff1f2;color:#e11d48;cursor:pointer;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

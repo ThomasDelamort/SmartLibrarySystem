@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+</head>
+<body>
+<!-- DASHBOARD SECTION -->
+<div class="sec-label" style="margin-bottom: 16px;">Overview</div>
+
+<!-- Stats -->
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-users" style="font-size:13px"></i>Students</div>
+        <div class="stat-val"><%= stats.totalStudents %></div>
+        <div class="stat-sub">Active accounts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-user-check" style="font-size:13px"></i>Librarians</div>
+        <div class="stat-val"><%= stats.totalLibrarians %></div>
+        <div class="stat-sub">Staff accounts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-book" style="font-size:13px"></i>Books</div>
+        <div class="stat-val"><%= stats.totalBooks %></div>
+        <div class="stat-sub">In catalogue</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-activity" style="font-size:13px"></i>Reservations</div>
+        <div class="stat-val"><%= reservations.processed %></div>
+        <div class="stat-sub">Processed total</div>
+    </div>
+</div>
+
+<!-- Analytics -->
+<div class="sec" style="margin-top: 16px;">
+    <div class="sec-label">Analytics</div>
+
+    <div class="panel" style="margin-bottom:10px">
+        <div class="panel-hdr">
+            <div class="panel-title"><i class="ti ti-chart-line"></i>User traffic</div>
+            <div class="pbtn-group">
+                <button class="pbtn active" onclick="setTraffic('14d',this)">14d</button>
+                <button class="pbtn" onclick="setTraffic('30d',this)">30d</button>
+            </div>
+        </div>
+        <div class="legend">
+            <span><span class="ldot" style="background:#1e293b"></span>Students</span>
+            <span><span class="ldot" style="background:#64748b"></span>Librarians (dashed)</span>
+        </div>
+        <div style="position:relative;width:100%;height:180px">
+            <canvas id="trafficChart"></canvas>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-bookmark"></i>Reservations</div>
+                <div class="pbtn-group">
+                    <button class="pbtn active" onclick="setRes('weekly',this)">Weekly</button>
+                    <button class="pbtn" onclick="setRes('monthly',this)">Monthly</button>
+                </div>
+            </div>
+            <div class="sum-row">
+                <div class="sum-card">
+                    <div class="sum-lbl">Processed</div>
+                    <div class="sum-val" id="sumP"><%= reservations.processed %></div>
+                    <div class="sum-sub" style="color:#16a34a">Approved</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-lbl">Cancelled</div>
+                    <div class="sum-val" id="sumC"><%= reservations.cancelled %></div>
+                    <div class="sum-sub" style="color:#ca8a04">Cancelled</div>
+                </div>
+            </div>
+            <div class="legend">
+                <span><span class="ldot" style="background:#1e293b"></span>Processed</span>
+                <span><span class="ldot" style="background:#94a3b8"></span>Cancelled</span>
+            </div>
+            <div style="position:relative;width:100%;height:140px">
+                <canvas id="resChart"></canvas>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-file-text"></i>Daily log</div>
+            </div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                Exports all activity for the selected date as a
+                <span style="font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary)">.csv</span> file.
+            </div>
+            <div style="margin-top:10px">
+                <label style="font-size:11px;color:var(--text-muted)">Log date</label>
+                <input type="date"
+                       id="logDate"
+                       style="
+                        width:100%;
+                        margin-top:4px;
+                        font-size:12px;
+                        padding:6px 8px;
+                        border:1px solid var(--border);
+                        border-radius:6px;
+                        background:#f8fafc;
+                        color:var(--text-primary)
+                ">
+            </div>
+            <button class="dl-btn"><i class="ti ti-download"></i> Download CSV</button>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="sec">
+    <div class="sec-label">Statistics</div>
+    <div class="two-col">
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-refresh"></i>Most borrowed</div>
+            </div>
+            <% if (mostBorrowed.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No data yet.</p>
+            <% } %>
+            <% mostBorrowed.forEach(function(item, i) { %>
+            <div class="stat-book">
+                <div class="book-rank"><%= i + 1 %></div>
+                <div class="book-info">
+                    <div class="book-title"><%= item.book.title %></div>
+                    <div class="book-author"><%= Array.isArray(item.book.author) ? item.book.author.join(', ') : item.book.author %></div>
+                </div>
+                <div class="book-count"><%= item.count %> x</div>
+            </div>
+            <% }) %>
+        </div>
+
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-users"></i>Recent accounts</div>
+            </div>
+            <% recentStudents.forEach(function(s) { %>
+            <div class="acct-row">
+                <div class="avatar av-blue"><%= s.firstName[0] %><%= s.lastName[0] %></div>
+                <div style="flex:1">
+                    <div class="acct-name"><%= s.firstName %> <%= s.lastName %></div>
+                    <div class="acct-email"><%= s.email %></div>
+                </div>
+                <span class="badge badge-blue">Student</span>
+            </div>
+            <% }) %>
+            <% recentLibrarians.forEach(function(l) { %>
+            <div class="acct-row">
+                <div class="avatar av-green"><%= l.firstName[0] %><%= l.lastName[0] %></div>
+                <div style="flex:1">
+                    <div class="acct-name"><%= l.firstName %> <%= l.lastName %></div>
+                    <div class="acct-email"><%= l.email %></div>
+                </div>
+                <span class="badge badge-green">Librarian</span>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="sec">
+    <div class="sec-label">Recent Activity</div>
+    <div class="two-col">
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title">Pending transactions</div>
+                <a href="#transactions" class="view-all">View All</a>
+            </div>
+            <% if (recentActivity.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No pending transactions.</p>
+            <% } %>
+            <% recentActivity.forEach(function(txn) { %>
+            <div class="activity-item">
+                <div class="act-icon ic-blue"><i class="ti ti-book"></i></div>
+                <div style="flex:1">
+                    <div class="act-title"><%= txn.student ? txn.student.firstName + ' ' + txn.student.lastName : 'Unknown' %></div>
+                    <div class="act-desc"><%= txn.transactionType === 'return' ? 'Return' : 'Borrow' %>: <%= txn.book ? txn.book.title : 'Unknown' %></div>
+                </div>
+                <div class="act-time"><%= new Date(txn.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></div>
+            </div>
+            <% }) %>
+        </div>
+
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title">Quick actions</div>
+            </div>
+            <a class="qa-btn" onclick="document.getElementById('students').scrollIntoView({behavior:'smooth'})"><i class="ti ti-users"></i> Manage Students</a>
+            <a class="qa-btn" onclick="document.getElementById('librarians').scrollIntoView({behavior:'smooth'})"><i class="ti ti-user-check"></i> Manage Librarians</a>
+            <a class="qa-btn" onclick="document.getElementById('books').scrollIntoView({behavior:'smooth'})"><i class="ti ti-book"></i> Manage Books</a>
+            <a class="qa-btn" onclick="document.getElementById('rooms').scrollIntoView({behavior:'smooth'})"><i class="ti ti-building"></i> Manage Rooms</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function downloadLog() {
+        const date = document.getElementById('logDate').value;
+        if (!date) return alert('Please select a date first.');
+        window.location.href = `/Admin/Log/Download?date=${date}`;
+    }
+</script>
+</body>
+</html>

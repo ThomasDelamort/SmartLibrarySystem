@@ -16,10 +16,15 @@ import {
     getStatus,
     getHistory,
     toggleLike,
-    getLikedBooks
+    getLikedBooks,
+    getStudentProfile,
+    updateStudentProfile,
+    changeStudentPassword,
+    uploadStudentProfilePicture
 } from "../controllers/student.controller.js";
 import { getBag, addToBag, removeFromBag, borrowFromBag } from "../controllers/Bag.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
+import { upload, uploadProfile } from "../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -52,5 +57,11 @@ router.post("/Students/Bag/BorrowAll", studentAuth, borrowFromBag);
 
 router.post("/Students/Like/:bookId", studentAuth, toggleLike);
 router.get("/Students/Liked", studentAuth, getLikedBooks);
+
+router.get("/Students/Profile", studentAuth, getStudentProfile);
+router.post("/Students/Profile/Update", studentAuth, updateStudentProfile);
+router.post("/Students/Profile/ChangePassword", studentAuth, changeStudentPassword);
+
+router.post("/Students/Profile/Picture", studentAuth, uploadProfile.single("profilePicture"), uploadStudentProfilePicture)
 
 export default router;

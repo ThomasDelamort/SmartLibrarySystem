@@ -83,6 +83,31 @@
                         <button class="btn btn-secondary btn-lg" disabled>
                             Unavailable
                         </button>
+                    <% if (loggedIn) { %>
+                    <button type="button"
+                            class="btn btn-outline-primary btn-lg"
+                            data-bs-toggle="modal"
+                            data-bs-target="#borrowModal">
+                        Borrow Book
+                    </button>
+
+                    <% } else { %>
+                    <form action="/Submit" method="POST">
+                        <input type="hidden" name="id" value="<%= book._id %>">
+                        <input type="hidden" name="action" value="borrow">
+
+                        <button type="submit"
+                                class="btn btn-outline-primary btn-lg">
+                            Borrow Book
+                        </button>
+                    </form>
+                    <% } %>
+
+
+                    <% } else { %>
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        Unavailable
+                    </button>
                     <% } %>
 
                     <% if (loggedIn) { %>
@@ -105,6 +130,24 @@
                                 🛒 Add to Bag
                             </button>
                         </form>
+                    <button type="button"
+                            class="btn btn-outline-success btn-lg"
+                            data-bs-toggle="modal"
+                            data-bs-target="#bagModal">
+                        🛒 Add to Bag
+                    </button>
+
+                    <% } else { %>
+
+                    <form action="/Submit" method="POST">
+                        <input type="hidden" name="id" value="<%= book._id %>">
+                        <input type="hidden" name="action" value="bag">
+
+                        <button type="submit"
+                                class="btn btn-outline-success btn-lg">
+                            🛒 Add to Bag
+                        </button>
+                    </form>
 
                     <% } %>
 

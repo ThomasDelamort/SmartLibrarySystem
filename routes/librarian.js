@@ -19,8 +19,13 @@ import {
     editBook,
     deleteBook,
     manualTransaction,
+    getLibrarianProfile,
+    updateLibrarianProfile,
+    changeLibrarianPassword,
+    uploadLibrarianProfilePicture
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
+import { uploadProfile } from "../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -43,4 +48,14 @@ router.get("/Librarian-Books/Add", librarianAuth, getAddBook);
 router.post("/Librarian-Books/Add", librarianAuth, upload.fields([{ name: "image", maxCount: 1 }, { name: "pdf", maxCount: 1 }]), addBook);
 router.get("/Librarian-Books/Edit/:id", librarianAuth, getEditBook);
 router.post("/Librarian-Books/Edit/:id", librarianAuth, upload.fields([{ name: "image", maxCount: 1 }, { name: "pdf", maxCount: 1 }]), editBook);
+router.post("/Librarian-Books/Edit/:id", librarianAuth, upload.single("image"), editBook);router.post("/Librarian-Books/Delete/:id", librarianAuth, deleteBook);
+
+
+router.get("/Librarian-Profile", librarianAuth, getLibrarianProfile);
+router.post("/Librarian-Profile/Update", librarianAuth, updateLibrarianProfile);
+router.post("/Librarian-Profile/ChangePassword", librarianAuth, changeLibrarianPassword);
+
+
+router.post("/Librarian-Profile/Picture", librarianAuth, uploadProfile.single("profilePicture"), uploadLibrarianProfilePicture);
+
 export default router;

@@ -1,4 +1,3 @@
-
 <p align="center">
   <img width="220" alt="Smart Library System Logo" src="https://github.com/user-attachments/assets/d25ef6c6-18be-439b-aef2-e4efbbc86267"/>
 </p>
@@ -6,10 +5,17 @@
 <h1 align="center">Smart Library System</h1>
 
 <p align="center">
-  A modern web-based library management system built to streamline book borrowing, tracking, overdue monitoring, and future room reservation management.
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-000000?style=flat-square&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonaws&logoColor=FF9900" />
 </p>
 
----
+
+<p align="center">
+  <i>A smart web-based library system for seamless borrowing, tracking, and reservations.</i>
+</p>
 
 ## 📌 Features
 
@@ -40,13 +46,13 @@
 
 ## 🛠️ Tech Stack
 
-<p align="left">
-  <img width="50" height="50" alt="MongoDB" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEN6fDm89O6g-B0h3eEPmVlxQyhlU1cNS7tQ&s" />
-  <img width="50" height="50" alt="ExpressJS" src="https://images.seeklogo.com/logo-png/65/1/express-js-icon-logo-png_seeklogo-653222.png" />
-  <img width="50" height="50" alt="EJS" src="https://ayushchugh.gallerycdn.vsassets.io/extensions/ayushchugh/ejs-snippets-and-color-highlighting/0.0.5/1625124300861/Microsoft.VisualStudio.Services.Icons.Default" />
-  <img width="50" height="50" alt="NodeJS" src="https://logodix.com/logo/1764882.png" />
-  <img width="60" height="50" alt="Bootstrap" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo-shadow.png" />
-</p>
+<div align="center">
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/express.png" alt="Express" title="Express"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/mongodb.png" alt="mongoDB" title="mongoDB"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/bootstrap.png" alt="Bootstrap" title="Bootstrap"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/node_js.png" alt="Node.js" title="Node.js"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/></code>
+</div>
 
 ### Technologies Used
 
@@ -55,6 +61,7 @@
 - **EJS** — Templating engine
 - **Node.js** — Runtime environment
 - **Bootstrap 5** — Frontend styling
+- **AWS** — Cloud hosting & deployment
 
 ---
 
@@ -65,5 +72,3 @@ Clone the repository:
 ```bash
 git clone <your-repository-url>
 cd smart-library-system
-
-

@@ -1,6 +1,6 @@
 import Book from "../../models/book.model.js";
 import Student from "../../models/student.model.js";
-import { borrowBook } from "./transaction.helper.js"
+import { borrowBook } from "./transaction.helper.js";
 
 export const paginateBooks = async ({ req, res, filter = {}, view, loggedIn, extra = {} }) => {
     const booksPerPage = 9;
