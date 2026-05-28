@@ -3,6 +3,7 @@ import Librarian from "../models/librarian.model.js";
 import Book from "../models/book.model.js";
 import BookTransaction from "../models/bookTransaction.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
+import Room from "../models/room.model.js";
 
 export const admin = async (req, res) => {
     const [
@@ -176,4 +177,56 @@ export const adminTransactions = async (req, res) => {
     ]);
 
     res.render("admin.transactions.ejs", { user: req.session.user, bookTransactions, roomTransactions });
+};
+
+export const downloadDailyLog = async (req, res) => {
+    const { date } = req.query;
+
+    const start = date ? new Date(date) : new Date();
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setHours(23, 59, 59, 999);
+
+    const [bookTxns, roomTxns] = await Promise.all([
+        BookTransaction.find({ createdAt: { $gte: start, $lte: end } })
+            .populate("book").populate("student"),
+        RoomTransaction.find({ createdAt: { $gte: start, $lte: end } })
+            .populate("room").populate("reservee")
+    ]);
+
+    const rows = [];
+
+    // Header
+    rows.push(["Type", "Reference", "Student", "StudentID", "Detail", "Status", "Date"].join(","));
+
+    // Book transactions
+    bookTxns.forEach(txn => {
+        rows.push([
+            txn.transactionType,
+            txn.referenceNumber || "",
+            txn.student ? `${txn.student.firstName} ${txn.student.lastName}` : "Unknown",
+            txn.student ? txn.student.studentId : "",
+            txn.book ? txn.book.title : "Unknown",
+            txn.status,
+            new Date(txn.createdAt).toLocaleString()
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+    });
+
+    // Room transactions
+    roomTxns.forEach(txn => {
+        rows.push([
+            "room_reservation",
+            "",
+            txn.reservee ? `${txn.reservee.firstName} ${txn.reservee.lastName}` : "Unknown",
+            txn.reservee ? txn.reservee.studentId : "",
+            txn.room ? `Room ${txn.room.number} (${txn.startTime}-${txn.endTime})` : "Unknown",
+            txn.status,
+            new Date(txn.createdAt).toLocaleString()
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+    });
+
+    const filename = `daily-log-${start.toISOString().slice(0, 10)}.csv`;
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.send(rows.join("\n"));
 };

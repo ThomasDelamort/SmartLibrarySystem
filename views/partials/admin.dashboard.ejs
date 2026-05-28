@@ -94,7 +94,18 @@
             </div>
             <div style="margin-top:10px">
                 <label style="font-size:11px;color:var(--text-muted)">Log date</label>
-                <input type="date" style="width:100%;margin-top:4px;font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#f8fafc;color:var(--text-primary)">
+                <input type="date"
+                       id="logDate"
+                       style="
+                        width:100%;
+                        margin-top:4px;
+                        font-size:12px;
+                        padding:6px 8px;
+                        border:1px solid var(--border);
+                        border-radius:6px;
+                        background:#f8fafc;
+                        color:var(--text-primary)
+                ">
             </div>
             <button class="dl-btn"><i class="ti ti-download"></i> Download CSV</button>
         </div>
@@ -187,5 +198,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    function downloadLog() {
+        const date = document.getElementById('logDate').value;
+        if (!date) return alert('Please select a date first.');
+        window.location.href = `/Admin/Log/Download?date=${date}`;
+    }
+</script>
 </body>
 </html>

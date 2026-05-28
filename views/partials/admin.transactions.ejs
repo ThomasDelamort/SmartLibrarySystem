@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<div class="sec-divider"></div>
+
+<div class="sec">
+    <div class="sec-label">Transactions</div>
+
+    <div class="two-col mb-10">
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-book"></i>Book Transactions</div>
+                <span style="font-size:11px;color:var(--text-muted)"><%= bookTransactions.length %> records</span>
+            </div>
+            <% if (bookTransactions.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No transactions found.</p>
+            <% } %>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                    <thead>
+                    <tr style="background:#f8fafc;">
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Student</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Book</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Type</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Status</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Due Date</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% bookTransactions.forEach(function(txn) { %>
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <td style="padding:10px 12px;">
+                            <div class="acct-name"><%= txn.student ? txn.student.firstName + ' ' + txn.student.lastName : 'Unknown' %></div>
+                            <div style="font-size:11px;color:var(--text-muted)"><%= txn.student ? txn.student.studentId : '' %></div>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-secondary);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                            <%= txn.book ? txn.book.title : 'Unknown' %>
+                        </td>
+                        <td style="padding:10px 12px;">
+                            <span class="badge <%= txn.transactionType === 'borrow' ? 'badge-blue' : 'badge-warn' %>">
+                                <%= txn.transactionType %>
+                            </span>
+                        </td>
+                        <td style="padding:10px 12px;">
+                            <span class="badge <%=
+                                txn.status === 'approved' ? 'badge-green' :
+                                txn.status === 'pending'  ? 'badge-warn' :
+                                txn.status === 'overdue'  ? 'badge-red' :
+                                txn.status === 'returned' ? 'badge-blue' : ''
+                            %>"><%= txn.status %></span>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-secondary);">
+                            <%= txn.dueDate ? new Date(txn.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—' %>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-muted);">
+                            <%= new Date(txn.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Room Transactions -->
+        <div class="panel">
+            <div class="panel-hdr">
+                <div class="panel-title"><i class="ti ti-building"></i>Room Reservations</div>
+                <span style="font-size:11px;color:var(--text-muted)"><%= roomTransactions.length %> records</span>
+            </div>
+            <% if (roomTransactions.length === 0) { %>
+            <p style="font-size:12px;color:var(--text-muted)">No reservations found.</p>
+            <% } %>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                    <thead>
+                    <tr style="background:#f8fafc;">
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Student</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Room</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Date</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Time</th>
+                        <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% roomTransactions.forEach(function(txn) { %>
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <td style="padding:10px 12px;">
+                            <div class="acct-name"><%= txn.reservee ? txn.reservee.firstName + ' ' + txn.reservee.lastName : 'Unknown' %></div>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-secondary);">
+                            Room <%= txn.room ? txn.room.number : '—' %>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-secondary);">
+                            <%= new Date(txn.reservationDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                        </td>
+                        <td style="padding:10px 12px;color:var(--text-secondary);">
+                            <%= txn.startTime %> – <%= txn.endTime %>
+                        </td>
+                        <td style="padding:10px 12px;">
+                            <span class="badge <%=
+                                txn.status === 'approved'  ? 'badge-green' :
+                                txn.status === 'pending'   ? 'badge-warn' :
+                                txn.status === 'cancelled' ? 'badge-red' :
+                                txn.status === 'completed' ? 'badge-blue' : ''
+                            %>"><%= txn.status %></span>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
