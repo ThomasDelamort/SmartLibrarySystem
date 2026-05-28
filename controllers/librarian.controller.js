@@ -363,3 +363,60 @@ export const manualTransaction = async (req, res) => {
 
     res.redirect("/Librarian-Transactions");
 };
+
+
+
+export const getLibrarianProfile = async (req, res) => {
+    const librarian = await librarianModel.findById(req.session.user.id);
+    res.render("librarian.profile.ejs", {
+        loggedIn: true,
+        librarian,
+        searchAction: "/Librarian-Books/Search",
+        error: req.query.error || null,
+        success: req.query.success || null,
+    });
+};
+
+export const updateLibrarianProfile = async (req, res) => {
+    const { firstName, lastName, email, sex, married } = req.body;
+
+    const emailTaken = await librarianModel.findOne({
+        email: email.toLowerCase().trim(),
+        _id: { $ne: req.session.user.id }
+    });
+
+    if (emailTaken)
+        return res.redirect("/Librarian-Profile?error=Email+is+already+in+use");
+
+    await librarianModel.findByIdAndUpdate(req.session.user.id, {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.toLowerCase().trim(),
+        sex,
+        married: married === "on",
+    });
+
+    req.session.user.name = firstName.trim();
+    req.session.user.lastName = lastName.trim();
+
+    res.redirect("/Librarian-Profile?success=Profile+updated+successfully");
+};
+
+export const changeLibrarianPassword = async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    const librarian = await librarianModel.findById(req.session.user.id);
+
+    if (librarian.password !== currentPassword)
+        return res.redirect("/Librarian-Profile?error=Current+password+is+incorrect");
+
+    if (newPassword !== confirmPassword)
+        return res.redirect("/Librarian-Profile?error=New+passwords+do+not+match");
+
+    if (newPassword.length < 6)
+        return res.redirect("/Librarian-Profile?error=Password+must+be+at+least+6+characters");
+
+    await librarianModel.findByIdAndUpdate(req.session.user.id, { password: newPassword });
+
+    res.redirect("/Librarian-Profile?success=Password+changed+successfully");
+};
