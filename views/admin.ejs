@@ -19,7 +19,7 @@
             <div class="page-title" id="active-section-title">Dashboard</div>
             <div class="topbar-right">
                 <div class="bell-btn"><i class="ti ti-bell" style="font-size:16px"></i></div>
-                <button class="gen-btn"><i class="ti ti-file-export"></i> Generate Report</button>
+                <button class="gen-btn" onclick="generateMonthlyReport()"><i class="ti ti-file-export"></i> Generate Report</button>
             </div>
         </div>
 
@@ -99,6 +99,14 @@
             if (target) target.scrollIntoView({ behavior: 'smooth' });
         });
     });
+</script>
+<script>
+    function generateMonthlyReport() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        window.location.href = `/Admin/Report/Monthly?year=${year}&month=${month}`;
+    }
 </script>
 </body>
 </html>

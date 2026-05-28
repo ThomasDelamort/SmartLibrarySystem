@@ -10,6 +10,7 @@ import {
     deleteRoom,
     updateRoomStatus,
     downloadDailyLog,
+    downloadMonthlyReport,
 } from '../controllers/admin.controller.js';
 import { adminAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -35,5 +36,6 @@ router.post('/Admin/Rooms/Delete/:id', adminAuth, deleteRoom);
 router.post('/Admin/Rooms/Status/:id', adminAuth, updateRoomStatus);
 
 router.get('/Admin/Log/Download', adminAuth, downloadDailyLog);
+router.get('/Admin/Report/Monthly', adminAuth, downloadMonthlyReport);
 
 export default router;
