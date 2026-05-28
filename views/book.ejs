@@ -58,6 +58,31 @@
 
                     <% if (book.status !== 'borrowed') { %>
 
+                        <% if (loggedIn) { %>
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-lg"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#borrowModal">
+                                Borrow Book
+                            </button>
+
+                        <% } else { %>
+                            <form action="/Submit" method="POST">
+                                <input type="hidden" name="id" value="<%= book._id %>">
+                                <input type="hidden" name="action" value="borrow">
+
+                                <button type="submit"
+                                        class="btn btn-outline-primary btn-lg">
+                                    Borrow Book
+                                </button>
+                            </form>
+                        <% } %>
+
+
+                    <% } else { %>
+                        <button class="btn btn-secondary btn-lg" disabled>
+                            Unavailable
+                        </button>
                     <% if (loggedIn) { %>
                     <button type="button"
                             class="btn btn-outline-primary btn-lg"
@@ -87,6 +112,24 @@
 
                     <% if (loggedIn) { %>
 
+                        <button type="button"
+                                class="btn btn-outline-success btn-lg"
+                                data-bs-toggle="modal"
+                                data-bs-target="#bagModal">
+                            🛒 Add to Bag
+                        </button>
+
+                    <% } else { %>
+
+                        <form action="/Submit" method="POST">
+                            <input type="hidden" name="id" value="<%= book._id %>">
+                            <input type="hidden" name="action" value="bag">
+
+                            <button type="submit"
+                                    class="btn btn-outline-success btn-lg">
+                                🛒 Add to Bag
+                            </button>
+                        </form>
                     <button type="button"
                             class="btn btn-outline-success btn-lg"
                             data-bs-toggle="modal"
@@ -168,7 +211,7 @@
                            class="form-control"
                            required>
                     <% if (error) { %>
-                    <p class="text-danger text-center mb-3" style="margin-top: 20px;"><%= error %></p>
+                        <p class="text-danger text-center mb-3" style="margin-top: 20px;"><%= error %></p>
                     <% } %>
                 </div>
 
@@ -187,11 +230,11 @@
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 <% if (error) { %>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        new bootstrap.Modal(document.getElementById("borrowModal")).show();
-    });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            new bootstrap.Modal(document.getElementById("borrowModal")).show();
+        });
+    </script>
 <% } %>
 
 <!-- Add to Bag Modal -->

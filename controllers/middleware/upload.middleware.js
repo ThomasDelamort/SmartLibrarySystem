@@ -19,16 +19,25 @@ export const upload = multer({
         bucket: process.env.AWS_BUCKET_NAME,
         metadata: (req, file, cb) => cb(null, { fieldName: file.fieldname }),
         key: (req, file, cb) => {
-            const fileName = `books/${Date.now()}-${file.originalname}`;
+            const folder = file.fieldname === "pdf" ? "pdfs" : "books";
+            const fileName = `${folder}/${Date.now()}-${file.originalname}`;
             cb(null, fileName);
         },
     }),
     fileFilter: (req, file, cb) => {
-        const allowed = ["image/jpeg", "image/png", "image/webp"];
-        allowed.includes(file.mimetype)
-            ? cb(null, true)
-            : cb(new Error("Only JPEG, PNG, and WEBP allowed"));
+        if (file.fieldname === "pdf") {
+            file.mimetype === "application/pdf"
+                ? cb(null, true)
+                : cb(new Error("Only PDF files allowed for the pdf field"));
+        } else {
+            const allowedImages = ["image/jpeg", "image/png", "image/webp"];
+            allowedImages.includes(file.mimetype)
+                ? cb(null, true)
+                : cb(new Error("Only JPEG, PNG, and WEBP allowed for images"));
+        }
     },
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB to cover both images and PDFs
+});
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
 });
 

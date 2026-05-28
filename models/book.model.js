@@ -62,7 +62,13 @@ const bookSchema = new mongoose.Schema({
             "damaged"
         ],
         default: "available",
+    },
+
+    pdfUrl: {
+        type: String,
+        default: null
     }
+
 }, {
     timestamps: true
 });
