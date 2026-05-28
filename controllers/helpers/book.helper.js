@@ -59,7 +59,10 @@ export const handleBookAction = async ({ req, res, redirectBase }) => {
     }
 
     if (action === "downloadPdf") {
-        return res.send(`Downloading PDF for ${book.title}`);
+        if (!book.pdfUrl) {
+            return res.status(404).send("No PDF available for this book");
+        }
+        return res.redirect(book.pdfUrl); // Redirects to the S3 signed/public URL
     }
 
     res.redirect(redirectBase);

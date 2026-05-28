@@ -46,6 +46,15 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label fw-semibold">Book PDF</label>
+                    <% if (book.pdfUrl) { %>
+                        <div class="mb-1"><a href="<%= book.pdfUrl %>" target="_blank" class="text-success">📄 Current PDF</a></div>
+                    <% } %>
+                    <input type="file" name="pdf" class="form-control" accept="application/pdf">
+                    <small class="text-muted">Leave empty to keep current PDF</small>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label fw-semibold">Description</label>
                     <textarea name="description" class="form-control" rows="4" required><%= book.description %></textarea>
                 </div>
