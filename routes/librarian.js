@@ -21,9 +21,11 @@ import {
     manualTransaction,
     getLibrarianProfile,
     updateLibrarianProfile,
-    changeLibrarianPassword
+    changeLibrarianPassword,
+    uploadLibrarianProfilePicture
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
+import { uploadProfile } from "../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -51,5 +53,8 @@ router.post("/Librarian-Books/Edit/:id", librarianAuth, upload.single("image"), 
 router.get("/Librarian-Profile", librarianAuth, getLibrarianProfile);
 router.post("/Librarian-Profile/Update", librarianAuth, updateLibrarianProfile);
 router.post("/Librarian-Profile/ChangePassword", librarianAuth, changeLibrarianPassword);
+
+
+router.post("/Librarian-Profile/Picture", librarianAuth, uploadProfile.single("profilePicture"), uploadLibrarianProfilePicture);
 
 export default router;

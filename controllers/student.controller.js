@@ -13,6 +13,7 @@ import Student from "../models/student.model.js"
 import Book from "../models/book.model.js"
 
 
+
 export const getStudents = async (req, res) => {
     await paginateBooks({
         req,
@@ -317,3 +318,16 @@ export const changeStudentPassword = async (req, res) => {
 
     res.redirect("/Students/Profile?success=Password+changed+successfully");
 };
+
+
+export const uploadStudentProfilePicture = async (req, res) => {
+    if (!req.file)
+        return res.redirect("/Students/Profile?error=No+file+uploaded");
+
+    await Student.findByIdAndUpdate(req.session.user.id, {
+        profilePicture: req.file.location,
+    });
+
+    res.redirect("/Students/Profile?success=Profile+picture+updated");
+};
+
