@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Profile - Smart Library</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+</head>
+
+<body>
+
+<%- include("partials/header.ejs") %>
+
+<div class="container-fluid mt-4">
+    <div class="container" style="max-width: 700px;">
+
+        <h2 class="fw-bold mb-4">My Profile</h2>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <!-- Profile Info Card -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <div class="d-flex align-items-center gap-4 mb-4">
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                <div>
+                    <h4 class="fw-bold mb-0"><%= student.firstName %> <%= student.lastName %></h4>
+                    <small class="text-muted"><%= student.studentId %></small><br>
+                    <span class="badge <%= student.canBorrow ? 'bg-success' : 'bg-danger' %> mt-1">
+                        <%= student.canBorrow ? 'Can Borrow' : 'Borrowing Suspended' %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-2">
+                <div class="col-md-4 text-center">
+                    <div class="card border-0 bg-light p-3">
+                        <h4 class="fw-bold mb-0"><%= student.borrowedBooks.length %></h4>
+                        <small class="text-muted">Borrowed</small>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card border-0 bg-light p-3">
+                        <h4 class="fw-bold mb-0"><%= student.likedBooks.length %></h4>
+                        <small class="text-muted">Liked Books</small>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card border-0 bg-light p-3">
+                        <h4 class="fw-bold mb-0 <%= student.fines > 0 ? 'text-danger' : 'text-success' %>">₱<%= student.fines %></h4>
+                        <small class="text-muted">Fines</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3">Edit Profile</h5>
+            <form action="/Students/Profile/Update" method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">First Name</label>
+                        <input type="text" name="firstName" class="form-control" value="<%= student.firstName %>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Last Name</label>
+                        <input type="text" name="lastName" class="form-control" value="<%= student.lastName %>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control" value="<%= student.email %>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Sex</label>
+                        <select name="sex" class="form-select" required>
+                            <option value="male" <%= student.sex === 'male' ? 'selected' : '' %>>Male</option>
+                            <option value="female" <%= student.sex === 'female' ? 'selected' : '' %>>Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-dark px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card border-0 shadow-sm p-4">
+            <h5 class="fw-bold mb-3">Change Password</h5>
+            <form action="/Students/Profile/ChangePassword" method="POST">
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label fw-semibold">Current Password</label>
+                        <input type="password" name="currentPassword" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label fw-semibold">New Password</label>
+                        <input type="password" name="newPassword" class="form-control" minlength="6" required>
+                    </div>
+                    <div>
+                        <label class="form-label fw-semibold">Confirm New Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" minlength="6" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-outline-dark px-4">Update Password</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

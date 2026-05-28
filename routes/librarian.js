@@ -19,6 +19,9 @@ import {
     editBook,
     deleteBook,
     manualTransaction,
+    getLibrarianProfile,
+    updateLibrarianProfile,
+    changeLibrarianPassword
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 
@@ -43,5 +46,10 @@ router.get("/Librarian-Books/Add", librarianAuth, getAddBook);
 router.post("/Librarian-Books/Add", librarianAuth, upload.single("image"), addBook);
 router.get("/Librarian-Books/Edit/:id", librarianAuth, getEditBook);
 router.post("/Librarian-Books/Edit/:id", librarianAuth, upload.single("image"), editBook);router.post("/Librarian-Books/Delete/:id", librarianAuth, deleteBook);
+
+
+router.get("/Librarian-Profile", librarianAuth, getLibrarianProfile);
+router.post("/Librarian-Profile/Update", librarianAuth, updateLibrarianProfile);
+router.post("/Librarian-Profile/ChangePassword", librarianAuth, changeLibrarianPassword);
 
 export default router;
