@@ -10,6 +10,7 @@ import Notification from "../models/notification.model.js"
 import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
 import Student from "../models/student.model.js"
+import Book from "../models/book.model.js"
 
 
 export const getStudents = async (req, res) => {
@@ -232,3 +233,31 @@ export const getHistory = async (req, res) => {
 
     res.render("student.history.ejs", { loggedIn: true, bookHistory, roomHistory });
 };
+
+
+// Like Function
+
+export const toggleLike = async (req, res) => {
+    const studentId = req.session.user.id;
+    const { bookId } = req.params;
+
+    const student = await Student.findById(studentId);
+    const alreadyLiked = student.likedBooks.some(id => id.toString() === bookId);
+
+    if (alreadyLiked) {
+        await Student.findByIdAndUpdate(studentId, { $pull: { likedBooks: bookId } });
+        await Book.findByIdAndUpdate(bookId, { $inc: { likes: -1 } });
+    } else {
+        await Student.findByIdAndUpdate(studentId, { $push: { likedBooks: bookId } });
+        await Book.findByIdAndUpdate(bookId, { $inc: { likes: 1 } });
+    }
+
+    const referer = req.headers.referer || "/Students";
+    res.redirect(referer);
+};
+
+export const getLikedBooks = async (req, res) => {
+    const student = await Student.findById(req.session.user.id).populate("likedBooks");
+    res.render("student.liked.ejs", { loggedIn: true, likedBooks: student.likedBooks });
+};
+

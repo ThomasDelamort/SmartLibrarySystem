@@ -34,7 +34,15 @@
                         <%= book.status === 'available' ? 'status-available' : 'status-borrowed' %>">
                         <%= book.status %>
                     </span>
+                    <form action="/Students/Like/<%= book._id %>" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-sm"
+                                style="font-size:1.5rem; background:none; border:none; padding:0;">
+                            <%= likedBooks.includes(book._id.toString()) ? '⭐' : '☆' %>
+                        </button>
+                    </form>
                 </div>
+
+                <p class="book-meta mb-1"><strong>Likes:</strong> <%= book.likes %></p>
 
                 <p class="book-meta mb-2"><strong>Author:</strong> <%= book.author %></p>
                 <p class="book-meta mb-3"><strong>Category:</strong> <%= book.category %></p>

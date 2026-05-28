@@ -1,4 +1,6 @@
 import express from "express";
+import { upload } from "../controllers/middleware/upload.middleware.js";
+
 import {
     getLibrarian,
     booksLibrarian,
@@ -38,9 +40,8 @@ router.get("/Librarian-Books/Search", librarianAuth, searchLibrarianBooks);
 router.get("/Librarian-SL/Search", librarianAuth, searchLibrarianStudents);
 
 router.get("/Librarian-Books/Add", librarianAuth, getAddBook);
-router.post("/Librarian-Books/Add", librarianAuth, addBook);
+router.post("/Librarian-Books/Add", librarianAuth, upload.single("image"), addBook);
 router.get("/Librarian-Books/Edit/:id", librarianAuth, getEditBook);
-router.post("/Librarian-Books/Edit/:id", librarianAuth, editBook);
-router.post("/Librarian-Books/Delete/:id", librarianAuth, deleteBook);
+router.post("/Librarian-Books/Edit/:id", librarianAuth, upload.single("image"), editBook);router.post("/Librarian-Books/Delete/:id", librarianAuth, deleteBook);
 
 export default router;

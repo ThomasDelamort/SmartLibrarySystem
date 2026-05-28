@@ -21,7 +21,7 @@
         </div>
 
         <div class="card border-0 shadow-sm p-4">
-            <form action="/Librarian-Books/Edit/<%= book._id %>" method="POST">
+            <form action="/Librarian-Books/Edit/<%= book._id %>" method="POST" enctype="multipart/form-data">
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Title</label>
@@ -40,7 +40,9 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Image URL</label>
-                    <input type="text" name="image" class="form-control" value="<%= book.image %>" required>
+                    <img src="<%= book.image %>" alt="Current Cover" style="height:80px;" class="mb-2 d-block">
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                    <small class="text-muted">Leave empty to keep current image</small>
                 </div>
 
                 <div class="mb-3">
