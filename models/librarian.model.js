@@ -29,6 +29,11 @@ const librarianSchema = new mongoose.Schema({
         ]
     },
 
+    profilePicture: {
+        type: String,
+        required: true,
+    },
+
     married: {
         type: Boolean,
         default: false

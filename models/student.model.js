@@ -30,6 +30,11 @@ const studentSchema = new mongoose.Schema(
             ]
         },
 
+        profilePicture: {
+            type: String,
+            default: null,
+        },
+
         email: {
             type: String,
             required: true,

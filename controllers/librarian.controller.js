@@ -8,6 +8,7 @@ import { createNotification } from "./helpers/notification.helper.js";
 import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
 
+
 export const getLibrarian = (req, res) => {
     res.render("librarian.ejs", { loggedIn: true, searchAction: "/Librarian-Books/Search" });
 };
@@ -419,4 +420,15 @@ export const changeLibrarianPassword = async (req, res) => {
     await librarianModel.findByIdAndUpdate(req.session.user.id, { password: newPassword });
 
     res.redirect("/Librarian-Profile?success=Password+changed+successfully");
+};
+
+export const uploadLibrarianProfilePicture = async (req, res) => {
+    if (!req.file)
+        return res.redirect("/Librarian-Profile?error=No+file+uploaded");
+
+    await librarianModel.findByIdAndUpdate(req.session.user.id, {
+        profilePicture: req.file.location,
+    });
+
+    res.redirect("/Librarian-Profile?success=Profile+picture+updated");
 };

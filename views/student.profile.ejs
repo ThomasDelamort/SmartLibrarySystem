@@ -29,13 +29,25 @@
         <!-- Profile Info Card -->
         <div class="card border-0 shadow-sm p-4 mb-4">
             <div class="d-flex align-items-center gap-4 mb-4">
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                <div style="position: relative; width: 80px; height: 80px;">
+                    <img src="<%= student.profilePicture || '/images/user.png' %>"
+                         alt="profile"
+                         id="profilePreview"
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    <label for="picInput"
+                           style="position: absolute; bottom: 0; right: 0; width: 24px; height: 24px; background: var(--color-text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-background-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </label>
+                </div>
                 <div>
                     <h4 class="fw-bold mb-0"><%= student.firstName %> <%= student.lastName %></h4>
                     <small class="text-muted"><%= student.studentId %></small><br>
                     <span class="badge <%= student.canBorrow ? 'bg-success' : 'bg-danger' %> mt-1">
                         <%= student.canBorrow ? 'Can Borrow' : 'Borrowing Suspended' %>
                     </span>
+                    <form id="picForm" action="/Students/Profile/Picture" method="POST" enctype="multipart/form-data" class="mt-2">
+                        <input type="file" id="picInput" name="profilePicture" accept="image/jpeg,image/png,image/webp" style="display:none">
+                    </form>
                 </div>
             </div>
 
@@ -81,8 +93,8 @@
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Sex</label>
                         <select name="sex" class="form-select" required>
-                            <option value="male"> <%= student.sex === 'male' ? 'selected' : '' %>>Male</option>
-                            <option value="female"> <%= student.sex === 'female' ? 'selected' : '' %>>Female</option>
+                            <option value="male" <%= student.sex === 'male' ? 'selected' : '' %>>Male</option>
+                            <option value="female" <%= student.sex === 'female' ? 'selected' : '' %>>Female</option>
                         </select>
                     </div>
                 </div>
@@ -122,5 +134,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script>
+    document.getElementById('picInput').addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => document.getElementById('profilePreview').src = e.target.result;
+            reader.readAsDataURL(this.files[0]);
+            document.getElementById('picForm').submit();
+        }
+    });
+</script>
 </body>
 </html>
