@@ -81,41 +81,45 @@
                 <div class="row g-4">
                     <% books.forEach(book => { %>
                     <div class="col-md-4">
-                        <a href="/Students/Book/<%= encodeURIComponent(book.title) %>" class="text-decoration-none text-dark">
-                            <div class="card h-100 book-card" id="book-card">
-                                <div class="d-flex h-100">
-                                    <img src="<%= book.image %>"
-                                         alt="<%= book.title %>"
-                                         class="img-thumbnail">
-                                    <div class="card-body d-flex flex-column py-3">
-                                        <h6 class="card-title mb-2">
-                                            <%= book.title %>
-                                        </h6>
-                                        <p class="mb-1 book-info">
-                                            <strong>Author:</strong>
-                                            <%= book.author.join(", ") %>
-                                        </p>
-                                        <div id="chicken">
-                                            <p class="mb-3 book-info">
-                                                <strong>Category:</strong>
-                                                <% book.category.forEach((cat) => { %>
-                                                <span class="cat"><%= cat %></span>
-                                                <% }) %>
+                        <div class="position-relative">
+                            <!-- Star button -->
+                            <form action="/Students/Like/<%= book._id %>" method="POST"
+                                  style="position:absolute; top:10px; right:10px; z-index:10;">
+                                <button type="submit" class="btn btn-sm p-1"
+                                        style="background:white; border:none; font-size:1.2rem; line-height:1;">
+                                    <%= likedBooks.includes(book._id.toString()) ? '⭐' : '☆' %>
+                                </button>
+                            </form>
+
+                            <a href="/Students/Book/<%= encodeURIComponent(book.title) %>" class="text-decoration-none text-dark">
+                                <div class="card h-100 book-card" id="book-card">
+                                    <div class="d-flex h-100">
+                                        <img src="<%= book.image %>"
+                                             alt="<%= book.title %>"
+                                             class="img-thumbnail">
+                                        <div class="card-body d-flex flex-column py-3">
+                                            <h6 class="card-title mb-2"><%= book.title %></h6>
+                                            <p class="mb-1 book-info">
+                                                <strong>Author:</strong>
+                                                <%= book.author.join(", ") %>
                                             </p>
+                                            <div id="chicken">
+                                                <p class="mb-3 book-info">
+                                                    <strong>Category:</strong>
+                                                    <% book.category.forEach((cat) => { %>
+                                                    <span class="cat"><%= cat %></span>
+                                                    <% }) %>
+                                                </p>
+                                            </div>
+                                            <span class="status-pill
+                                                <%= book.status === 'available' ? 'status-available' : 'status-borrowed' %>">
+                                                <%= book.status %>
+                                            </span>
                                         </div>
-
-
-                                        <span class="status-pill
-                                            <%= book.status === 'available'
-                                                ? 'status-available'
-                                                : 'status-borrowed'
-                                            %>">
-                                            <%= book.status %>
-                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                     <% }) %>
                 </div>

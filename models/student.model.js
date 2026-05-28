@@ -53,6 +53,11 @@ const studentSchema = new mongoose.Schema(
             ref: "Book",
         }],
 
+        likedBooks: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Book"
+        }],
+
         reservations: [
             {
             room: String,

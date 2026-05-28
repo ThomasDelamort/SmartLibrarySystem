@@ -1,4 +1,5 @@
 import Book from "../../models/book.model.js";
+import Student from "../../models/student.model.js";
 import { borrowBook } from "./transaction.helper.js"
 
 export const paginateBooks = async ({ req, res, filter = {}, view, loggedIn, extra = {} }) => {
@@ -10,12 +11,19 @@ export const paginateBooks = async ({ req, res, filter = {}, view, loggedIn, ext
     const totalBooks = await Book.countDocuments(filter);
     const totalPages = Math.ceil(totalBooks / booksPerPage);
 
+    let likedBooks = [];
+    if (req.session.user) {
+        const student = await Student.findById(req.session.user.id).select("likedBooks");
+        likedBooks = student ? student.likedBooks.map(id => id.toString()) : [];
+    }
+
     res.render(view, {
         loggedIn,
         books,
         currentPage: page,
         totalPages,
         searchQuery: req.query.q || "",
+        likedBooks,
         ...extra
     });
 };
@@ -24,42 +32,17 @@ export const createSearchFilter = (query) => {
     return {
         $or: [
             { title: { $regex: query, $options: "i" } },
-
-            {
-                author: {
-                    $elemMatch: {
-                        $regex: query,
-                        $options: "i"
-                    }
-                }
-            },
-
-            {
-                category: {
-                    $elemMatch: {
-                        $regex: query,
-                        $options: "i"
-                    }
-                }
-            }
+            { author: { $elemMatch: { $regex: query, $options: "i" } } },
+            { category: { $elemMatch: { $regex: query, $options: "i" } } }
         ]
     };
 };
 
 export const createCategoryFilter = (categories) => {
     if (!categories) return {};
-
-    if (!Array.isArray(categories)) {
-        categories = [categories];
-    }
-
-    return {
-        category: {
-            $in: categories
-        }
-    };
+    if (!Array.isArray(categories)) categories = [categories];
+    return { category: { $in: categories } };
 };
-
 
 export const handleBookAction = async ({ req, res, redirectBase }) => {
     const { id, action } = req.body;
@@ -78,22 +61,27 @@ export const handleBookAction = async ({ req, res, redirectBase }) => {
     if (action === "downloadPdf") {
         return res.send(`Downloading PDF for ${book.title}`);
     }
+
     res.redirect(redirectBase);
 };
-
 
 export const renderSingleBook = async ({ req, res, loggedIn }) => {
     const { title } = req.params;
 
     const book = await Book.findOne({ title });
 
-    if (!book) {
-        return res.status(404).send("Book not found");
+    if (!book) return res.status(404).send("Book not found");
+
+    let likedBooks = [];
+    if (req.session.user) {
+        const student = await Student.findById(req.session.user.id).select("likedBooks");
+        likedBooks = student ? student.likedBooks.map(id => id.toString()) : [];
     }
 
     res.render("book.ejs", {
         loggedIn,
         book,
-        error: req.query.error || null   // ← add this line
+        likedBooks,
+        error: req.query.error || null
     });
 };

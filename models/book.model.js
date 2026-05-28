@@ -17,6 +17,12 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
 
+    likes: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+
     image: {
         type: String,
         required: true

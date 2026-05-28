@@ -14,7 +14,9 @@ import {
     getReservations,
     cancelReservation,
     getStatus,
-    getHistory
+    getHistory,
+    toggleLike,
+    getLikedBooks
 } from "../controllers/student.controller.js";
 import { getBag, addToBag, removeFromBag, borrowFromBag } from "../controllers/Bag.controller.js";
 import { studentAuth } from "../controllers/middleware/auth.middleware.js";
@@ -48,5 +50,7 @@ router.post("/Students/Bag/Add", studentAuth, addToBag);
 router.post("/Students/Bag/Remove/:bookId", studentAuth, removeFromBag);
 router.post("/Students/Bag/BorrowAll", studentAuth, borrowFromBag);
 
+router.post("/Students/Like/:bookId", studentAuth, toggleLike);
+router.get("/Students/Liked", studentAuth, getLikedBooks);
 
 export default router;
