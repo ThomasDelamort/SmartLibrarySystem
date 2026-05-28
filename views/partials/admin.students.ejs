@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+</head>
+<body>
+<div class="sec-label" style="margin-bottom: 16px;">Students</div>
+
+<!-- Search -->
+<div class="sec-divider"></div>
+
+<div class="sec">
+    <div class="sec-label">Students</div>
+
+    <!-- Search -->
+    <div class="panel mb-10">
+        <form method="GET" action="/Admin" style="display:flex;gap:8px;">
+            <input type="hidden" name="section" value="students">
+            <input type="text" name="q" placeholder="Search by name, email, ID..."
+                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+                   style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
+            <button type="submit" style="background:#0f172a;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;">
+                <i class="ti ti-search"></i> Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Students Table -->
+    <div class="panel">
+        <div class="panel-hdr">
+            <div class="panel-title"><i class="ti ti-users"></i>All Students</div>
+            <span style="font-size:11px;color:var(--text-muted)"><%= students.length %> total</span>
+        </div>
+
+        <% if (students.length === 0) { %>
+        <p style="font-size:12px;color:var(--text-muted)">No students found.</p>
+        <% } %>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                <tr style="background:#f8fafc;">
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Student</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">ID</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Email</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Fines</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Borrow</th>
+                    <th style="padding:10px 12px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% students.forEach(function(student) { %>
+                <tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:10px 12px;">
+                        <div class="acct-row" style="padding:0;border:none;">
+                            <div class="avatar av-blue"><%= student.firstName[0] %><%= student.lastName[0] %></div>
+                            <div>
+                                <div class="acct-name"><%= student.firstName %> <%= student.lastName %></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);"><%= student.studentId %></td>
+                    <td style="padding:10px 12px;color:var(--text-secondary);"><%= student.email %></td>
+                    <td style="padding:10px 12px;">
+                                <span style="color:<%= student.fines > 0 ? '#e11d48' : '#16a34a' %>;font-weight:600;">
+                                    ₱<%= student.fines %>
+                                </span>
+                    </td>
+                    <td style="padding:10px 12px;">
+                                <span class="badge <%= student.canBorrow ? 'badge-green' : 'badge-warn' %>">
+                                    <%= student.canBorrow ? 'Allowed' : 'Revoked' %>
+                                </span>
+                    </td>
+                    <td style="padding:10px 12px;">
+                        <div style="display:flex;gap:6px;">
+                            <form action="/Admin/Students/ToggleBorrow/<%= student._id %>" method="POST">
+                                <button type="submit"
+                                        style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text-primary);">
+                                    <%= student.canBorrow ? 'Revoke' : 'Restore' %>
+                                </button>
+                            </form>
+                            <form action="/Admin/Students/Delete/<%= student._id %>" method="POST"
+                                  onsubmit="return confirm('Delete this student?')">
+                                <button type="submit"
+                                        style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid #fecdd3;background:#fff1f2;color:#e11d48;cursor:pointer;">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
