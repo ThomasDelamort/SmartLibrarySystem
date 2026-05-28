@@ -38,8 +38,6 @@ export const upload = multer({
     },
     limits: { fileSize: 20 * 1024 * 1024 }, // 20MB to cover both images and PDFs
 });
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
-});
 
 export const uploadProfile = multer({
     storage: multerS3({
@@ -59,4 +57,3 @@ export const uploadProfile = multer({
     },
     limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max for profile pics
 });
-
