@@ -95,9 +95,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
                 <small style="margin-right: 5px;"> <%= user.lastName %></small>
-                <img class="profile-image"
-                     src="/images/user.png"
-                     alt="user">
+                <img class="profile-image" src="<%= user?.profilePicture || '/images/user.png' %>" alt="user">
             </button>
 
             <ul class="dropdown-menu dropdown-menu-end">

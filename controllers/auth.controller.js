@@ -34,7 +34,8 @@ export const dashboard = async (req, res) => {
         lastName: `${user.lastName}`,
         email: user.email,
         role: user.role,
-        sex: user.sex
+        sex: user.sex,
+        profilePicture: user.profilePicture || null,
     };
 
 

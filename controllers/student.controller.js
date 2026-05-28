@@ -331,6 +331,8 @@ export const uploadStudentProfilePicture = async (req, res) => {
         profilePicture: req.file.location,
     });
 
+    req.session.user.profilePicture = req.file.location;
+
     res.redirect("/Students/Profile?success=Profile+picture+updated");
 };
 
