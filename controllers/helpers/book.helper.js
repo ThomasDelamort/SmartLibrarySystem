@@ -1,6 +1,7 @@
 import Book from "../../models/book.model.js";
 import Student from "../../models/student.model.js";
 import { borrowBook } from "./transaction.helper.js";
+import https from "https";
 
 export const paginateBooks = async ({ req, res, filter = {}, view, loggedIn, extra = {} }) => {
     const booksPerPage = 9;
@@ -62,7 +63,20 @@ export const handleBookAction = async ({ req, res, redirectBase }) => {
         if (!book.pdfUrl) {
             return res.status(404).send("No PDF available for this book");
         }
-        return res.redirect(book.pdfUrl); // Redirects to the S3 signed/public URL
+
+        const safeTitle = book.title.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+        const filename = `${safeTitle}.pdf`;
+
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader("Content-Type", "application/pdf");
+
+        https.get(book.pdfUrl, (stream) => {
+            stream.pipe(res);
+        }).on("error", () => {
+            res.status(500).send("Failed to download PDF");
+        });
+
+        return;
     }
 
     res.redirect(redirectBase);

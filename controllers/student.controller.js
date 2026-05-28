@@ -123,8 +123,11 @@ export const returnBook = async (req, res) => {
 
 export const markNotificationRead = async (req, res) => {
     await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
-    res.redirect("/Students");
-}
+
+    const referer = req.headers.referer;
+    const redirectTo = referer ? new URL(referer).pathname: "/Students";
+    res.redirect(redirectTo);
+};
 
 
 
