@@ -72,3 +72,97 @@ Clone the repository:
 ```bash
 git clone <your-repository-url>
 cd smart-library-system
+```
+
+---
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
+
+---
+
+### 3️⃣ Configure Environment Variables
+create .env file in root directory
+```bash
+PORT=3000
+MONGODB_URI=your_mongodb_connection
+SESSION_SECRET=your_secret_key
+
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=your_region
+AWS_BUCKET_NAME=your_bucket_name
+```
+
+---
+
+### 📦 Dependencies
+dependencies should be: 
+<h3>package.json</h3>
+```aiignore
+"dependencies": {
+  "@aws-sdk/client-s3": "^3.1054.0",
+  "bootstrap": "^5.3.8",
+  "connect-mongo": "^6.0.0",
+  "dotenv": "^17.4.2",
+  "ejs": "^5.0.2",
+  "express": "^5.2.1",
+  "express-session": "^1.19.0",
+  "mongodb": "^7.2.0",
+  "mongoose": "^9.6.2",
+  "multer": "^2.1.1",
+  "multer-s3": "^3.0.1",
+  "node-cron": "^4.2.1",
+  "qrcode": "^1.5.1"
+}
+```
+
+---
+
+### 🔮 Future Improvements
+
+
+---
+# 👨‍💻 Authors
+
+<div align="center" style="display: flex; justify-content: center; gap: 75px; flex-wrap: wrap; ">
+  <div align="center">
+    <img 
+      src="" 
+      width="120" 
+      height="120" 
+      style="border-radius: 50%;" 
+      alt="Author 1"
+    />
+    <br><br>
+    <strong>Devann Dereck Villarin</strong><br>
+    <sub>Backend Developer</sub>
+  </div>
+
+  <div align="center">
+    <img 
+      src="public/authors/552221536_122152995194639799_4950695176087201167_n.jpg" 
+      width="120" 
+      height="120" 
+      style="border-radius: 50%;" 
+      alt="Author 2"
+    />
+    <br><br>
+    <strong>Christian Neal Paredes</strong><br>
+    <sub>F u l l s t a c k  D e v e l o p er</sub>
+  </div>
+
+  <div align="center">
+    <img 
+      src="" 
+      width="120" 
+      height="120" 
+      style="border-radius: 50%;" 
+      alt="Author 3"
+    />
+    <br><br>
+    <strong>Michael Lee</strong><br>
+    <sub>UI/UX Designer</sub>
+  </div>
+</div>
