@@ -126,43 +126,49 @@ dependencies should be:
 ---
 # 👨‍💻 Authors
 
-<div align="center" style="display: flex; justify-content: center; gap: 75px; flex-wrap: wrap; ">
-  <div align="center">
-    <img 
-      src="" 
-      width="120" 
-      height="120" 
-      style="border-radius: 50%;" 
-      alt="Author 1"
-    />
-    <br><br>
-    <strong>Devann Dereck Villarin</strong><br>
-    <sub>BACK-END DEVELOPER</sub>
+<div align="center">
+
+  <div style="display: inline-flex; gap: 75px; flex-wrap: wrap; justify-content: center;">
+
+    <div align="center">
+      <img 
+        src="" 
+        width="120" 
+        height="120" 
+        style="border-radius: 50%; object-fit: cover;" 
+        alt="Author 1"
+      />
+      <br><br>
+      <strong>Devann Dereck Villarin</strong><br>
+      <sub>BACK-END DEVELOPER</sub>
+    </div>
+
+    <div align="center">
+      <img 
+        src="public/authors/Neal.jpg" 
+        width="120" 
+        height="120" 
+        style="border-radius: 50%; object-fit: cover;" 
+        alt="Author 2"
+      />
+      <br><br>
+      <strong>Christian Neal Paredes</strong><br>
+      <sub>FULLSTACK DEVELOPER</sub>
+    </div>
+
+    <div align="center">
+      <img 
+        src="" 
+        width="120" 
+        height="120" 
+        style="border-radius: 50%; object-fit: cover;" 
+        alt="Author 3"
+      />
+      <br><br>
+      <strong>Aeirol John Gilo</strong><br>
+      <sub>UI/UX DESIGNER</sub>
+    </div>
+
   </div>
 
-  <div align="center">
-    <img 
-      src="public/authors/Neal.jpg" 
-      width="120" 
-      height="120" 
-      style="border-radius: 50%;" 
-      alt="Author 2"
-    />
-    <br><br>
-    <strong>Christian Neal Paredes</strong><br>
-    <sub>FULLSTACK DEVELOPER</sub>
-  </div>
-
-  <div align="center">
-    <img 
-      src="" 
-      width="120" 
-      height="120" 
-      style="border-radius: 50%;" 
-      alt="Author 3"
-    />
-    <br><br>
-    <strong>Michael Lee</strong><br>
-    <sub>UI/UX DESIGNER</sub>
-  </div>
 </div>
