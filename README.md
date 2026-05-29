@@ -125,41 +125,6 @@ dependencies should be:
 
 ---
 # 👨‍💻 Authors
-
-<div align="center">
-<span style="display:inline-block; margin: 0 35px;">
-  <img 
-    src="public/authors/devann.jpg" 
-    width="120" 
-    height="120" 
-    style="border-radius:50%; object-fit:cover;"
-  />
-  <br><br>
-  <strong>Devann Dereck Villarin</strong><br>
-  <sub>BACK-END DEVELOPER</sub>
-</span>
-
-<span style="display:inline-block; margin: 0 35px;">
-  <img 
-    src="public/authors/Neal.jpg" 
-    width="120" 
-    height="120" 
-    style="border-radius:50%; object-fit:cover;"
-  />
-  <br><br>
-  <strong>Christian Neal Paredes</strong><br>
-  <sub>FULLSTACK DEVELOPER</sub>
-</span>
-
-<span style="display:inline-block; margin: 0 35px;">
-  <img 
-    src="public/authors/aeirol.jpg" 
-    width="120" 
-    height="120" 
-    style="border-radius:50%; object-fit:cover;"
-  />
-  <br><br>
-  <strong>Aeirol John Gilo</strong><br>
-  <sub>UI/UX DESIGNER</sub>
-</span>
-</div>
+- Christian Neal Paredes - Fullstack Developer
+- Devann Dereck Villarin - Back-end Developer
+- Aeirol John Gilo - UI / UX Designer
