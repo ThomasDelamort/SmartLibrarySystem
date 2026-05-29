@@ -127,9 +127,7 @@ dependencies should be:
 # 👨‍💻 Authors
 
 <div align="center">
-
   <div style="display: inline-flex; gap: 75px; flex-wrap: wrap; justify-content: center;">
-
     <div align="center">
       <img 
         src="" 
@@ -142,7 +140,6 @@ dependencies should be:
       <strong>Devann Dereck Villarin</strong><br>
       <sub>BACK-END DEVELOPER</sub>
     </div>
-
     <div align="center">
       <img 
         src="public/authors/Neal.jpg" 
@@ -155,7 +152,6 @@ dependencies should be:
       <strong>Christian Neal Paredes</strong><br>
       <sub>FULLSTACK DEVELOPER</sub>
     </div>
-
     <div align="center">
       <img 
         src="" 
