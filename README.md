@@ -142,7 +142,7 @@ dependencies should be:
 
   <div align="center">
     <img 
-      src="public/authors/552221536_122152995194639799_4950695176087201167_n.jpg" 
+      src="public/authors/Neal.jpg" 
       width="120" 
       height="120" 
       style="border-radius: 50%;" 
