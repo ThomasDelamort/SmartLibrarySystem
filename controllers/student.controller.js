@@ -81,9 +81,11 @@ export const getBorrowedBooks = async (req, res) => {
     }).populate("book");
 
 
+    const now = new Date();
     const transactionsWithStatus = transactions.map(txn => ({
         ...txn.toObject(),
-        pendingReturn: pendingReturns.some(id => id.equals(txn.book._id))
+        pendingReturn: pendingReturns.some(id => id.equals(txn.book._id)),
+        status: txn.status === "approved" && txn.dueDate < now ? "overdue" : txn.status
     }));
 
     res.render("student.borrowed.ejs", { loggedIn: true, transactions: transactionsWithStatus });
@@ -207,15 +209,33 @@ export const cancelReservation = async (req, res) => {
 };
 
 
+const FINE_PER_DAY = 4;
+
 export const getStatus = async (req, res) => {
     const student = await Student.findById(req.session.user.id);
 
+    const now = new Date();
     const overdueBooks = await BookTransaction.find({
         student: req.session.user.id,
-        status: "overdue"
+        status: { $in: ["approved", "overdue"] },
+        dueDate: { $lt: now }
     }).populate("book");
 
-    res.render("student.status.ejs", { loggedIn: true, student, overdueBooks });
+    let extraFines = 0;
+    const overdueWithFines = overdueBooks.map(txn => {
+        const daysOverdue = Math.floor((now - txn.dueDate) / (1000 * 60 * 60 * 24));
+        const computedFine = daysOverdue * FINE_PER_DAY;
+        extraFines += computedFine - (txn.fineAmount || 0);
+        return { ...txn.toObject(), fineAmount: computedFine };
+    });
+
+    const displayFines = (student.fines || 0) + extraFines;
+
+    res.render("student.status.ejs", {
+        loggedIn: true,
+        student: { ...student.toObject(), fines: displayFines },
+        overdueBooks: overdueWithFines
+    });
 };
 
 

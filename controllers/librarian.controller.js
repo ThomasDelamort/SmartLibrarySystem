@@ -61,12 +61,16 @@ export const searchLibrarianStudents = async (req, res) => {
 
 
 
+const FINE_PER_DAY = 4;
+
 export const transactions = async (req, res) => {
-    const [pendingBooks, pendingRooms, borrowed, overdue, returnedToday, students, books, rooms] = await Promise.all([
+    const now = new Date();
+
+    const [pendingBooks, pendingRooms, borrowed, overdueRaw, returnedToday, students, books, rooms] = await Promise.all([
         BookTransaction.find({ status: "pending" }).populate("book").populate("student"),
         RoomTransaction.find({ status: "pending" }).populate("room").populate("reservee"),
-        BookTransaction.countDocuments({ status: "approved" }),
-        BookTransaction.countDocuments({ status: "overdue" }),
+        BookTransaction.countDocuments({ status: "approved", dueDate: { $gte: now } }),
+        BookTransaction.find({ status: { $in: ["approved", "overdue"] }, dueDate: { $lt: now } }).populate("book").populate("student"),
         BookTransaction.countDocuments({
             status: "returned",
             transactionType: "return",
@@ -77,11 +81,17 @@ export const transactions = async (req, res) => {
         Room.find({ status: "available" }, "number capacity").sort({ number: 1 }),
     ]);
 
+    const overdueTransactions = overdueRaw.map(txn => {
+        const daysOverdue = Math.floor((now - txn.dueDate) / (1000 * 60 * 60 * 24));
+        return { ...txn.toObject(), daysOverdue, fineAmount: daysOverdue * FINE_PER_DAY };
+    });
+
     res.render("librarian.transactions.ejs", {
         loggedIn: true,
         bookTransactions: pendingBooks,
         roomTransactions: pendingRooms,
-        stats: { borrowed, overdue, returnedToday },
+        overdueTransactions,
+        stats: { borrowed, overdue: overdueTransactions.length, returnedToday },
         searchAction: "/Librarian-Book/Search",
         students,
         books,

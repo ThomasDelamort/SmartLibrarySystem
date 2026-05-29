@@ -115,6 +115,53 @@
             </div>
         </div>
 
+        <!-- Overdue Books -->
+        <h5 class="fw-bold mb-3">Overdue Books</h5>
+        <div class="transactions-list mb-5">
+            <div class="d-flex flex-column gap-3">
+
+                <% if (overdueTransactions.length === 0) { %>
+                <p class="text-muted">No overdue books.</p>
+                <% } %>
+
+                <% overdueTransactions.forEach(txn => { %>
+                <div class="transaction-item">
+                    <div class="row align-items-center">
+
+                        <div class="col-md-1 text-center">
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                 alt="student"
+                                 class="transaction-image">
+                        </div>
+
+                        <div class="col-md-5">
+                            <h5 class="transaction-name">
+                                <%= txn.student ? `${txn.student.firstName} ${txn.student.lastName}` : 'Unknown Student' %>
+                            </h5>
+                            <p class="transaction-book">
+                                <strong><%= txn.book.title %></strong>
+                            </p>
+                            <span class="transaction-date">
+                                Due: <%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                &nbsp;|&nbsp; <%= txn.daysOverdue %> day(s) overdue
+                            </span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <span class="status-overdue">Overdue</span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <p class="text-danger fw-bold mb-0">Fine: $<%= txn.fineAmount %></p>
+                        </div>
+
+                    </div>
+                </div>
+                <% }) %>
+
+            </div>
+        </div>
+
         <!-- Room Transactions -->
         <h5 class="fw-bold mb-3">Room Reservations</h5>
         <div class="transactions-list">

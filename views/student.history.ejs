@@ -49,7 +49,7 @@
                             <strong><%= new Date(txn.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></strong>
                         </small>
                         <% if (txn.fineAmount > 0) { %>
-                        <br><small class="text-danger">Fine: ₱<%= txn.fineAmount %></small>
+                        <br><small class="text-danger">Fine: $<%= txn.fineAmount %></small>
                         <% } %>
                     </div>
 

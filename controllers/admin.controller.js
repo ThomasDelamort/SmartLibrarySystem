@@ -72,7 +72,7 @@ export const adminStudents = async (req, res) => {
     res.render("admin.students.ejs", { user: req.session.user, students, searchQuery: query });
 };
 
-// ── Toggle borrow: return JSON so client stays on page ──────────────────────
+
 export const toggleCanBorrow = async (req, res) => {
     const student = await Student.findById(req.params.id);
     if (!student) return res.status(404).json({ success: false, message: "Student not found" });
@@ -430,7 +430,7 @@ export const downloadMonthlyReport = async (req, res) => {
     row("Total approved borrows",           totalApproved);
     row("Total books returned",             totalReturned);
     row("Total overdue transactions",       totalOverdue);
-    row("Total outstanding fines (₱)",      totalOutstandingFines.toFixed(2));
+    row("Total outstanding fines ($)",      totalOutstandingFines.toFixed(2));
     row("Total cancelled transactions",     totalCancelled);  sep();
 
     hdr("TOP 5 MOST BORROWED BOOKS");
@@ -455,8 +455,8 @@ export const downloadMonthlyReport = async (req, res) => {
     row("Total registered students",         allStudents.length);
     row("New registrations this month",      newStudents);
     row("Students with borrowing revoked",   revokedStudents.length);
-    row("Students who hit ₱10 fine limit",   studentsHitLimit);
-    row("Total fines outstanding (₱)",       totalFinesAllStudents.toFixed(2));  sep();
+    row("Students who hit $10 fine limit",   studentsHitLimit);
+    row("Total fines outstanding ($)",       totalFinesAllStudents.toFixed(2));  sep();
 
     hdr("LIBRARIAN ACTIVITY");
     row("Librarian", "Borrow Approvals", "Room Approvals", "Returns Processed");
@@ -470,10 +470,10 @@ export const downloadMonthlyReport = async (req, res) => {
 
     hdr("FINES SUMMARY");
     row("Metric", "Value");
-    row("Fine rate",                              `₱${FINE_PER_DAY}/day`);
-    row("Total fine amount accumulated (₱)",      totalFineAccumulated.toFixed(2));
-    row("Students who reached ₱10 threshold",     studentsHitLimit);
-    row("Average fine per overdue transaction (₱)", avgFinePerOverdue);
+    row("Fine rate",                              `$${FINE_PER_DAY}/day`);
+    row("Total fine amount accumulated ($)",      totalFineAccumulated.toFixed(2));
+    row("Students who reached $10 threshold",     studentsHitLimit);
+    row("Average fine per overdue transaction ($)", avgFinePerOverdue);
 
     // ── Session log ──────────────────────────────────────────────────────────
     hdr("SESSION LOG — ALL USERS");

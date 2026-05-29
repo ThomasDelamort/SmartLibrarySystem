@@ -9,7 +9,7 @@ const FINE_PER_DAY = 4;
 const FINE_LIMIT = 10;
 
 export const startOverdueCron = () => {
-    cron.schedule("0 0 * * *", async () => {
+    cron.schedule("* * * * *", async () => {
         console.log("Running overdue check...");
 
         const now = new Date();
@@ -18,7 +18,7 @@ export const startOverdueCron = () => {
         const todayEnd = new Date();
         todayEnd.setHours(23, 59, 59, 999);
 
-
+        // Due today notifications
         const dueToday = await BookTransaction.find({
             status: "approved",
             dueDate: { $gte: todayStart, $lte: todayEnd }
@@ -32,10 +32,10 @@ export const startOverdueCron = () => {
             );
         }
 
-
+        // Overdue — only past days, not today
         const overdueTransactions = await BookTransaction.find({
             status: "approved",
-            dueDate: { $lt: now }
+            dueDate: { $lt: todayStart }
         }).populate("book");
 
         for (const txn of overdueTransactions) {
@@ -43,14 +43,11 @@ export const startOverdueCron = () => {
             const newFine = daysOverdue * FINE_PER_DAY;
             const difference = newFine - (txn.fineAmount || 0);
 
-
             txn.status = "overdue";
             txn.fineAmount = newFine;
             await txn.save();
 
-
             await Book.findByIdAndUpdate(txn.book._id, { status: "overdue" });
-
 
             if (difference > 0) {
                 const student = await Student.findByIdAndUpdate(
@@ -59,18 +56,16 @@ export const startOverdueCron = () => {
                     { new: true }
                 );
 
-
                 if (student.fines >= FINE_LIMIT && student.canBorrow) {
                     await Student.findByIdAndUpdate(txn.student, { canBorrow: false });
 
                     await createNotification(
                         txn.student,
-                        `Your borrowing privileges have been revoked due to unpaid fines exceeding ₱${FINE_LIMIT}.`,
+                        `Your borrowing privileges have been revoked due to unpaid fines exceeding $${FINE_LIMIT}.`,
                         "fine"
                     );
                 }
             }
-
 
             const alreadyNotified = await Notification.findOne({
                 student: txn.student,
@@ -81,7 +76,7 @@ export const startOverdueCron = () => {
             if (!alreadyNotified) {
                 await createNotification(
                     txn.student,
-                    `"${txn.book.title}" is overdue by ${daysOverdue} day(s). Fine: ₱${newFine}.`,
+                    `"${txn.book.title}" is overdue by ${daysOverdue} day(s). Fine: $${newFine}.`,
                     "overdue"
                 );
             }
