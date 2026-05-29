@@ -4,6 +4,7 @@ import Book from "../models/book.model.js";
 import BookTransaction from "../models/bookTransaction.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
 import Room from "../models/room.model.js";
+import UserSession from "../models/userSession.model.js";
 
 export const admin = async (req, res) => {
     const [
@@ -71,16 +72,22 @@ export const adminStudents = async (req, res) => {
     res.render("admin.students.ejs", { user: req.session.user, students, searchQuery: query });
 };
 
+// ── Toggle borrow: return JSON so client stays on page ──────────────────────
 export const toggleCanBorrow = async (req, res) => {
     const student = await Student.findById(req.params.id);
-    if (!student) return res.status(404).send("Student not found");
-    await Student.findByIdAndUpdate(req.params.id, { canBorrow: !student.canBorrow });
-    res.redirect("/Admin/Students");
+    if (!student) return res.status(404).json({ success: false, message: "Student not found" });
+    const updated = await Student.findByIdAndUpdate(
+        req.params.id,
+        { canBorrow: !student.canBorrow },
+        { new: true }
+    );
+    return res.json({ success: true, canBorrow: updated.canBorrow });
 };
 
+// ── Delete student: return JSON so client stays on page ─────────────────────
 export const deleteStudent = async (req, res) => {
     await Student.findByIdAndDelete(req.params.id);
-    res.redirect("/Admin/Students");
+    return res.json({ success: true });
 };
 
 // LIBRARIANS
@@ -89,22 +96,9 @@ export const adminLibrarians = async (req, res) => {
     res.render("admin.librarians.ejs", { user: req.session.user, librarians });
 };
 
-export const addLibrarian = async (req, res) => {
-    const { firstName, lastName, email, password, sex } = req.body;
-    await Librarian.create({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.toLowerCase().trim(),
-        password,
-        sex,
-        role: "librarian"
-    });
-    res.redirect("/Admin/Librarians");
-};
-
 export const deleteLibrarian = async (req, res) => {
     await Librarian.findByIdAndDelete(req.params.id);
-    res.redirect("/Admin/Librarians");
+    return res.json({ success: true });
 };
 
 // BOOKS
@@ -135,7 +129,7 @@ export const adminBooks = async (req, res) => {
 
 export const deleteAdminBook = async (req, res) => {
     await Book.findByIdAndDelete(req.params.id);
-    res.redirect("/Admin/Books");
+    return res.json({ success: true });
 };
 
 // ROOMS
@@ -152,17 +146,17 @@ export const addRoom = async (req, res) => {
         description: description?.trim(),
         status: "available"
     });
-    res.redirect("/Admin/Rooms");
+    res.redirect("/Admin/Rooms");//subject to change
 };
 
 export const deleteRoom = async (req, res) => {
     await Room.findByIdAndDelete(req.params.id);
-    res.redirect("/Admin/Rooms");
+    return res.json({ success: true });
 };
 
 export const updateRoomStatus = async (req, res) => {
     await Room.findByIdAndUpdate(req.params.id, { status: req.body.status });
-    res.redirect("/Admin/Rooms");
+    return res.json({ success: true });
 };
 
 // TRANSACTIONS
@@ -179,6 +173,84 @@ export const adminTransactions = async (req, res) => {
     res.render("admin.transactions.ejs", { user: req.session.user, bookTransactions, roomTransactions });
 };
 
+// ── Chart data API: real DB data ─────────────────────────────────────────────
+export const chartTrafficData = async (req, res) => {
+    const days = parseInt(req.query.days) || 14;
+    const now = new Date();
+    const labels = [], studentCounts = [], librarianCounts = [];
+
+    for (let i = days - 1; i >= 0; i--) {
+        const dayStart = new Date(now);
+        dayStart.setDate(now.getDate() - i);
+        dayStart.setHours(0, 0, 0, 0);
+
+        const dayEnd = new Date(dayStart);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        const label = dayStart.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        labels.push(label);
+
+        const [sCount, lCount] = await Promise.all([
+            UserSession.countDocuments({ userRole: "student", timeIn: { $gte: dayStart, $lte: dayEnd } }),
+            UserSession.countDocuments({ userRole: "librarian", timeIn: { $gte: dayStart, $lte: dayEnd } }),
+        ]);
+
+        studentCounts.push(sCount);
+        librarianCounts.push(lCount);
+    }
+
+    res.json({ labels, students: studentCounts, librarians: librarianCounts });
+};
+
+export const chartReservationData = async (req, res) => {
+    const mode = req.query.mode || "weekly"; // 'weekly' | 'monthly'
+    const now = new Date();
+    const labels = [], processed = [], cancelled = [];
+
+    if (mode === "weekly") {
+        // Last 4 weeks
+        for (let w = 3; w >= 0; w--) {
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() - (w + 1) * 7);
+            weekStart.setHours(0, 0, 0, 0);
+
+            const weekEnd = new Date(now);
+            weekEnd.setDate(now.getDate() - w * 7);
+            weekEnd.setHours(23, 59, 59, 999);
+
+            const weekNum = 4 - w;
+            labels.push(`Week ${weekNum}`);
+
+            const [p, c] = await Promise.all([
+                RoomTransaction.countDocuments({ status: { $in: ["approved", "completed"] }, createdAt: { $gte: weekStart, $lte: weekEnd } }),
+                RoomTransaction.countDocuments({ status: "cancelled", createdAt: { $gte: weekStart, $lte: weekEnd } }),
+            ]);
+
+            processed.push(p);
+            cancelled.push(c);
+        }
+    } else {
+        // Last 4 months
+        for (let m = 3; m >= 0; m--) {
+            const monthStart = new Date(now.getFullYear(), now.getMonth() - m, 1, 0, 0, 0, 0);
+            const monthEnd   = new Date(now.getFullYear(), now.getMonth() - m + 1, 0, 23, 59, 59, 999);
+
+            const label = monthStart.toLocaleDateString("en-US", { month: "short" });
+            labels.push(label);
+
+            const [p, c] = await Promise.all([
+                RoomTransaction.countDocuments({ status: { $in: ["approved", "completed"] }, createdAt: { $gte: monthStart, $lte: monthEnd } }),
+                RoomTransaction.countDocuments({ status: "cancelled", createdAt: { $gte: monthStart, $lte: monthEnd } }),
+            ]);
+
+            processed.push(p);
+            cancelled.push(c);
+        }
+    }
+
+    res.json({ labels, processed, cancelled });
+};
+
 export const downloadDailyLog = async (req, res) => {
     const { date } = req.query;
 
@@ -187,17 +259,20 @@ export const downloadDailyLog = async (req, res) => {
     const end = new Date(start);
     end.setHours(23, 59, 59, 999);
 
-    const [bookTxns, roomTxns] = await Promise.all([
+    const [bookTxns, roomTxns, sessions] = await Promise.all([
         BookTransaction.find({ createdAt: { $gte: start, $lte: end } })
             .populate("book").populate("student"),
         RoomTransaction.find({ createdAt: { $gte: start, $lte: end } })
-            .populate("room").populate("reservee")
+            .populate("room").populate("reservee"),
+        UserSession.find({ timeIn: { $gte: start, $lte: end } }).sort({ timeIn: 1 }),
     ]);
 
     const rows = [];
+    const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
 
     // Header
-    rows.push(["Type", "Reference", "Student", "StudentID", "Detail", "Status", "Date"].join(","));
+    rows.push("TRANSACTIONS");
+    rows.push(["Type", "Reference", "User", "ID", "Detail", "Status", "Date"].map(q).join(","));
 
     // Book transactions
     bookTxns.forEach(txn => {
@@ -209,7 +284,7 @@ export const downloadDailyLog = async (req, res) => {
             txn.book ? txn.book.title : "Unknown",
             txn.status,
             new Date(txn.createdAt).toLocaleString()
-        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+        ].map(q).join(","));
     });
 
     // Room transactions
@@ -222,7 +297,33 @@ export const downloadDailyLog = async (req, res) => {
             txn.room ? `Room ${txn.room.number} (${txn.startTime}-${txn.endTime})` : "Unknown",
             txn.status,
             new Date(txn.createdAt).toLocaleString()
-        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+        ].map(q).join(","));
+    });
+
+    rows.push("");
+
+    // ── Session log section ──
+    rows.push("SESSION LOG");
+    rows.push(["Role", "Name", "ID / Email", "Time In", "Time Out", "Duration"].map(q).join(","));
+
+    sessions.forEach(s => {
+        const timeIn  = new Date(s.timeIn);
+        const timeOut = s.timeOut ? new Date(s.timeOut) : null;
+        const duration = timeOut
+            ? (() => {
+                const mins = Math.round((timeOut - timeIn) / 60000);
+                return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+            })()
+            : "Active / Not logged out";
+
+        rows.push([
+            s.userRole,
+            `${s.firstName} ${s.lastName}`,
+            s.idNumber || s.email,
+            timeIn.toLocaleString(),
+            timeOut ? timeOut.toLocaleString() : "—",
+            duration
+        ].map(q).join(","));
     });
 
     const filename = `daily-log-${start.toISOString().slice(0, 10)}.csv`;
@@ -242,13 +343,14 @@ export const downloadMonthlyReport = async (req, res) => {
     const FINE_PER_DAY = 4;
     const FINE_LIMIT   = 10;
 
-    const [bookTxns, roomTxns, allStudents, allLibrarians] = await Promise.all([
+    const [bookTxns, roomTxns, allStudents, allLibrarians, sessions] = await Promise.all([
         BookTransaction.find({ createdAt: { $gte: start, $lte: end } })
             .populate("book").populate("student").populate("librarian"),
         RoomTransaction.find({ createdAt: { $gte: start, $lte: end } })
             .populate("room").populate("reservee").populate("approvedBy"),
         Student.find(),
-        Librarian.find()
+        Librarian.find(),
+        UserSession.find({ timeIn: { $gte: start, $lte: end } }).sort({ userRole: 1, timeIn: 1 }),
     ]);
 
     // Book Transaction Totals
@@ -372,6 +474,34 @@ export const downloadMonthlyReport = async (req, res) => {
     row("Total fine amount accumulated (₱)",      totalFineAccumulated.toFixed(2));
     row("Students who reached ₱10 threshold",     studentsHitLimit);
     row("Average fine per overdue transaction (₱)", avgFinePerOverdue);
+
+    // ── Session log ──────────────────────────────────────────────────────────
+    hdr("SESSION LOG — ALL USERS");
+    row("Role", "Name", "ID / Email", "Time In", "Time Out", "Duration");
+
+    if (sessions.length === 0) {
+        row("No session data recorded this month", "", "", "", "", "");
+    } else {
+        sessions.forEach(s => {
+            const timeIn  = new Date(s.timeIn);
+            const timeOut = s.timeOut ? new Date(s.timeOut) : null;
+            const duration = timeOut
+                ? (() => {
+                    const mins = Math.round((timeOut - timeIn) / 60000);
+                    return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+                })()
+                : "Active / Not logged out";
+
+            row(
+                s.userRole,
+                `${s.firstName} ${s.lastName}`,
+                s.idNumber || s.email,
+                timeIn.toLocaleString(),
+                timeOut ? timeOut.toLocaleString() : "—",
+                duration
+            );
+        });
+    }
 
     const filename = `monthly-report-${year}-${String(month).padStart(2, "0")}.csv`;
     res.setHeader("Content-Type", "text/csv");

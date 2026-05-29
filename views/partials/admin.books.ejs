@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <title>Books</title>
 </head>
 <body>
+
+<!-- ── Confirm Modal ──────────────────────────────────────────────────────── -->
+<div id="bookModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;width:340px;box-shadow:0 8px 32px rgba(0,0,0,.18);">
+        <div style="font-size:15px;font-weight:600;color:#0f172a;margin-bottom:8px;">Delete book?</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:4px;" id="bookModalMsg">This book will be permanently removed.</div>
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:22px;">This action cannot be undone.</div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+            <button onclick="closeBookModal()"
+                    style="padding:8px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:13px;cursor:pointer;color:#374151;">
+                Cancel
+            </button>
+            <button id="bookModalConfirm"
+                    style="padding:8px 18px;border-radius:8px;border:none;background:#e11d48;color:#fff;font-size:13px;cursor:pointer;font-weight:500;">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="sec-divider"></div>
 
 <div class="sec">
@@ -137,5 +157,47 @@
         </div>
     </div>
 </div>
+
+<script>
+    /* ── Modal helpers ────────────────────────────────────────────────────────── */
+    function closeBookModal() {
+        document.getElementById('bookModal').style.display = 'none';
+    }
+
+    document.getElementById('bookModal').addEventListener('click', function(e) {
+        if (e.target === this) closeBookModal();
+    });
+
+    /* ── Delete book ─────────────────────────────────────────────────────────── */
+    function confirmDeleteBook(btn) {
+        const id    = btn.dataset.id;
+        const title = btn.dataset.title;
+        document.getElementById('bookModalMsg').textContent = `"${title}" will be permanently removed.`;
+
+        const confirmBtn = document.getElementById('bookModalConfirm');
+        confirmBtn.onclick = () => { closeBookModal(); doDeleteBook(id); };
+
+        document.getElementById('bookModal').style.display = 'flex';
+    }
+
+    async function doDeleteBook(id) {
+        try {
+            const res  = await fetch(`/Admin/Books/Delete/${id}`, { method: 'POST' });
+            const data = await res.json();
+            if (!data.success) return alert('Failed to delete book.');
+
+            const row = document.getElementById(`book-row-${id}`);
+            if (row) row.remove();
+
+            const remaining = document.querySelectorAll('#booksTableBody tr').length;
+            const lbl = document.getElementById('booksCountLabel');
+            if (lbl) lbl.textContent = `${remaining} total`;
+        } catch (err) {
+            alert('Network error. Please try again.');
+        }
+    }
+</script>
+
+
 </body>
 </html>

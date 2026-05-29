@@ -1,12 +1,7 @@
 const grid = 'rgba(0,0,0,0.05)';
 const tick = '#94a3b8';
 
-const d14 = ['May 13','May 14','May 15','May 16','May 17','May 18','May 19','May 20','May 21','May 22','May 23','May 24','May 25','May 26'];
-const s14 = [210,185,320,390,420,310,180,230,200,360,400,410,380,347];
-const l14 = [8,7,11,13,14,10,6,9,8,12,13,13,12,12];
-const d30 = ['Apr 27','Apr 28','Apr 29','Apr 30','May 1','May 2','May 3','May 4','May 5','May 6','May 7','May 8','May 9','May 10','May 11','May 12','May 13','May 14','May 15','May 16','May 17','May 18','May 19','May 20','May 21','May 22','May 23','May 24','May 25','May 26'];
-const s30 = [290,270,350,310,380,300,160,250,280,370,410,380,200,220,190,215,210,185,320,390,420,310,180,230,200,360,400,410,380,347];
-const l30 = [10,9,12,11,13,10,5,9,10,13,14,12,7,8,7,8,8,7,11,13,14,10,6,9,8,12,13,13,12,12];
+/* ─── Chart helpers ─────────────────────────────────────────────────────── */
 
 function mkT(labels, s, l) {
     return {
@@ -14,8 +9,8 @@ function mkT(labels, s, l) {
         data: {
             labels,
             datasets: [
-                { label: 'Students', data: s, borderColor: '#1e293b', backgroundColor: 'rgba(30,41,59,0.07)', tension: 0.35, pointRadius: 2, pointHoverRadius: 4, borderWidth: 2, fill: true },
-                { label: 'Librarians', data: l, borderColor: '#64748b', backgroundColor: 'rgba(100,116,139,0.07)', tension: 0.35, pointRadius: 2, pointHoverRadius: 4, borderWidth: 2, fill: true, borderDash: [4,3] }
+                { label: 'Students',   data: s, borderColor: '#1e293b', backgroundColor: 'rgba(30,41,59,0.07)',   tension: 0.35, pointRadius: 2, pointHoverRadius: 4, borderWidth: 2, fill: true },
+                { label: 'Librarians', data: l, borderColor: '#64748b', backgroundColor: 'rgba(100,116,139,0.07)', tension: 0.35, pointRadius: 2, pointHoverRadius: 4, borderWidth: 2, fill: true, borderDash: [4, 3] }
             ]
         },
         options: {
@@ -29,13 +24,6 @@ function mkT(labels, s, l) {
         }
     };
 }
-
-const wL = ['Week 1','Week 2','Week 3','Week 4'];
-const wP = [92,108,101,105];
-const wC = [28,30,26,30];
-const mL = ['Feb','Mar','Apr','May'];
-const mP = [310,380,420,406];
-const mC = [80,95,120,114];
 
 function mkR(labels, proc, canc) {
     return {
@@ -59,20 +47,51 @@ function mkR(labels, proc, canc) {
     };
 }
 
-let tChart = new Chart(document.getElementById('trafficChart'), mkT(d14, s14, l14));
-let rChart = new Chart(document.getElementById('resChart'), mkR(wL, wP, wC));
+/* ─── Chart instances ────────────────────────────────────────────────────── */
+
+let tChart = null;
+let rChart = null;
+
+async function loadTrafficChart(days) {
+    const res  = await fetch(`/Admin/Chart/Traffic?days=${days}`);
+    const data = await res.json();
+    if (tChart) tChart.destroy();
+    tChart = new Chart(document.getElementById('trafficChart'), mkT(data.labels, data.students, data.librarians));
+}
+
+async function loadReservationChart(mode) {
+    const res  = await fetch(`/Admin/Chart/Reservations?mode=${mode}`);
+    const data = await res.json();
+
+    // Update the summary numbers above the chart
+    const totalP = data.processed.reduce((a, b) => a + b, 0);
+    const totalC = data.cancelled.reduce((a, b) => a + b, 0);
+    const sumPEl = document.getElementById('sumP');
+    const sumCEl = document.getElementById('sumC');
+    if (sumPEl) sumPEl.textContent = totalP;
+    if (sumCEl) sumCEl.textContent = totalC;
+
+    if (rChart) rChart.destroy();
+    rChart = new Chart(document.getElementById('resChart'), mkR(data.labels, data.processed, data.cancelled));
+}
+
+/* ─── Button callbacks ───────────────────────────────────────────────────── */
 
 function setTraffic(p, btn) {
     document.querySelectorAll('.pbtn-group')[0].querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    tChart.destroy();
-    tChart = new Chart(document.getElementById('trafficChart'), mkT(p === '14d' ? d14 : d30, p === '14d' ? s14 : s30, p === '14d' ? l14 : l30));
+    loadTrafficChart(p === '14d' ? 14 : 30);
 }
 
 function setRes(p, btn) {
     document.querySelectorAll('.pbtn-group')[1].querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    rChart.destroy();
-    const isW = p === 'weekly';
-    rChart = new Chart(document.getElementById('resChart'), mkR(isW ? wL : mL, isW ? wP : mP, isW ? wC : mC));
+    loadReservationChart(p);
 }
+
+/* ─── Init on DOM ready ──────────────────────────────────────────────────── */
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadTrafficChart(14);
+    loadReservationChart('weekly');
+});
