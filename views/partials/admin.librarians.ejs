@@ -11,33 +11,6 @@
 <div class="sec">
     <div class="sec-label">Librarians</div>
 
-    <!-- Add Librarian Form -->
-    <div class="panel mb-10">
-        <div class="panel-hdr">
-            <div class="panel-title"><i class="ti ti-user-plus"></i>Add Librarian</div>
-        </div>
-        <form action="/Admin/Librarians/Add" method="POST" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <input type="text" name="firstName" placeholder="First Name" required
-                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
-            <input type="text" name="lastName" placeholder="Last Name" required
-                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
-            <input type="email" name="email" placeholder="Email" required
-                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
-            <input type="password" name="password" placeholder="Password" required
-                   style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
-            <select name="sex" required
-                    style="font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;color:var(--text-primary);">
-                <option value="" disabled selected>Sex</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <button type="submit"
-                    style="background:#0f172a;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;">
-                <i class="ti ti-plus"></i> Add Librarian
-            </button>
-        </form>
-    </div>
-
     <!-- Librarians Table -->
     <div class="panel">
         <div class="panel-hdr">

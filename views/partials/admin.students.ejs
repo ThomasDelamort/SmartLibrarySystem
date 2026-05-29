@@ -7,6 +7,24 @@
 </head>
 <body>
 
+<!-- ── Confirm Modal ──────────────────────────────────────────────────────── -->
+<div id="studentModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;width:340px;box-shadow:0 8px 32px rgba(0,0,0,.18);">
+        <div style="font-size:15px;font-weight:600;color:#0f172a;margin-bottom:8px;" id="studentModalTitle">Confirm Action</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:22px;" id="studentModalMsg">Are you sure?</div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+            <button onclick="closeStudentModal()"
+                    style="padding:8px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:13px;cursor:pointer;color:#374151;">
+                Cancel
+            </button>
+            <button id="studentModalConfirm"
+                    style="padding:8px 18px;border-radius:8px;border:none;background:#e11d48;color:#fff;font-size:13px;cursor:pointer;font-weight:500;">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="sec">
     <div class="sec-label">Students</div>
 
@@ -98,20 +116,22 @@
                     <td style="padding:10px 12px;">
                         <div style="display:flex;gap:6px;">
 
-                            <form action="/Admin/Students/ToggleBorrow/<%= student._id %>" method="POST">
-                                <button type="submit"
-                                        style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;">
-                                    <%= student.canBorrow ? 'Revoke' : 'Restore' %>
-                                </button>
-                            </form>
+                            <!-- Revoke / Restore button -->
+                            <button id="toggle-btn-<%= student._id %>"
+                                    data-id="<%= student._id %>"
+                                    data-canborrow="<%= student.canBorrow %>"
+                                    onclick="confirmToggle(this)"
+                                    style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;">
+                                <%= student.canBorrow ? 'Revoke' : 'Restore' %>
+                            </button>
 
-                            <form action="/Admin/Students/Delete/<%= student._id %>" method="POST"
-                                  onsubmit="return confirm('Delete this student?')">
-                                <button type="submit"
-                                        style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid #fecdd3;background:#fff1f2;color:#e11d48;cursor:pointer;">
-                                    Delete
-                                </button>
-                            </form>
+                            <!-- Delete button -->
+                            <button data-id="<%= student._id %>"
+                                    data-name="<%= student.firstName %> <%= student.lastName %>"
+                                    onclick="confirmDeleteStudent(this)"
+                                    style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid #fecdd3;background:#fff1f2;color:#e11d48;cursor:pointer;">
+                                Delete
+                            </button>
 
                         </div>
                     </td>
@@ -125,6 +145,108 @@
         <% } %>
     </div>
 </div>
+
+<script>
+    /* ── Modal helpers ────────────────────────────────────────────────────────── */
+    function openStudentModal(title, msg, onConfirm, confirmLabel, confirmColor) {
+        document.getElementById('studentModalTitle').textContent   = title;
+        document.getElementById('studentModalMsg').textContent     = msg;
+        const btn = document.getElementById('studentModalConfirm');
+        btn.textContent    = confirmLabel || 'Confirm';
+        btn.style.background = confirmColor || '#e11d48';
+        btn.onclick        = () => { closeStudentModal(); onConfirm(); };
+        const modal = document.getElementById('studentModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeStudentModal() {
+        document.getElementById('studentModal').style.display = 'none';
+    }
+
+    // Close on backdrop click
+    document.getElementById('studentModal').addEventListener('click', function(e) {
+        if (e.target === this) closeStudentModal();
+    });
+
+    /* ── Revoke / Restore ─────────────────────────────────────────────────────── */
+    function confirmToggle(btn) {
+        const id        = btn.dataset.id;
+        const canBorrow = btn.dataset.canborrow === 'true';
+        const action    = canBorrow ? 'Revoke' : 'Restore';
+        const msg       = canBorrow
+            ? 'This will prevent the student from borrowing books.'
+            : 'This will allow the student to borrow books again.';
+
+        openStudentModal(
+            `${action} borrowing?`, msg,
+            () => doToggle(id, btn),
+            action,
+            canBorrow ? '#d97706' : '#16a34a'
+        );
+    }
+
+    async function doToggle(id, btn) {
+        try {
+            const res  = await fetch(`/Admin/Students/ToggleBorrow/${id}`, { method: 'POST' });
+            const data = await res.json();
+            if (!data.success) return alert('Failed to update student.');
+
+            // Update badge and button in-place — no page reload
+            const badge = document.getElementById(`borrow-badge-${id}`);
+            if (data.canBorrow) {
+                badge.textContent  = 'true';
+                badge.className    = 'badge badge-green';
+                btn.textContent    = 'Revoke';
+                btn.dataset.canborrow = 'true';
+            } else {
+                badge.textContent  = 'false';
+                badge.className    = 'badge badge-warn';
+                btn.textContent    = 'Restore';
+                btn.dataset.canborrow = 'false';
+            }
+        } catch (err) {
+            alert('Network error. Please try again.');
+        }
+    }
+
+    /* ── Delete student ───────────────────────────────────────────────────────── */
+    function confirmDeleteStudent(btn) {
+        const id   = btn.dataset.id;
+        const name = btn.dataset.name;
+        openStudentModal(
+            'Delete student?',
+            `"${name}" will be permanently removed. This cannot be undone.`,
+            () => doDeleteStudent(id),
+            'Delete',
+            '#e11d48'
+        );
+    }
+
+    async function doDeleteStudent(id) {
+        try {
+            const res  = await fetch(`/Admin/Students/Delete/${id}`, { method: 'POST' });
+            const data = await res.json();
+            if (!data.success) return alert('Failed to delete student.');
+
+            // Remove the row from the table
+            const row = document.getElementById(`student-row-${id}`);
+            if (row) row.remove();
+
+            // Update total count
+            const rows  = document.querySelectorAll('#studentsTableBody tr');
+            const spans = document.querySelectorAll('.panel-hdr .panel-title + span, .panel-hdr span[style]');
+            // Find the count badge near "All Students"
+            document.querySelectorAll('.panel-hdr span').forEach(s => {
+                if (s.textContent.includes('total')) {
+                    s.textContent = `${rows.length} total`;
+                }
+            });
+        } catch (err) {
+            alert('Network error. Please try again.');
+        }
+    }
+</script>
+
 
 </body>
 </html>
