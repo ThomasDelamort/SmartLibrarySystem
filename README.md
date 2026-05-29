@@ -137,7 +137,7 @@ dependencies should be:
     />
     <br><br>
     <strong>Devann Dereck Villarin</strong><br>
-    <sub>Backend Developer</sub>
+    <sub>BACK-END DEVELOPER</sub>
   </div>
 
   <div align="center">
@@ -150,7 +150,7 @@ dependencies should be:
     />
     <br><br>
     <strong>Christian Neal Paredes</strong><br>
-    <sub>F u l l s t a c k  D e v e l o p er</sub>
+    <sub>FULLSTACK DEVELOPER</sub>
   </div>
 
   <div align="center">
@@ -163,6 +163,6 @@ dependencies should be:
     />
     <br><br>
     <strong>Michael Lee</strong><br>
-    <sub>UI/UX Designer</sub>
+    <sub>UI/UX DESIGNER</sub>
   </div>
 </div>
