@@ -22,6 +22,9 @@ export const login = (req, res) => {
     res.render("login.ejs", {loggedIn: false});
 };
 
+export const meetTheTeam = (req, res) => {
+    res.render("team.ejs", {loggedIn: false});
+};
 
 export const getBooks = async (req, res) => {
     await paginateBooks({

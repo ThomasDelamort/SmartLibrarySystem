@@ -10,7 +10,8 @@ import {
     searchBooks,
     filterBooks,
     viewBook,
-    getBook
+    getBook,
+    meetTheTeam
 } from "../controllers/page.controller.js";
 
 const router = express.Router();
@@ -28,5 +29,7 @@ router.get("/BookFilter", filterBooks);
 router.post("/View", viewBook);
 
 router.get("/Books/Book/:title", getBook);
+
+router.get("/Team", meetTheTeam);
 
 export default router;
