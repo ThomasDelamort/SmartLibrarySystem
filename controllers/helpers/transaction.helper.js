@@ -1,6 +1,7 @@
 import BookTransaction from "../../models/bookTransaction.model.js";
 import Book from "../../models/book.model.js";
 import Student from "../../models/student.model.js";
+import { createLibrarianNotification } from "./librarianNotification.helper.js";
 
 const generateReference = () => {
     return `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -48,6 +49,11 @@ export const borrowBook = async ({ req, res }) => {
         status: "pending",
         dueDate: new Date(dueDate)
     });
+
+    await createLibrarianNotification(
+        `New borrow request for a book from ${req.session.user.name} ${req.session.user.lastName}.`,
+        "return_request"
+    );
 
     res.redirect(`/Students/Book/${encodeURIComponent(book.title)}`);
 };

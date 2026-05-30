@@ -270,11 +270,11 @@ export const downloadDailyLog = async (req, res) => {
     const rows = [];
     const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
 
-    // Header
+
     rows.push("TRANSACTIONS");
     rows.push(["Type", "Reference", "User", "ID", "Detail", "Status", "Date"].map(q).join(","));
 
-    // Book transactions
+
     bookTxns.forEach(txn => {
         rows.push([
             txn.transactionType,
@@ -287,7 +287,7 @@ export const downloadDailyLog = async (req, res) => {
         ].map(q).join(","));
     });
 
-    // Room transactions
+
     roomTxns.forEach(txn => {
         rows.push([
             "room_reservation",
@@ -302,7 +302,7 @@ export const downloadDailyLog = async (req, res) => {
 
     rows.push("");
 
-    // ── Session log section ──
+
     rows.push("SESSION LOG");
     rows.push(["Role", "Name", "ID / Email", "Time In", "Time Out", "Duration"].map(q).join(","));
 

@@ -22,10 +22,14 @@ import {
     getLibrarianProfile,
     updateLibrarianProfile,
     changeLibrarianPassword,
-    uploadLibrarianProfilePicture
+    uploadLibrarianProfilePicture,
+    settleFines,
+    markLibrarianNotificationRead,
+    clearAllLibrarianNotifications
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 import { uploadProfile } from "../controllers/middleware/upload.middleware.js";
+
 
 const router = express.Router();
 
@@ -40,6 +44,7 @@ router.post("/Librarian-Transactions/Return/:id", librarianAuth, confirmReturn);
 router.post("/Librarian-Transactions/Room/Approve/:id", librarianAuth, approveRoomTransaction);
 router.post("/Librarian-Transactions/Room/Reject/:id", librarianAuth, rejectRoomTransaction);
 router.post("/Librarian-Transactions/Manual", librarianAuth, manualTransaction);
+router.post("/Librarian-Transaction/SettleFines", librarianAuth, settleFines);
 
 router.get("/Librarian-Books/Search", librarianAuth, searchLibrarianBooks);
 router.get("/Librarian-SL/Search", librarianAuth, searchLibrarianStudents);
@@ -55,7 +60,9 @@ router.get("/Librarian-Profile", librarianAuth, getLibrarianProfile);
 router.post("/Librarian-Profile/Update", librarianAuth, updateLibrarianProfile);
 router.post("/Librarian-Profile/ChangePassword", librarianAuth, changeLibrarianPassword);
 
+router.post("/Librarian/Notifications/Read/:id", librarianAuth, markLibrarianNotificationRead);
 
 router.post("/Librarian-Profile/Picture", librarianAuth, uploadProfile.single("profilePicture"), uploadLibrarianProfilePicture);
 
+router.post("/Librarian/Notifications/ClearAll", librarianAuth, clearAllLibrarianNotifications);
 export default router;

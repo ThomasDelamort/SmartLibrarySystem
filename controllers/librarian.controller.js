@@ -7,6 +7,7 @@ import librarianModel from "../models/librarian.model.js";
 import { createNotification } from "./helpers/notification.helper.js";
 import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
+import LibrarianNotification from "../models/librarianNotification.model.js"
 
 
 export const getLibrarian = (req, res) => {
@@ -445,4 +446,40 @@ export const uploadLibrarianProfilePicture = async (req, res) => {
     req.session.user.profilePicture = req.file.location;
 
     res.redirect("/Librarian-Profile?success=Profile+picture+updated");
+};
+
+export const settleFines = async (req, res) => {
+    const { studentId } = req.body;
+
+    const student = await Student.findById(studentId);
+    if (!student) return res.status(404).send("Student not found");
+
+    const fineAmount = student.fines;
+    const wasRevoked = !student.canBorrow;
+
+    await Student.findByIdAndUpdate(studentId, {
+        fines: 0,
+        canBorrow: true
+    });
+
+    const message = wasRevoked
+        ? `Your fines of $${fineAmount} have been settled. Your borrowing privileges have been restored.`
+        : `Your fines of $${fineAmount} have been settled by the librarian.`;
+
+    await createNotification(studentId, message, "fine");
+
+    res.redirect("/Librarian-Transactions");
+};
+
+export const markLibrarianNotificationRead = async (req, res) => {
+    await LibrarianNotification.findByIdAndUpdate(req.params.id, { isRead: true });
+    res.redirect(req.headers.referer || "/Librarian-Dashboard");
+};
+
+export const clearAllLibrarianNotifications = async (req, res) => {
+    await LibrarianNotification.updateMany(
+        { isRead: false },
+        { isRead: true }
+    );
+    res.redirect(req.headers.referer || "/Librarian-Dashboard");
 };

@@ -7,19 +7,14 @@
 
     <link rel="stylesheet" href="/styles/style.css"/>
     <link rel="stylesheet" href="/styles/header.css"/>
-
 </head>
 <body>
 
 <section class="container-fluid px-3">
     <header class="main-header d-flex flex-wrap align-items-center justify-content-between">
 
-
         <div class="d-flex align-items-center gap-4">
-
-
             <nav class="navbar navbar-expand-md navbar-light p-0">
-
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
@@ -27,53 +22,30 @@
                         aria-controls="navbarNav"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
-
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-
-                <div class="collapse navbar-collapse"
-                     id="navbarNav">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav gap-1">
                         <li>
-                            <a href="/Librarian-Dashboard"
-                               class="brand">
-                                📚 SmartLS
-                            </a>
+                            <a href="/Librarian-Dashboard" class="brand">📚 SmartLS</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link"
-                               href="/Librarian-Dashboard">
-                                Home
-                            </a>
+                            <a class="nav-link" href="/Librarian-Dashboard">Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link"
-                               href="/Librarian-Books">
-                                Books
-                            </a>
+                            <a class="nav-link" href="/Librarian-Books">Books</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link"
-                               href="/Librarian-SL">
-                                Students
-                            </a>
+                            <a class="nav-link" href="/Librarian-SL">Students</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link"
-                               href="/Librarian-Transactions">
-                                Transactions
-                            </a>
+                            <a class="nav-link" href="/Librarian-Transactions">Transactions</a>
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
-
 
         <form class="search-form d-flex align-items-center"
               role="search"
@@ -88,54 +60,78 @@
                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
         </form>
 
+        <div class="d-flex align-items-center gap-3">
 
-        <div class="dropdown">
-            <button class="btn dropdown-toggle profile-btn"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                <small style="margin-right: 5px;"> <%= user.lastName %></small>
-                <img class="profile-image" src="<%= user?.profilePicture || '/images/user.png' %>" alt="user">
-            </button>
+            <!-- Bell Icon -->
+            <div class="dropdown">
+                <button class="btn position-relative"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <ion-icon name="notifications-outline" style="font-size: 1.5rem;"></ion-icon>
+                    <% if (librarianUnreadCount > 0) { %>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <%= librarianUnreadCount %>
+                    </span>
+                    <% } %>
+                </button>
 
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item"
-                       href="/Librarian-Profile">
-                        My Profile
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item"
-                       href="#">
-                        Preferences
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item"
-                       href="#">
-                        Status
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item"
-                       href="#">
-                        History
-                    </a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <a class="dropdown-item text-danger"
-                       href="/logout">
-                        Log Out
-                    </a>
-                </li>
-            </ul>
+                <ul class="dropdown-menu dropdown-menu-end" style="min-width: 320px;">
+                    <li class="px-3 py-2 d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0">Notifications</h6>
+                        <% if (librarianNotifications.length > 0) { %>
+                        <form action="/Librarian/Notifications/ClearAll" method="POST">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary" style="font-size:0.75rem;">
+                                Clear All
+                            </button>
+                        </form>
+                        <% } %>
+                    </li>
+
+                    <% librarianNotifications.forEach(function(notif) { %>
+                    <li class="d-flex align-items-start px-3 py-2 gap-2">
+                        <div class="flex-grow-1">
+                            <small><%= notif.message %></small>
+                            <div class="text-muted" style="font-size: 0.7rem;">
+                                <%= new Date(notif.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+                            </div>
+                        </div>
+                        <form action="/Librarian/Notifications/Read/<%= notif._id %>" method="POST">
+                            <button type="submit" class="btn btn-sm p-0 text-muted" title="Dismiss">
+                                <ion-icon name="close-outline"></ion-icon>
+                            </button>
+                        </form>
+                    </li>
+                    <li><hr class="dropdown-divider m-0"></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="dropdown">
+                <button class="btn dropdown-toggle profile-btn"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <small style="margin-right: 5px;"><%= user.lastName %></small>
+                    <img class="profile-image" src="<%= user?.profilePicture || '/images/user.png' %>" alt="user">
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="/Librarian-Profile">My Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Preferences</a></li>
+                    <li><a class="dropdown-item" href="#">Status</a></li>
+                    <li><a class="dropdown-item" href="#">History</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="/logout">Log Out</a></li>
+                </ul>
+            </div>
+
         </div>
     </header>
 </section>
 
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

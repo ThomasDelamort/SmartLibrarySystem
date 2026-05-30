@@ -68,8 +68,7 @@
 
                         <div class="col-md-1 text-center">
                             <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                                 alt="student"
-                                 class="transaction-image">
+                                 alt="student" class="transaction-image">
                         </div>
 
                         <div class="col-md-5">
@@ -81,14 +80,14 @@
                                 <strong><%= txn.book.title %></strong>
                             </p>
                             <span class="transaction-date">
-                                    Due: <%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
-                                </span>
+                                Due: <%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                            </span>
                         </div>
 
                         <div class="col-md-3">
-                                <span class="<%= txn.transactionType === 'return' ? 'status-returned' : 'status-borrowed' %>">
-                                    <%= txn.transactionType === 'return' ? 'Return Request' : 'Borrow Request' %>
-                                </span>
+                            <span class="<%= txn.transactionType === 'return' ? 'status-returned' : 'status-borrowed' %>">
+                                <%= txn.transactionType === 'return' ? 'Return Request' : 'Borrow Request' %>
+                            </span>
                         </div>
 
                         <div class="col-md-3">
@@ -115,53 +114,6 @@
             </div>
         </div>
 
-        <!-- Overdue Books -->
-        <h5 class="fw-bold mb-3">Overdue Books</h5>
-        <div class="transactions-list mb-5">
-            <div class="d-flex flex-column gap-3">
-
-                <% if (overdueTransactions.length === 0) { %>
-                <p class="text-muted">No overdue books.</p>
-                <% } %>
-
-                <% overdueTransactions.forEach(txn => { %>
-                <div class="transaction-item">
-                    <div class="row align-items-center">
-
-                        <div class="col-md-1 text-center">
-                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                                 alt="student"
-                                 class="transaction-image">
-                        </div>
-
-                        <div class="col-md-5">
-                            <h5 class="transaction-name">
-                                <%= txn.student ? `${txn.student.firstName} ${txn.student.lastName}` : 'Unknown Student' %>
-                            </h5>
-                            <p class="transaction-book">
-                                <strong><%= txn.book.title %></strong>
-                            </p>
-                            <span class="transaction-date">
-                                Due: <%= new Date(txn.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
-                                &nbsp;|&nbsp; <%= txn.daysOverdue %> day(s) overdue
-                            </span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <span class="status-overdue">Overdue</span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <p class="text-danger fw-bold mb-0">Fine: $<%= txn.fineAmount %></p>
-                        </div>
-
-                    </div>
-                </div>
-                <% }) %>
-
-            </div>
-        </div>
-
         <!-- Room Transactions -->
         <h5 class="fw-bold mb-3">Room Reservations</h5>
         <div class="transactions-list">
@@ -177,8 +129,7 @@
 
                         <div class="col-md-1 text-center">
                             <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                                 alt="student"
-                                 class="transaction-image">
+                                 alt="student" class="transaction-image">
                         </div>
 
                         <div class="col-md-5">
@@ -189,10 +140,10 @@
                                 Requesting to reserve: <strong>Room <%= txn.room.number %></strong>
                             </p>
                             <span class="transaction-date">
-                                    <%= new Date(txn.reservationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
-                                    &nbsp;|&nbsp;
-                                    <%= txn.startTime %> - <%= txn.endTime %>
-                                </span>
+                                <%= new Date(txn.reservationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                &nbsp;|&nbsp;
+                                <%= txn.startTime %> - <%= txn.endTime %>
+                            </span>
                             <% if (txn.purpose) { %>
                             <br><small class="text-muted">Purpose: <%= txn.purpose %></small>
                             <% } %>
@@ -233,13 +184,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="/Librarian-Transactions/Manual" method="POST">
+            <form action="/Librarian-Transactions/Manual" method="POST" id="manualTransactionForm">
                 <div class="modal-body">
 
-                    <!-- Transaction Type Selector -->
+                    <!-- Transaction Type -->
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Transaction Type</label>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 flex-wrap">
                             <input type="radio" class="btn-check" name="type" id="typeBorrow" value="borrow" checked>
                             <label class="btn btn-outline-primary" for="typeBorrow">📖 Borrow</label>
 
@@ -248,18 +199,30 @@
 
                             <input type="radio" class="btn-check" name="type" id="typeRoom" value="room">
                             <label class="btn btn-outline-warning" for="typeRoom">🚪 Room Reserve</label>
+
+                            <input type="radio" class="btn-check" name="type" id="typeSettle" value="settle">
+                            <label class="btn btn-outline-danger" for="typeSettle">💰 Settle Fines</label>
                         </div>
                     </div>
 
-                    <!-- Student (all types) -->
+                    <!-- Student Search -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Student</label>
-                        <select name="studentId" class="form-select" required>
-                            <option value="" disabled selected>Select a student</option>
-                            <% students.forEach(s => { %>
-                            <option value="<%= s._id %>"><%= s.firstName %> <%= s.lastName %> — <%= s.studentId %></option>
-                            <% }) %>
-                        </select>
+                        <div class="input-group mb-2">
+                            <input type="text" id="studentSearchInput" class="form-control"
+                                   placeholder="Search by name, email, or ID...">
+                            <button type="button" class="btn btn-outline-dark" onclick="searchStudentModal()">Search</button>
+                        </div>
+                        <div id="studentSearchResults" class="d-flex flex-column gap-1 mb-2"></div>
+                        <div id="selectedStudentDisplay" style="display:none;"
+                             class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                            <div>
+                                <small class="fw-semibold" id="selectedStudentName"></small>
+                                <small class="text-muted d-block" id="selectedStudentEmail"></small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearStudent()">Remove</button>
+                        </div>
+                        <input type="hidden" name="studentId" id="studentIdInput">
                     </div>
 
                     <!-- Borrow Fields -->
@@ -268,7 +231,7 @@
                             <label class="form-label fw-semibold">Book</label>
                             <select name="bookId" class="form-select">
                                 <option value="" disabled selected>Select a book</option>
-                                <% books.forEach(b => { %>
+                                <% books.forEach(function(b) { %>
                                 <option value="<%= b._id %>"><%= b.title %></option>
                                 <% }) %>
                             </select>
@@ -285,7 +248,7 @@
                             <label class="form-label fw-semibold">Book to Return</label>
                             <select name="bookId" class="form-select">
                                 <option value="" disabled selected>Select a book</option>
-                                <% books.forEach(b => { %>
+                                <% books.forEach(function(b) { %>
                                 <option value="<%= b._id %>"><%= b.title %></option>
                                 <% }) %>
                             </select>
@@ -299,7 +262,7 @@
                             <label class="form-label fw-semibold">Room</label>
                             <select name="roomId" class="form-select">
                                 <option value="" disabled selected>Select a room</option>
-                                <% rooms.forEach(r => { %>
+                                <% rooms.forEach(function(r) { %>
                                 <option value="<%= r._id %>">Room <%= r.number %> (Capacity: <%= r.capacity %>)</option>
                                 <% }) %>
                             </select>
@@ -328,6 +291,19 @@
                         </div>
                     </div>
 
+                    <!-- Settle Fines Fields -->
+                    <div id="settleFields" style="display:none;">
+                        <div class="mb-3">
+                            <p class="text-muted">This will clear the selected student's unpaid fines and restore borrowing privileges if suspended.</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Student's Current Fines</label>
+                            <div id="studentFinesDisplay" class="form-control bg-light text-muted">
+                                Select a student to see their fines
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer">
@@ -341,18 +317,101 @@
 </div>
 
 <script>
-    // Show/hide fields based on transaction type
     const typeInputs = document.querySelectorAll('input[name="type"]');
     const borrowFields = document.getElementById('borrowFields');
     const returnFields = document.getElementById('returnFields');
-    const roomFields   = document.getElementById('roomFields');
+    const roomFields = document.getElementById('roomFields');
+    const settleFields = document.getElementById('settleFields');
+    const finesDisplay = document.getElementById('studentFinesDisplay');
 
     typeInputs.forEach(input => {
         input.addEventListener('change', () => {
             borrowFields.style.display = input.value === 'borrow' ? 'block' : 'none';
             returnFields.style.display = input.value === 'return' ? 'block' : 'none';
             roomFields.style.display   = input.value === 'room'   ? 'block' : 'none';
+            settleFields.style.display = input.value === 'settle' ? 'block' : 'none';
         });
+    });
+
+    async function searchStudentModal() {
+        const query = document.getElementById('studentSearchInput').value.trim();
+        if (!query) return;
+
+        const res = await fetch(`/Students/Search?q=${encodeURIComponent(query)}`);
+        const students = await res.json();
+
+        const resultsDiv = document.getElementById('studentSearchResults');
+        resultsDiv.innerHTML = '';
+
+        if (students.length === 0) {
+            resultsDiv.innerHTML = '<small class="text-muted">No students found.</small>';
+            return;
+        }
+
+        students.forEach(s => {
+            const el = document.createElement('div');
+            el.className = 'd-flex justify-content-between align-items-center p-2 border rounded';
+            el.innerHTML = `
+                <div>
+                    <small class="fw-semibold">${s.firstName} ${s.lastName}</small>
+                    <small class="text-muted d-block">${s.email} — ${s.studentId}</small>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-dark"
+                        onclick="selectStudent('${s._id}', '${s.firstName} ${s.lastName}', '${s.email}', ${s.fines || 0})">
+                    Select
+                </button>
+            `;
+            resultsDiv.appendChild(el);
+        });
+    }
+
+    function selectStudent(id, name, email, fines) {
+        document.getElementById('studentIdInput').value = id;
+        document.getElementById('selectedStudentName').textContent = name;
+        document.getElementById('selectedStudentEmail').textContent = email;
+        document.getElementById('selectedStudentDisplay').style.display = 'flex';
+        document.getElementById('studentSearchResults').innerHTML = '';
+        document.getElementById('studentSearchInput').value = '';
+
+        if (finesDisplay) {
+            finesDisplay.textContent = fines > 0 ? `$${fines} unpaid` : 'No unpaid fines';
+            finesDisplay.className = `form-control bg-light fw-bold ${fines > 0 ? 'text-danger' : 'text-success'}`;
+        }
+    }
+
+    function clearStudent() {
+        document.getElementById('studentIdInput').value = '';
+        document.getElementById('selectedStudentDisplay').style.display = 'none';
+        if (finesDisplay) {
+            finesDisplay.textContent = 'Select a student to see their fines';
+            finesDisplay.className = 'form-control bg-light text-muted';
+        }
+    }
+
+    document.getElementById('studentSearchInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchStudentModal();
+        }
+    });
+
+    document.getElementById('manualTransactionForm').addEventListener('submit', function(e) {
+        const type = document.querySelector('input[name="type"]:checked').value;
+        if (type === 'settle') {
+            e.preventDefault();
+            const studentId = document.getElementById('studentIdInput').value;
+            if (!studentId) return alert('Please select a student.');
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Librarian-Transactions/SettleFines';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'studentId';
+            input.value = studentId;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
     });
 </script>
 
