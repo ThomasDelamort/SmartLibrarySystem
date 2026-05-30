@@ -146,7 +146,7 @@ export const addRoom = async (req, res) => {
         description: description?.trim(),
         status: "available"
     });
-    res.redirect("/Admin/Rooms");//subject to change
+    res.redirect("/Admin");//subject to change
 };
 
 export const deleteRoom = async (req, res) => {

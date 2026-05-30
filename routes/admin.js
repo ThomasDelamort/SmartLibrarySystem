@@ -29,7 +29,7 @@ router.post('/Admin/Librarians/Delete/:id', adminAuth, deleteLibrarian);
 
 router.post('/Admin/Books/Delete/:id', adminAuth, deleteAdminBook);
 
-
+router.post('/Admin', adminAuth, admin)
 router.post('/Admin/Rooms/Add', adminAuth, addRoom);
 router.post('/Admin/Rooms/Delete/:id', adminAuth, deleteRoom);
 router.post('/Admin/Rooms/Status/:id', adminAuth, updateRoomStatus);
