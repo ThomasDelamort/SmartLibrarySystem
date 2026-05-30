@@ -9,8 +9,11 @@
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/layout.css">
     <link rel="stylesheet" href="/styles/transition.css">
-</head>
 
+    <style>
+        .modal { position: fixed !important; }
+    </style>
+</head>
 <body>
 
 <%- include("partials/header.ejs") %>
@@ -35,8 +38,8 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="fw-bold mb-0">Room <%= room.number %></h5>
                             <span class="badge <%= room.status === 'available' ? 'bg-success' : room.status === 'reserved' ? 'bg-warning text-dark' : room.status === 'occupied' ? 'bg-danger' : 'bg-secondary' %>">
-                                    <%= room.status %>
-                                </span>
+                                <%= room.status %>
+                            </span>
                         </div>
 
                         <p class="text-muted mb-0">
@@ -49,7 +52,8 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#reserveModal"
                                 data-room-id="<%= room._id %>"
-                                data-room-number="<%= room.number %>">
+                                data-room-number="<%= room.number %>"
+                                data-room-capacity="<%= room.capacity %>">
                             Reserve
                         </button>
                         <% } else { %>
@@ -69,7 +73,7 @@
 
 <!-- Reserve Modal -->
 <div class="modal fade" id="reserveModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -105,7 +109,20 @@
 
                     <div>
                         <label class="form-label">Number of Attendees</label>
-                        <input type="number" name="attendeesCount" class="form-control" min="1" value="1" required>
+                        <input type="number" name="attendeesCount" id="attendeesCount" class="form-control" min="1" value="1" required>
+                    </div>
+
+                    <!-- Invite Students -->
+                    <div>
+                        <label class="form-label">Invite Students <small class="text-muted">(optional)</small></label>
+                        <div class="input-group mb-2">
+                            <input type="text" id="inviteSearch" class="form-control"
+                                   placeholder="Search by name, email, or ID...">
+                            <button type="button" class="btn btn-outline-dark" onclick="searchInvite()">Search</button>
+                        </div>
+                        <div id="inviteResults" class="d-flex flex-column gap-1 mb-2"></div>
+                        <div id="invitedList" class="d-flex flex-column gap-1"></div>
+                        <div id="inviteInputs"></div>
                     </div>
 
                 </div>
@@ -150,6 +167,105 @@
         btn.addEventListener("click", () => {
             document.getElementById("modalRoomId").value = btn.dataset.roomId;
             document.getElementById("modalRoomNumber").textContent = btn.dataset.roomNumber;
+            document.getElementById("attendeesCount").max = btn.dataset.roomCapacity;
+            document.getElementById("inviteResults").innerHTML = "";
+            document.getElementById("invitedList").innerHTML = "";
+            document.getElementById("inviteInputs").innerHTML = "";
+            invitedStudents = [];
+        });
+    });
+
+    let invitedStudents = [];
+
+    async function searchInvite() {
+        const query = document.getElementById("inviteSearch").value.trim();
+        if (!query) return;
+
+        const res = await fetch(`/Students/Search?q=${encodeURIComponent(query)}`);
+        const students = await res.json();
+
+        const resultsDiv = document.getElementById("inviteResults");
+        resultsDiv.innerHTML = "";
+
+        if (students.length === 0) {
+            resultsDiv.innerHTML = '<small class="text-muted">No students found.</small>';
+            return;
+        }
+
+        students.forEach(s => {
+            if (invitedStudents.find(i => i._id === s._id)) return;
+
+            const el = document.createElement("div");
+            el.className = "d-flex justify-content-between align-items-center p-2 border rounded";
+            el.innerHTML = `
+                <div>
+                    <small class="fw-semibold">${s.firstName} ${s.lastName}</small>
+                    <small class="text-muted d-block">${s.email}</small>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-dark"
+                        onclick="addInvite('${s._id}', '${s.firstName} ${s.lastName}', '${s.email}')">
+                    Invite
+                </button>
+            `;
+            resultsDiv.appendChild(el);
+        });
+    }
+
+    function addInvite(id, name, email) {
+        if (invitedStudents.find(i => i._id === id)) return;
+        invitedStudents.push({ _id: id, name, email });
+
+        const listDiv = document.getElementById("invitedList");
+        const el = document.createElement("div");
+        el.className = "d-flex justify-content-between align-items-center p-2 bg-light rounded";
+        el.id = `invited-${id}`;
+        el.innerHTML = `
+            <div>
+                <small class="fw-semibold">${name}</small>
+                <small class="text-muted d-block">${email}</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeInvite('${id}')">
+                Remove
+            </button>
+        `;
+        listDiv.appendChild(el);
+
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "invites[]";
+        input.value = id;
+        input.id = `input-${id}`;
+        document.getElementById("inviteInputs").appendChild(input);
+
+        document.getElementById("inviteResults").innerHTML = "";
+        document.getElementById("inviteSearch").value = "";
+    }
+
+    function removeInvite(id) {
+        invitedStudents = invitedStudents.filter(i => i._id !== id);
+        document.getElementById(`invited-${id}`)?.remove();
+        document.getElementById(`input-${id}`)?.remove();
+    }
+
+    document.getElementById("inviteSearch").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            searchInvite();
+        }
+    });
+
+    document.querySelectorAll("[data-room-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.getElementById("modalRoomId").value = btn.dataset.roomId;
+            document.getElementById("modalRoomNumber").textContent = btn.dataset.roomNumber;
+            document.getElementById("attendeesCount").max = btn.dataset.roomCapacity;
+            document.getElementById("inviteResults").innerHTML = "";
+            document.getElementById("invitedList").innerHTML = "";
+            document.getElementById("inviteInputs").innerHTML = "";
+            invitedStudents = [];
+
+            // Scroll to top so modal is visible
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 </script>

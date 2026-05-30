@@ -53,6 +53,20 @@ const RoomTransactionSchema = new mongoose.Schema(
             default: "pending",
         },
 
+        invites: [
+            {
+                student: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Student"
+                },
+                status: {
+                    type: String,
+                    enum: ["pending", "accepted", "declined"],
+                    default: "pending"
+                }
+            }
+        ],
+
         approvedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Librarian",

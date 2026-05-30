@@ -62,7 +62,19 @@ export const dashboard = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+    const sessionDocId = req.session.sessionId;
+
+    if (sessionDocId) {
+        try {
+            await UserSession.findByIdAndUpdate(sessionDocId, {
+                timeout: new Date()
+            });
+        } catch (err) {
+            console.log("Failed to record timeOut:", err);
+        }
+    }
+
     req.session.destroy(() => {
-        res.redirect("/");
+       res.redirect("/");
     });
 }

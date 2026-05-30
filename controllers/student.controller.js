@@ -11,6 +11,7 @@ import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
 import Student from "../models/student.model.js"
 import Book from "../models/book.model.js"
+import { createNotification } from "./helpers/notification.helper.js";
 
 
 
@@ -142,36 +143,44 @@ export const getRooms = async (req, res) => {
 
 export const reserveRoom = async (req, res) => {
     const { roomId, reservationDate, startTime, endTime, purpose, attendeesCount } = req.body;
+    const invites = req.body["invites[]"] || [];
+    const inviteArray = Array.isArray(invites) ? invites : [invites];
 
     const room = await Room.findById(roomId);
-
-    if (!room) return res.status(404).send('Room not found');
-
+    if (!room) return res.status(404).send("Room not found");
     if (room.status !== "available") return res.redirect("/Students/Rooms");
 
     const conflict = await RoomTransaction.findOne({
         room: roomId,
         reservationDate: new Date(reservationDate),
         status: { $in: ["pending", "approved"] },
-        $or: [
-            { startTime: { $lt: endTime }, endTime: { $gt: startTime }}
-        ]
+        $or: [{ startTime: { $lt: endTime }, endTime: { $gt: startTime } }]
     });
 
     if (conflict) return res.redirect("/Students/Rooms");
 
-    await RoomTransaction.create({
+    const transaction = await RoomTransaction.create({
         reservee: req.session.user.id,
         room: roomId,
         reservationDate: new Date(reservationDate),
         startTime,
         endTime,
         purpose,
-        attendeesCount: parseInt(attendeesCount)
+        attendeesCount: parseInt(attendeesCount),
+        invites: inviteArray.filter(id => id).map(id => ({ student: id, status: "pending" }))
     });
 
+    // Send notification to each invited student
+    for (const studentId of inviteArray.filter(id => id)) {
+        await createNotification(
+            studentId,
+            `You have been invited to a room reservation for Room ${room.number} on ${new Date(reservationDate).toLocaleDateString()}.`,
+            "borrow_approved"
+        );
+    }
+
     res.redirect("/Students/Rooms");
-}
+};
 
 
 
@@ -354,5 +363,24 @@ export const uploadStudentProfilePicture = async (req, res) => {
     req.session.user.profilePicture = req.file.location;
 
     res.redirect("/Students/Profile?success=Profile+picture+updated");
+};
+
+export const searchStudents = async (req, res) => {
+    const query = req.query.q || "";
+    const currentId = req.session.user?.id;
+
+    const filter = currentId ? { _id: { $ne: currentId } } : {};
+
+    const students = await Student.find({
+        ...filter,
+        $or: [
+            { firstName: { $regex: query, $options: "i" } },
+            { lastName: { $regex: query, $options: "i" } },
+            { email: { $regex: query, $options: "i" } },
+            { studentId: { $regex: query, $options: "i" } }
+        ]
+    }).select("firstName lastName email studentId fines").limit(5);
+
+    res.json(students);
 };
 

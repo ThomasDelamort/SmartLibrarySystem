@@ -446,3 +446,26 @@ export const uploadLibrarianProfilePicture = async (req, res) => {
 
     res.redirect("/Librarian-Profile?success=Profile+picture+updated");
 };
+
+export const settleFines = async (req, res) => {
+    const { studentId } = req.body;
+
+    const student = await Student.findById(studentId);
+    if (!student) return res.status(404).send("Student not found");
+
+    const fineAmount = student.fines;
+    const wasRevoked = !student.canBorrow;
+
+    await Student.findByIdAndUpdate(studentId, {
+        fines: 0,
+        canBorrow: true
+    });
+
+    const message = wasRevoked
+        ? `Your fines of $${fineAmount} have been settled. Your borrowing privileges have been restored.`
+        : `Your fines of $${fineAmount} have been settled by the librarian.`;
+
+    await createNotification(studentId, message, "fine");
+
+    res.redirect("/Librarian-Transactions");
+};

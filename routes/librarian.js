@@ -22,7 +22,8 @@ import {
     getLibrarianProfile,
     updateLibrarianProfile,
     changeLibrarianPassword,
-    uploadLibrarianProfilePicture
+    uploadLibrarianProfilePicture,
+    settleFines,
 } from "../controllers/librarian.controller.js";
 import { librarianAuth } from "../controllers/middleware/auth.middleware.js";
 import { uploadProfile } from "../controllers/middleware/upload.middleware.js";
@@ -40,6 +41,7 @@ router.post("/Librarian-Transactions/Return/:id", librarianAuth, confirmReturn);
 router.post("/Librarian-Transactions/Room/Approve/:id", librarianAuth, approveRoomTransaction);
 router.post("/Librarian-Transactions/Room/Reject/:id", librarianAuth, rejectRoomTransaction);
 router.post("/Librarian-Transactions/Manual", librarianAuth, manualTransaction);
+router.post("/Librarian-Transaction/SettleFines", librarianAuth, settleFines);
 
 router.get("/Librarian-Books/Search", librarianAuth, searchLibrarianBooks);
 router.get("/Librarian-SL/Search", librarianAuth, searchLibrarianStudents);

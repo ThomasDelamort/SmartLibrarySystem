@@ -37,3 +37,8 @@ export const studentAuth = (req, res, next) => {
     if (!["student"].includes(req.session.user.role)) return res.status(401).redirect("/Login");
     next();
 }
+
+export const userAuth = (req, res, next) => {
+    if (req.session.user) return next();
+    res.redirect("/Login");
+};
