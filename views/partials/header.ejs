@@ -42,7 +42,7 @@
                             <a class="nav-link" href="/Students/Rooms">Reserve Room</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Students/Bag">🛒 Bag</a>
+                            <a class="nav-link" href="/Students/Bag">🎒 Bag</a>
                         </li>
                         <% } else { %>
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
@@ -104,8 +104,15 @@
                 </button>
 
                 <ul class="dropdown-menu dropdown-menu-end" style="min-width: 320px;">
-                    <li class="px-3 py-2">
+                    <li class="px-3 py-2 d-flex justify-content-between align-items-center">
                         <h6 class="fw-bold mb-0">Notifications</h6>
+                        <% if (notifications.length > 0) { %>
+                        <form action="/Notifications/ClearAll" method="POST">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary" style="font-size:0.75rem;">
+                                Clear All
+                            </button>
+                        </form>
+                        <% } %>
                     </li>
                     <li><hr class="dropdown-divider m-0"></li>
 

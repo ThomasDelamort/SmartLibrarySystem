@@ -4,6 +4,7 @@ import Book from "../models/book.model.js";
 import Student from "../models/student.model.js";
 import Notification from "../models/notification.model.js";
 import { createNotification } from "../controllers/helpers/notification.helper.js";
+import { createLibrarianNotification } from "../controllers/helpers/librarianNotification.helper.js";
 
 const FINE_PER_DAY = 4;
 const FINE_LIMIT = 10;
@@ -43,16 +44,13 @@ export const startOverdueCron = () => {
             const newFine = daysOverdue * FINE_PER_DAY;
             const difference = newFine - (txn.fineAmount || 0);
 
-            // Update transaction status and fine
             await BookTransaction.findByIdAndUpdate(txn._id, {
                 status: "overdue",
                 fineAmount: newFine
             });
 
-            // Update book status
             await Book.findByIdAndUpdate(txn.book._id, { status: "overdue" });
 
-            // Only increment the difference to avoid double charging
             if (difference > 0) {
                 const student = await Student.findByIdAndUpdate(
                     txn.student,
@@ -60,7 +58,6 @@ export const startOverdueCron = () => {
                     { new: true }
                 );
 
-                // Revoke borrowing if fines exceed limit
                 if (student.fines >= FINE_LIMIT && student.canBorrow) {
                     await Student.findByIdAndUpdate(txn.student, { canBorrow: false });
                     await createNotification(
@@ -71,7 +68,6 @@ export const startOverdueCron = () => {
                 }
             }
 
-            // Send one overdue notification per day
             const alreadyNotified = await Notification.findOne({
                 student: txn.student,
                 type: "overdue",
@@ -85,6 +81,12 @@ export const startOverdueCron = () => {
                     "overdue"
                 );
             }
+
+            // Notify librarians
+            await createLibrarianNotification(
+                `"${txn.book.title}" is overdue by ${daysOverdue} day(s).`,
+                "overdue"
+            );
         }
 
         console.log(`Overdue check done. ${overdueTransactions.length} books marked overdue.`);

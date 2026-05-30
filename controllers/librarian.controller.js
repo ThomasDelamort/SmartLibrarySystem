@@ -7,6 +7,7 @@ import librarianModel from "../models/librarian.model.js";
 import { createNotification } from "./helpers/notification.helper.js";
 import Room from "../models/room.model.js";
 import RoomTransaction from "../models/roomTransaction.model.js";
+import LibrarianNotification from "../models/librarianNotification.model.js"
 
 
 export const getLibrarian = (req, res) => {
@@ -468,4 +469,17 @@ export const settleFines = async (req, res) => {
     await createNotification(studentId, message, "fine");
 
     res.redirect("/Librarian-Transactions");
+};
+
+export const markLibrarianNotificationRead = async (req, res) => {
+    await LibrarianNotification.findByIdAndUpdate(req.params.id, { isRead: true });
+    res.redirect(req.headers.referer || "/Librarian-Dashboard");
+};
+
+export const clearAllLibrarianNotifications = async (req, res) => {
+    await LibrarianNotification.updateMany(
+        { isRead: false },
+        { isRead: true }
+    );
+    res.redirect(req.headers.referer || "/Librarian-Dashboard");
 };

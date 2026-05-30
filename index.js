@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import session from "express-session";
 import Notification from "./models/notification.model.js";
+import LibrarianNotification from "./models/librarianNotification.model.js"
 
 
 import pageRoutes from "./routes/pages.js";
@@ -52,6 +53,21 @@ app.use(async (req, res, next) => {
         res.locals.unreadCount = 0;
     }
 
+    next();
+});
+
+app.use(async (req, res, next) => {
+    if (req.session.user && req.session.user.role === "librarian") {
+        const librarianNotifications = await LibrarianNotification.find({ isRead: false })
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        res.locals.librarianNotifications = librarianNotifications;
+        res.locals.librarianUnreadCount = librarianNotifications.length;
+    } else {
+        res.locals.librarianNotifications = [];
+        res.locals.librarianUnreadCount = 0;
+    }
     next();
 });
 

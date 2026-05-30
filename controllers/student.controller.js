@@ -12,7 +12,8 @@ import RoomTransaction from "../models/roomTransaction.model.js";
 import Student from "../models/student.model.js"
 import Book from "../models/book.model.js"
 import { createNotification } from "./helpers/notification.helper.js";
-
+import { createLibrarianNotification } from "./helpers/librarianNotification.helper.js";
+import LibrarianNotification from "../models/librarianNotification.model.js";
 
 
 export const getStudents = async (req, res) => {
@@ -117,6 +118,11 @@ export const returnBook = async (req, res) => {
         status: "pending",
         dueDate: transaction.dueDate
     });
+
+    await createLibrarianNotification(
+        `New return request for a book from ${req.session.user.name} ${req.session.user.lastName}.`,
+        "return_request"
+    );
 
     res.redirect("/Students/Borrowed");
 };
@@ -384,3 +390,10 @@ export const searchStudents = async (req, res) => {
     res.json(students);
 };
 
+export const clearAllNotifications = async (req, res) => {
+    await Notification.updateMany(
+        { student: req.session.user.id, isRead: false },
+        { isRead: true }
+    );
+    res.redirect(req.headers.referer || "/Students");
+};

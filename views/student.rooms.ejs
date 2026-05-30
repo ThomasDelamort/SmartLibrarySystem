@@ -88,7 +88,8 @@
 
                     <div>
                         <label class="form-label">Date</label>
-                        <input type="date" name="reservationDate" class="form-control" required>
+                        <input type="date" name="reservationDate" class="form-control" required
+                               min="<%= new Date().toISOString().split('T')[0] %>">
                     </div>
 
                     <div class="row g-2">
