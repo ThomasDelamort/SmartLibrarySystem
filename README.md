@@ -31,15 +31,15 @@
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img width="80%" src="./public/images/screenshots/Screenshot 2026-05-25 132605.png" alt="Dashboard Screenshot">
+  <img width="80%" src="backend/public/images/screenshots/Screenshot 2026-05-25 132605.png" alt="Dashboard Screenshot">
 </p>
 
 <p align="center">
-  <img width="80%" src="./public/images/screenshots/Screenshot 2026-05-25 132617.png" alt="Library Screenshot">
+  <img width="80%" src="backend/public/images/screenshots/Screenshot 2026-05-25 132617.png" alt="Library Screenshot">
 </p>
 
 <p align="center">
-  <img width="80%" src="./public/images/screenshots/Screenshot 2026-05-25 132629.png" alt="Borrowing Screenshot">
+  <img width="80%" src="backend/public/images/screenshots/Screenshot 2026-05-25 132629.png" alt="Borrowing Screenshot">
 </p>
 
 ---
