@@ -3,7 +3,9 @@ import Heading from './components/Header'
 
 const MainPage = () => {
     return (
-        <Heading />
+        <div>
+            <Heading />
+        </div>
     )
 }
 export default MainPage
