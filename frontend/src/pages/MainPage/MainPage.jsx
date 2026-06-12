@@ -1,5 +1,5 @@
 import React from 'react'
-import Heading from './components/Header'
+import Header from './components/Header'
 import Hero from './Hero.jsx'
 import Footer from './Footer.jsx'
 
@@ -7,7 +7,7 @@ import Footer from './Footer.jsx'
 const MainPage = () => {
     return (
         <>
-            <Heading />
+            <Header />
             <Hero />
             <Footer />
         </>

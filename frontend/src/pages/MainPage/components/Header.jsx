@@ -1,7 +1,7 @@
 import React from 'react'
 import NavCollapse from './NavCollapse'
 import SearchBar from "./SearchBar";
-import '../../../public/styles/header.css'
+import '../../../../public/styles/header.css'
 
 const Header = () => {
     return (
