@@ -1,6 +1,7 @@
 import React from 'react'
 import NavCollapse from './NavCollapse'
 import SearchBar from "./SearchBar";
+import Login from "./Login";
 import '../../../../public/styles/header.css'
 
 const Header = () => {
@@ -9,9 +10,7 @@ const Header = () => {
             <header className='main-header d-flex flex-wrap align-items-center justify-content-between gap-3'>
                 <NavCollapse/>
                 <SearchBar/>
-                <div>
-                    <a href="/Login" className="btn btn-outline-dark login-btn">Log-in</a>
-                </div>
+                <Login />
             </header>
         </section>
     )
