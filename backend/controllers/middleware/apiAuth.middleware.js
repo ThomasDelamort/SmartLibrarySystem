@@ -1,4 +1,4 @@
-// JSON-mode auth guards for the React/API client.
+// JSON-mode api guards for the React/API client.
 // Unlike the EJS middleware (which redirects or renders 401.ejs),
 // these always respond with JSON so the SPA can react to 401/403.
 

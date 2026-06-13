@@ -3,7 +3,6 @@ import { listBooks, getBookByTitle, downloadBookPdf } from "../../controllers/ap
 
 const router = express.Router();
 
-// Public — no auth required (mirrors the public EJS book pages).
 router.get("/books", listBooks);
 router.get("/books/:id/pdf", downloadBookPdf);
 router.get("/books/:title", getBookByTitle);
