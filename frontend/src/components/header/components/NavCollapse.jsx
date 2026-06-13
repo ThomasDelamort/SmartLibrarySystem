@@ -16,8 +16,7 @@ const NavCollapse = () => {
 
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav gap-1">
-                        <Link to="/" className="navbar-brand text-decoration-none">📚 SmartLS</Link>
-                        {/* Logged-out links — point at real routes as those pages migrate. */}
+                        <Link to="/" className="navbar-brand text-decoration-none">SmartLS</Link>
                         <li className="nav-item"><a className="nav-link" href="#">About</a></li>
                         <li className="nav-item"><a className="nav-link" href="#">Services</a></li>
                         <li className="nav-item"><a className="nav-link" href="#">Download</a></li>

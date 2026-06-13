@@ -1,8 +1,7 @@
 import React from 'react'
-import Header from '../../components/header/Header.jsx'
-import Hero from './components/Hero.jsx'
-import Footer from './components/Footer.jsx'
-import '../../components/header/styles/header.css'
+import Header from '../../components/header/Header'
+import Hero from './components/Hero'
+import Footer from './components/Footer'
 
 const MainPage = () => {
     return (

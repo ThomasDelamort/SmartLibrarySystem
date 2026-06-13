@@ -1,7 +1,7 @@
-import NavCollapse from './components/NavCollapse.jsx'
-import SearchBar from './components/SearchBar.jsx'
-import Login from './components/Login.jsx'
-import './styles/header.css'
+import NavCollapse from './components/NavCollapse'
+import SearchBar from './components/SearchBar'
+import Login from './components/Login'
+import '../../styles/header.css'
 
 // Reusable site header (logged-out state). Styling matches the EJS header partial.
 const Header = () => {

@@ -88,11 +88,11 @@ export default function BookDetailPage() {
                                     )}
 
                                     <button type="button" className="btn btn-outline-success btn-lg">
-                                        🛒 Add to Bag
+                                        🎒 Add to Bag
                                     </button>
 
                                     <a href={`/api/books/${book._id}/pdf`} className="btn btn-danger btn-lg">
-                                        Download PDF
+                                        📄 Download PDF
                                     </a>
                                 </div>
                             </div>

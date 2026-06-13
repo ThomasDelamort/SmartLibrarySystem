@@ -39,7 +39,7 @@ const Footer = () => {
                     <li><a href="/Team">Team</a></li>
                     <li><a href="/Contact">Contact</a></li>
                 </ul>
-                <p className="copyright"> © {new Date().getFullYear()} SmartLibSys 📚</p>
+                <p className="copyright"> © {new Date().getFullYear()} SmartLS </p>
             </footer>
         </>
     )
