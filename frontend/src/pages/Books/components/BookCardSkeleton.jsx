@@ -1,5 +1,4 @@
-// Placeholder card shown while books load. Mirrors the real book-card layout
-// (left image block + stacked text lines + status pill) so the grid doesn't jump.
+// Placeholder card shown while books load. Mirrors the real book-card layout.
 export default function BookCardSkeleton() {
     return (
         <div className="col-md-4">

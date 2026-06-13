@@ -1,0 +1,11 @@
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push the footer to the bottom when the page is short.
+   The #root > … selector outranks style.css's `.card-footer { margin-top: 60px }`. */
+#root > .card-footer {
+    margin-top: auto;
+}
