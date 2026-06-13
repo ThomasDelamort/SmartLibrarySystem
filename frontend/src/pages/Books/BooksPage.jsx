@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { api } from '../../lib/api'
+import Header from '../../components/header/Header.jsx'
 import BookCardSkeleton from '../../skeletons/BookCardSkeleton.jsx'
 
-// Same stylesheets the EJS Books page loads, so the look matches 1:1.
 import '../../styles/style.css'
 import '../../styles/layout.css'
 import '../../styles/transition.css'
 import '../../styles/books.css'
-import '../../styles/header.css'
 import '../../styles/skeleton.css'
 
 const CATEGORIES = [
@@ -27,14 +26,14 @@ export default function BooksPage() {
     const q = searchParams.get('q') || ''
     const selectedCategories = searchParams.getAll('category')
 
-    const [searchInput, setSearchInput] = useState(q)
     const [checkedCats, setCheckedCats] = useState(selectedCategories)
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    useEffect(() => { setSearchInput(q) }, [q])
-    useEffect(() => { setCheckedCats(searchParams.getAll('category')) }, [searchParams])
+    useEffect(() => {
+        setCheckedCats(searchParams.getAll('category'))
+    }, [searchParams])
 
     useEffect(() => {
         let active = true
@@ -52,16 +51,6 @@ export default function BooksPage() {
 
         return () => { active = false }
     }, [page, q, selectedCategories.join(',')])
-
-    const handleSearch = (e) => {
-        e.preventDefault()
-        const params = new URLSearchParams(searchParams)
-        const value = searchInput.trim()
-        if (value) params.set('q', value)
-        else params.delete('q')
-        params.set('page', '1')
-        setSearchParams(params)
-    }
 
     const toggleCheck = (cat) => {
         setCheckedCats((prev) =>
@@ -90,53 +79,7 @@ export default function BooksPage() {
 
     return (
         <>
-            {/* ---------- HEADER (logged-out, matches header partial) ---------- */}
-            <section className="container-fluid px-3">
-                <header className="main-header d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <div className="d-flex align-items-center gap-4">
-                        <nav className="navbar navbar-expand-md navbar-light p-0">
-                            <button
-                                className="navbar-toggler"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#navbarNav"
-                                aria-controls="navbarNav"
-                                aria-expanded="false"
-                                aria-label="Toggle navigation"
-                            >
-                                <span className="navbar-toggler-icon"></span>
-                            </button>
-
-                            <div className="collapse navbar-collapse" id="navbarNav">
-                                <ul className="navbar-nav gap-1">
-                                    <Link to="/" className="navbar-brand text-decoration-none">📚 SmartLS</Link>
-                                    <li className="nav-item"><a className="nav-link" href="#">About</a></li>
-                                    <li className="nav-item"><a className="nav-link" href="#">Services</a></li>
-                                    <li className="nav-item"><a className="nav-link" href="#">Download</a></li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-
-                    <form className="search-form d-flex align-items-center" role="search" onSubmit={handleSearch}>
-                        <button className="search-btn" type="submit">🔍</button>
-                        <input
-                            className="form-control search-input"
-                            type="search"
-                            name="q"
-                            id="searchbarSearch"
-                            placeholder="Search Books"
-                            aria-label="Search"
-                            value={searchInput}
-                            onChange={(e) => setSearchInput(e.target.value)}
-                        />
-                    </form>
-
-                    <div>
-                        <Link to="/login" className="btn btn-outline-dark login-btn">Log-in</Link>
-                    </div>
-                </header>
-            </section>
+            <Header />
 
             {/* ---------- CONTENT ---------- */}
             <div className="container-fluid mt-4">

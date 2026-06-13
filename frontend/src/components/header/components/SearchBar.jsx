@@ -1,27 +1,34 @@
-import React from 'react'
+import { useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const SearchBar = () => {
+    const [searchParams] = useSearchParams()
+    const [query, setQuery] = useState(searchParams.get('q') || '')
+    const navigate = useNavigate()
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const q = query.trim()
+        // Client-side navigation to the Books page; BooksPage reads ?q from the URL.
+        navigate(q ? `/books?q=${encodeURIComponent(q)}` : '/books')
+    }
+
     return (
         <form
-            className="d-flex align-items-center gap-2"
-            style={{ width: "400px"}}
+            className="search-form d-flex align-items-center"
             role="search"
-            action="/Search"
-            method="GET"
+            onSubmit={handleSubmit}
         >
-            <button
-                className="btn btn-outline-dark"
-                type="submit"
-            >
-                🔍
-            </button>
+            <button className="search-btn" type="submit">🔍</button>
             <input
-                className="form-control"
+                className="form-control search-input"
                 type="search"
                 name="q"
                 id="searchbarSearch"
                 placeholder="Search Books"
                 aria-label="Search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
             />
         </form>
     )

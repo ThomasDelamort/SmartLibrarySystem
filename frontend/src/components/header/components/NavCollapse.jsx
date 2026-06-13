@@ -1,4 +1,4 @@
-import React from 'react'
+import { Link } from 'react-router-dom'
 
 const NavCollapse = () => {
     return (
@@ -15,19 +15,12 @@ const NavCollapse = () => {
                 </button>
 
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
-                        <a href="/frontend/public" className="navbar-brand text-decoration-none ">📚 SmartLS</a>
-                    </div>
                     <ul className="navbar-nav gap-1">
-                        <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/frontend/public">Books</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/frontend/public">About</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/frontend/public">Download</a>
-                        </li>
+                        <Link to="/" className="navbar-brand text-decoration-none">📚 SmartLS</Link>
+                        {/* Logged-out links — point at real routes as those pages migrate. */}
+                        <li className="nav-item"><a className="nav-link" href="#">About</a></li>
+                        <li className="nav-item"><a className="nav-link" href="#">Services</a></li>
+                        <li className="nav-item"><a className="nav-link" href="#">Download</a></li>
                     </ul>
                 </div>
             </nav>

@@ -1,9 +1,9 @@
-import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
     return (
         <div>
-            <a href="/Login" className="btn btn-outline-dark login-btn">Log-in</a>
+            <Link to="/login" className="btn btn-outline-dark login-btn">Log-in</Link>
         </div>
     )
 }
