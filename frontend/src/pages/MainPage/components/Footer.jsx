@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../../public/styles/layout.css'
+import '../../../styles/layout.css'
 
 const Footer = () => {
     return (
@@ -33,7 +33,7 @@ const Footer = () => {
                 </ul>
 
                 <ul className="menu">
-                    <li><a href="/">Home</a></li>
+                    <li><a href="/frontend/public">Home</a></li>
                     <li><a href="/About">About</a></li>
                     <li><a href="/Contact">Services</a></li>
                     <li><a href="/Team">Team</a></li>
