@@ -1,8 +1,8 @@
 import React from 'react'
-import NavCollapse from './NavCollapse'
-import SearchBar from "./SearchBar";
-import Login from "./Login";
-import '../../../../public/styles/header.css'
+import NavCollapse from './components/NavCollapse.jsx'
+import SearchBar from "./components/SearchBar.jsx";
+import Login from "./components/Login.jsx";
+
 
 const Header = () => {
     return (

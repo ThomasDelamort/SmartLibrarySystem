@@ -1,0 +1,56 @@
+/* Status pills — ported from backend/public/styles/books.css */
+.status-available,
+.status-borrowed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-available {
+    background: #22c55e;
+    color: #fff;
+}
+
+.status-borrowed {
+    background: #facc15;
+    color: #222;
+}
+
+/* Card + layout niceties */
+.book-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.book-thumb {
+    width: 110px;
+    object-fit: cover;
+}
+
+.book-info {
+    font-size: 0.85rem;
+}
+
+.cat {
+    display: inline-block;
+    background: #eef2f7;
+    border-radius: 6px;
+    padding: 1px 8px;
+    margin: 2px 3px 0 0;
+    font-size: 0.75rem;
+}
+
+.filter-card {
+    position: sticky;
+    top: 1rem;
+}

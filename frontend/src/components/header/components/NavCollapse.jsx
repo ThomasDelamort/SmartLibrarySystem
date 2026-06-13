@@ -16,17 +16,17 @@ const NavCollapse = () => {
 
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
-                        <a href="/" className="navbar-brand text-decoration-none ">📚 SmartLS</a>
+                        <a href="/frontend/public" className="navbar-brand text-decoration-none ">📚 SmartLS</a>
                     </div>
                     <ul className="navbar-nav gap-1">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/">Books</a>
+                            <a className="nav-link active" aria-current="page" href="/frontend/public">Books</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/">About</a>
+                            <a className="nav-link active" aria-current="page" href="/frontend/public">About</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/">Download</a>
+                            <a className="nav-link active" aria-current="page" href="/frontend/public">Download</a>
                         </li>
                     </ul>
                 </div>

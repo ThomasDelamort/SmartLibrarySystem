@@ -1,0 +1,64 @@
+/* Shimmer placeholders for loading states */
+.skeleton {
+    position: relative;
+    background: #e9ecef;
+    background-image: linear-gradient(
+            90deg,
+            #e9ecef 0px,
+            #f3f5f7 40px,
+            #e9ecef 80px
+    );
+    background-size: 600px 100%;
+    border-radius: 6px;
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+/* Make the skeleton card look like #book-card (which is id-styled, so it
+   doesn't apply to these placeholders). */
+.book-card-skeleton {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.skeleton-img {
+    width: 160px;
+    min-height: 240px;
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
+.skeleton-title {
+    height: 18px;
+    width: 80%;
+    margin-bottom: 16px;
+}
+
+.skeleton-line {
+    height: 12px;
+    margin-bottom: 12px;
+}
+
+.skeleton-pill {
+    height: 28px;
+    width: 50%;
+    border-radius: 999px;
+    margin-top: auto;
+}
+
+@media (max-width: 768px) {
+    .skeleton-img {
+        width: 90px;
+        min-height: 120px;
+    }
+}
