@@ -4,7 +4,6 @@ import { api } from '../../lib/api'
 import Header from '../../components/header/Header.jsx'
 import Footer from '../../components/footer/Footer.jsx'
 
-// Same stylesheets the EJS book page loads.
 import '../../styles/style.css'
 import '../../styles/layout.css'
 import '../../styles/book.css'
