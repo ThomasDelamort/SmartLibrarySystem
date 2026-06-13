@@ -1,5 +1,4 @@
 
-
 const Menu = () => {
     return (
         <ul className="menu">

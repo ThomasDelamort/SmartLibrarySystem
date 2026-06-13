@@ -1,6 +1,7 @@
 import '../../styles/layout.css'
-import Menu from "./components/Menu";
-import Socials from "./components/Socials";
+import Menu from "./Menu.jsx";
+import Socials from "./Socials.jsx";
+import Copyright from "./Copyright.jsx";
 
 
 const Footer = () => {
@@ -14,7 +15,9 @@ const Footer = () => {
 
                 <Menu />
 
-                <p className="copyright">© {year} SmartLS 📚</p>
+                <Copyright
+                    year={year}
+                />
 
             </footer>
         </section>
