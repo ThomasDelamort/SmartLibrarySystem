@@ -23,14 +23,15 @@ export const toggleLike = async (req, res) => {
 
         if (alreadyLiked) {
             await Student.findByIdAndUpdate(studentId, { $pull: { likedBooks: bookId } });
-            await Book.findByIdAndUpdate(bookId, { $inc: { likes: -1 } });
+            // Only decrement when likes > 0 so the counter can never go negative.
+            await Book.findOneAndUpdate({ _id: bookId, likes: { $gt: 0 } }, { $inc: { likes: -1 } });
         } else {
             await Student.findByIdAndUpdate(studentId, { $push: { likedBooks: bookId } });
             await Book.findByIdAndUpdate(bookId, { $inc: { likes: 1 } });
         }
 
         const book = await Book.findById(bookId).select("likes");
-        return res.json({ liked: !alreadyLiked, likes: book?.likes ?? 0 });
+        return res.json({ liked: !alreadyLiked, likes: Math.max(0, book?.likes ?? 0) });
     } catch (err) {
         console.error("toggleLike error:", err);
         return res.status(500).json({ error: "Failed to update like" });

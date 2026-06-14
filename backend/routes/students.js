@@ -18,9 +18,9 @@ import {
     cancelReservation,
     searchStudents,
     getLiked,
-} from "../../controllers/api/students.api.controller.js";
-import { requireStudent } from "../../controllers/middleware/apiAuth.middleware.js";
-import { uploadProfile } from "../../controllers/middleware/upload.middleware.js";
+} from "../controllers/api/students.api.controller.js";
+import { requireStudent } from "../controllers/middleware/apiAuth.middleware.js";
+import { uploadProfile } from "../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 

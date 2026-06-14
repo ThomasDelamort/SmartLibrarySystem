@@ -10,6 +10,7 @@ import BorrowedPage from './pages/Student/BorrowedPage'
 import ProfilePage from './pages/Student/ProfilePage'
 import RoomsPage from './pages/Student/RoomsPage'
 import ReservationsPage from './pages/Student/ReservationsPage'
+import LikedPage from './pages/Student/LikedPage'
 import './App.css'
 
 function App() {
@@ -58,6 +59,14 @@ function App() {
                         element={
                             <ProtectedRoute role="student">
                                 <ReservationsPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/liked"
+                        element={
+                            <ProtectedRoute role="student">
+                                <LikedPage />
                             </ProtectedRoute>
                         }
                     />
