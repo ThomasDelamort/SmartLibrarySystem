@@ -5,8 +5,8 @@ const HeroLogo = () => {
                 src="/images/logo.png"
                 className="d-block max-auto img-fluid"
                 alt="Bootstrap Themes"
-                width="700"
-                height="500"
+                width="320"
+                height="120"
                 loading="lazy"
             />
         </div>
