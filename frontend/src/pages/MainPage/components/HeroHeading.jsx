@@ -1,5 +1,4 @@
-
-const BookInfoStatus = () => {
+const HeroHeading = () => {
     return (
         <div className="col-lg-6"><h1
             className="display-5 fw-bold text-body-emphasis lh-1 mb-3">Welcome</h1>
@@ -15,4 +14,4 @@ const BookInfoStatus = () => {
         </div>
     )
 }
-export default BookInfoStatus
+export default HeroHeading

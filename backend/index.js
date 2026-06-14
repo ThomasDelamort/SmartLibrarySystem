@@ -16,6 +16,7 @@ import adminRoutes from "./routes/admin.js";
 // --- API (React/JSON) routes ---
 import authApiRoutes from "./routes/api/auth.api.js";
 import booksApiRoutes from "./routes/api/books.api.js";
+import studentsApiRoutes from "./routes/api/students.api.js";
 
 dotenv.config();
 
@@ -43,13 +44,13 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    // Persist sessions in MongoDB so logins survive server restarts.
+
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
         httpOnly: true,
-        secure: isProd,                       // requires HTTPS in production
-        sameSite: isProd ? "none" : "lax",    // "none" needed for cross-site cookies over HTTPS
-        maxAge: 1000 * 60 * 60 * 24,          // 1 day
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
+        maxAge: 1000 * 60 * 60 * 24,
     },
 }));
 
@@ -97,6 +98,7 @@ app.use(async (req, res, next) => {
 // --- JSON API routes (consumed by React) ---
 app.use("/api", authApiRoutes);
 app.use("/api", booksApiRoutes);
+app.use("/api", studentsApiRoutes);
 
 // --- Existing EJS routes (unchanged, served in parallel during migration) ---
 app.use("/", pageRoutes);
