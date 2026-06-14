@@ -1,11 +1,16 @@
+/* Global app shell + sticky footer.
+   Makes #root a full-height column so the footer drops to the bottom
+   when a page's content is short (e.g. an empty Bag/Borrowed). */
+
 #root {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* Push the footer to the bottom when the page is short.
-   The #root > … selector outranks style.css's `.card-footer { margin-top: 60px }`. */
+/* Footer is the last direct child of #root (Header / content / Footer are
+   siblings — Router/Provider add no DOM wrappers). margin-top: auto absorbs
+   the leftover space and pins it to the bottom. */
 #root > .card-footer {
     margin-top: auto;
 }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../stores/AuthContext'
+import { useAuth } from '../../../stores/AuthContext.jsx'
 
 const Login = () => {
     const { user, logout } = useAuth()
@@ -52,10 +52,10 @@ const Login = () => {
                     style={{ position: 'absolute', right: 0, top: '100%' }}
                 >
                     {/* Links wired as each student page is built. */}
-                    <li><a className="dropdown-item" href="#">My Profile</a></li>
+                    <li><Link className="dropdown-item" to="/students/profile" onClick={() => setOpen(false)}>My Profile</Link></li>
                     <li><Link className="dropdown-item" to="/students/borrowed" onClick={() => setOpen(false)}>Borrowed Books</Link></li>
                     <li><a className="dropdown-item" href="#">Liked Books</a></li>
-                    <li><a className="dropdown-item" href="#">My Reservations</a></li>
+                    <li><Link className="dropdown-item" to="/students/reservations" onClick={() => setOpen(false)}>My Reservations</Link></li>
                     <li><a className="dropdown-item" href="#">Status</a></li>
                     <li><a className="dropdown-item" href="#">History</a></li>
                     <li><hr className="dropdown-divider" /></li>

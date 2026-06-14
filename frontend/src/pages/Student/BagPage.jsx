@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../../components/header/Header.jsx'
-import Footer from '../../components/Footer/Footer.jsx'
-import { useBag } from '../../stores/useBag.js'
+import Footer from '../../components/footer/Footer.jsx'
+import { useBag } from '../../stores/useBag'
+import RowCardSkeleton from './components/RowCardSkeleton'
 
 import '../../styles/style.css'
 import '../../styles/layout.css'
@@ -55,7 +56,13 @@ export default function BagPage() {
 
                     {notice && <div className={`alert alert-${notice.type}`}>{notice.text}</div>}
 
-                    {loading && <p className="text-muted">Loading…</p>}
+                    {loading && (
+                        <div className="d-flex flex-column gap-3">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                                <RowCardSkeleton key={i} />
+                            ))}
+                        </div>
+                    )}
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     {!loading && !error && items.length === 0 && (

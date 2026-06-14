@@ -8,7 +8,7 @@ const Footer = () => {
     const year = new Date().getFullYear()
 
     return (
-        <section className="card-footer mt-5">
+        <section className="card-footer">
             <footer>
 
                 <Socials />

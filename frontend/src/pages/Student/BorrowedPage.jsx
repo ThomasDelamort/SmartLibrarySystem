@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import Header from '../../components/header/Header.jsx'
 import Footer from '../../components/footer/Footer.jsx'
 import { useBorrowed } from '../../stores/useBorrowed'
+import RowCardSkeleton from './components/RowCardSkeleton'
+import Space from "../../components/Space";
 
 import '../../styles/style.css'
 import '../../styles/layout.css'
+
 
 const formatDate = (d) =>
     d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '—'
@@ -46,7 +49,13 @@ export default function BorrowedPage() {
 
                     {notice && <div className={`alert alert-${notice.type}`}>{notice.text}</div>}
 
-                    {loading && <p className="text-muted">Loading…</p>}
+                    {loading && (
+                        <div className="d-flex flex-column gap-3">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                                <RowCardSkeleton key={i} />
+                            ))}
+                        </div>
+                    )}
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     {!loading && !error && items.length === 0 && (
@@ -117,7 +126,7 @@ export default function BorrowedPage() {
 
                 </div>
             </div>
-
+            <Space />
             <Footer />
         </>
     )

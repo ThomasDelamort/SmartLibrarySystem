@@ -7,6 +7,9 @@ import BookDetailPage from './pages/Books/BookDetailPage'
 import LoginPage from './pages/Login/LoginPage'
 import BagPage from './pages/Student/BagPage'
 import BorrowedPage from './pages/Student/BorrowedPage'
+import ProfilePage from './pages/Student/ProfilePage'
+import RoomsPage from './pages/Student/RoomsPage'
+import ReservationsPage from './pages/Student/ReservationsPage'
 import './App.css'
 
 function App() {
@@ -31,6 +34,30 @@ function App() {
                         element={
                             <ProtectedRoute role="student">
                                 <BorrowedPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/profile"
+                        element={
+                            <ProtectedRoute role="student">
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/rooms"
+                        element={
+                            <ProtectedRoute role="student">
+                                <RoomsPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/reservations"
+                        element={
+                            <ProtectedRoute role="student">
+                                <ReservationsPage />
                             </ProtectedRoute>
                         }
                     />
