@@ -553,3 +553,25 @@ export const searchStudents = async (req, res) => {
         return res.status(500).json({ error: "Search failed" });
     }
 };
+
+// GET /api/students/liked  -> { books }
+export const getLiked = async (req, res) => {
+    try {
+        const student = await Student.findById(req.session.user.id).populate("likedBooks");
+        if (!student) return res.status(404).json({ error: "Student not found" });
+
+        return res.json({
+            books: (student.likedBooks || []).map((b) => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                category: b.category,
+                image: b.image,
+                status: b.status,
+            })),
+        });
+    } catch (err) {
+        console.error("getLiked error:", err);
+        return res.status(500).json({ error: "Failed to load liked books" });
+    }
+};

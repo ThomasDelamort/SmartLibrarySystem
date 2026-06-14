@@ -1,74 +1,50 @@
 import express from "express";
-
 import {
-    getStudents,
-    filterStudentBooks,
-    searchStudentBooks,
-    submitBook,
-    getStudentBook,
-    getBorrowedBooks,
+    toggleLike,
+    borrowBook,
+    addToBag,
+    getBag,
+    removeFromBag,
+    borrowFromBag,
+    getBorrowed,
     returnBook,
-    markNotificationRead,
+    getProfile,
+    updateProfile,
+    changePassword,
+    uploadProfilePicture,
     getRooms,
     reserveRoom,
     getReservations,
     cancelReservation,
-    getStatus,
-    getHistory,
-    toggleLike,
-    getLikedBooks,
     searchStudents,
-    getStudentProfile,
-    updateStudentProfile,
-    changeStudentPassword,
-    uploadStudentProfilePicture,
-    clearAllNotifications
-} from "../controllers/student.controller.js";
-import { getBag, addToBag, removeFromBag, borrowFromBag } from "../controllers/Bag.controller.js";
-import { studentAuth, userAuth } from "../controllers/middleware/auth.middleware.js";
-import { upload, uploadProfile } from "../controllers/middleware/upload.middleware.js";
+    getLiked,
+} from "../../controllers/api/students.api.controller.js";
+import { requireStudent } from "../../controllers/middleware/apiAuth.middleware.js";
+import { uploadProfile } from "../../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 
-router.get("/Students", studentAuth, getStudents);
-router.get("/Filter", studentAuth, filterStudentBooks);
-router.get("/Search-Book", studentAuth, searchStudentBooks);
-router.post("/Submit", studentAuth, submitBook);
-router.get("/Students/Book/:title", studentAuth, getStudentBook);
-router.get("/Students/Borrowed", studentAuth, getBorrowedBooks);
-router.post("/Students/Return", studentAuth, returnBook);
-router.post("/Notifications/Read/:id", studentAuth, markNotificationRead);
+router.post("/students/like/:bookId", requireStudent, toggleLike);
+router.get("/students/liked", requireStudent, getLiked);
+router.post("/students/borrow", requireStudent, borrowBook);
 
+router.get("/students/bag", requireStudent, getBag);
+router.post("/students/bag", requireStudent, addToBag);
+router.post("/students/bag/remove/:bookId", requireStudent, removeFromBag);
+router.post("/students/bag/borrow-all", requireStudent, borrowFromBag);
 
-router.get("/Students/Rooms", studentAuth, getRooms);
-router.post("/Students/Rooms/Reserve", studentAuth, reserveRoom);
+router.get("/students/borrowed", requireStudent, getBorrowed);
+router.post("/students/return", requireStudent, returnBook);
 
+router.get("/students/profile", requireStudent, getProfile);
+router.post("/students/profile", requireStudent, updateProfile);
+router.post("/students/profile/password", requireStudent, changePassword);
+router.post("/students/profile/picture", requireStudent, uploadProfile.single("profilePicture"), uploadProfilePicture);
 
-router.get("/Students/Reservations", studentAuth, getReservations);
-router.post("/Students/Reservation/Cancel/:id", studentAuth, cancelReservation);
-
-
-router.get("/Students/Status", studentAuth, getStatus);
-router.get("/Students/History", studentAuth, getHistory);
-
-
-router.get("/Students/Bag", studentAuth, getBag);
-router.post("/Students/Bag/Add", studentAuth, addToBag);
-router.post("/Students/Bag/Remove/:bookId", studentAuth, removeFromBag);
-router.post("/Students/Bag/BorrowAll", studentAuth, borrowFromBag);
-
-router.post("/Students/Like/:bookId", studentAuth, toggleLike);
-router.get("/Students/Liked", studentAuth, getLikedBooks);
-
-router.get("/Students/Profile", studentAuth, getStudentProfile);
-router.post("/Students/Profile/Update", studentAuth, updateStudentProfile);
-router.post("/Students/Profile/ChangePassword", studentAuth, changeStudentPassword);
-
-router.post("/Students/Profile/Picture", studentAuth, uploadProfile.single("profilePicture"), uploadStudentProfilePicture)
-
-router.get("/Students/Search", userAuth, searchStudents);
-
-router.post("/Notifications/ClearAll", studentAuth, clearAllNotifications);
-
+router.get("/students/rooms", requireStudent, getRooms);
+router.post("/students/rooms/reserve", requireStudent, reserveRoom);
+router.get("/students/reservations", requireStudent, getReservations);
+router.post("/students/reservations/cancel/:id", requireStudent, cancelReservation);
+router.get("/students/search", requireStudent, searchStudents);
 
 export default router;
