@@ -11,6 +11,8 @@ import ProfilePage from './pages/Student/ProfilePage'
 import RoomsPage from './pages/Student/RoomsPage'
 import ReservationsPage from './pages/Student/ReservationsPage'
 import LikedPage from './pages/Student/LikedPage'
+import HistoryPage from './pages/Student/HistoryPage'
+import StatusPage from './pages/Student/StatusPage'
 import './App.css'
 
 function App() {
@@ -67,6 +69,22 @@ function App() {
                         element={
                             <ProtectedRoute role="student">
                                 <LikedPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/history"
+                        element={
+                            <ProtectedRoute role="student">
+                                <HistoryPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/students/status"
+                        element={
+                            <ProtectedRoute role="student">
+                                <StatusPage />
                             </ProtectedRoute>
                         }
                     />

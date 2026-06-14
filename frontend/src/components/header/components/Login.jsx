@@ -56,8 +56,8 @@ const Login = () => {
                     <li><Link className="dropdown-item" to="/students/borrowed" onClick={() => setOpen(false)}>Borrowed Books</Link></li>
                     <li><Link className="dropdown-item" to="/students/liked" onClick={() => setOpen(false)}>Liked Books</Link></li>
                     <li><Link className="dropdown-item" to="/students/reservations" onClick={() => setOpen(false)}>My Reservations</Link></li>
-                    <li><a className="dropdown-item" href="#">Status</a></li>
-                    <li><a className="dropdown-item" href="#">History</a></li>
+                    <li><Link className="dropdown-item" to="/students/status" onClick={() => setOpen(false)}>Status</Link></li>
+                    <li><Link className="dropdown-item" to="/students/history" onClick={() => setOpen(false)}>History</Link></li>
                     <li><hr className="dropdown-divider" /></li>
                     <li>
                         <button className="dropdown-item text-danger" onClick={handleLogout}>

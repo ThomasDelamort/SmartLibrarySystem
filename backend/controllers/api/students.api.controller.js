@@ -576,3 +576,93 @@ export const getLiked = async (req, res) => {
         return res.status(500).json({ error: "Failed to load liked books" });
     }
 };
+
+// ---------------------------------------------------------------------------
+// History & Status
+// ---------------------------------------------------------------------------
+
+const FINE_PER_DAY = 4;
+
+// GET /api/students/history  -> { bookHistory, roomHistory }
+export const getHistory = async (req, res) => {
+    try {
+        const studentId = req.session.user.id;
+
+        const [bookHistory, roomHistory] = await Promise.all([
+            BookTransaction.find({
+                student: studentId,
+                transactionType: "borrow",
+                status: { $in: ["returned", "cancelled"] },
+            }).populate("book").sort({ createdAt: -1 }),
+
+            RoomTransaction.find({
+                reservee: studentId,
+                status: { $in: ["completed", "cancelled", "rejected"] },
+            }).populate("room").sort({ createdAt: -1 }),
+        ]);
+
+        return res.json({
+            bookHistory: bookHistory
+                .filter((t) => t.book)
+                .map((t) => ({
+                    id: t._id,
+                    book: { title: t.book.title, author: t.book.author, image: t.book.image },
+                    transactionType: t.transactionType,
+                    createdAt: t.createdAt,
+                    fineAmount: t.fineAmount || 0,
+                    status: t.status,
+                })),
+            roomHistory: roomHistory
+                .filter((r) => r.room)
+                .map((r) => ({
+                    id: r._id,
+                    room: { number: r.room.number },
+                    reservationDate: r.reservationDate,
+                    startTime: r.startTime,
+                    endTime: r.endTime,
+                    purpose: r.purpose || null,
+                    status: r.status,
+                })),
+        });
+    } catch (err) {
+        console.error("getHistory error:", err);
+        return res.status(500).json({ error: "Failed to load history" });
+    }
+};
+
+// GET /api/students/status  -> { fines, overdueBooks }
+export const getStatus = async (req, res) => {
+    try {
+        const student = await Student.findById(req.session.user.id);
+        if (!student) return res.status(404).json({ error: "Student not found" });
+
+        const now = new Date();
+        const overdue = await BookTransaction.find({
+            student: req.session.user.id,
+            status: { $in: ["approved", "overdue"] },
+            dueDate: { $lt: now },
+        }).populate("book");
+
+        let extraFines = 0;
+        const overdueBooks = overdue
+            .filter((t) => t.book)
+            .map((txn) => {
+                const daysOverdue = Math.floor((now - txn.dueDate) / (1000 * 60 * 60 * 24));
+                const computedFine = daysOverdue * FINE_PER_DAY;
+                extraFines += computedFine - (txn.fineAmount || 0);
+                return {
+                    id: txn._id,
+                    book: { title: txn.book.title, author: txn.book.author, image: txn.book.image },
+                    dueDate: txn.dueDate,
+                    fineAmount: computedFine,
+                };
+            });
+
+        const fines = (student.fines || 0) + extraFines;
+
+        return res.json({ fines, overdueBooks });
+    } catch (err) {
+        console.error("getStatus error:", err);
+        return res.status(500).json({ error: "Failed to load status" });
+    }
+};

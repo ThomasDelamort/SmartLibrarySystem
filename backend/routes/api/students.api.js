@@ -18,6 +18,8 @@ import {
     cancelReservation,
     searchStudents,
     getLiked,
+    getHistory,
+    getStatus,
 } from "../../controllers/api/students.api.controller.js";
 import { requireStudent } from "../../controllers/middleware/apiAuth.middleware.js";
 import { uploadProfile } from "../../controllers/middleware/upload.middleware.js";
@@ -25,6 +27,9 @@ import { uploadProfile } from "../../controllers/middleware/upload.middleware.js
 const router = express.Router();
 
 router.post("/students/like/:bookId", requireStudent, toggleLike);
+router.get("/students/liked", requireStudent, getLiked);
+router.get("/students/history", requireStudent, getHistory);
+router.get("/students/status", requireStudent, getStatus);
 router.post("/students/borrow", requireStudent, borrowBook);
 
 router.get("/students/bag", requireStudent, getBag);
@@ -45,7 +50,5 @@ router.post("/students/rooms/reserve", requireStudent, reserveRoom);
 router.get("/students/reservations", requireStudent, getReservations);
 router.post("/students/reservations/cancel/:id", requireStudent, cancelReservation);
 router.get("/students/search", requireStudent, searchStudents);
-
-router.get("/students/liked", requireStudent, getLiked);
 
 export default router;
