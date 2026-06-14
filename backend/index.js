@@ -4,8 +4,7 @@ import cors from "cors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import Notification from "./models/notification.model.js";
-import LibrarianNotification from "./models/librarianNotification.model.js"
-
+import LibrarianNotification from "./models/librarianNotification.model.js";
 
 import pageRoutes from "./routes/pages.js";
 import authRoutes from "./routes/auth.js";
@@ -13,7 +12,7 @@ import studentRoutes from "./routes/students.js";
 import librarianRoutes from "./routes/librarian.js";
 import adminRoutes from "./routes/admin.js";
 
-// --- API (React/JSON) routes ---
+
 import authApiRoutes from "./routes/api/auth.api.js";
 import booksApiRoutes from "./routes/api/books.api.js";
 import studentsApiRoutes from "./routes/api/students.api.js";
@@ -24,7 +23,7 @@ const app = express();
 
 const isProd = process.env.NODE_ENV === "production";
 
-// Needed so secure cookies work when running behind a proxy (e.g. in production).
+
 app.set("trust proxy", 1);
 
 app.set("view engine", "ejs");
@@ -32,9 +31,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// --- CORS for the React client ---
-// In dev, prefer a Vite proxy (same origin) so cookies "just work"; if you call the
-// API cross-origin instead, this allows the browser to send the session cookie.
+
 app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
@@ -44,7 +41,6 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
         httpOnly: true,
@@ -54,15 +50,12 @@ app.use(session({
     },
 }));
 
-
-
 app.use((req, res, next) => {
     res.locals.user = req.session.user;
     next();
 });
 
 app.use(async (req, res, next) => {
-
     if (req.session.user) {
         const notifications = await Notification.find({
             student: req.session.user.id,
@@ -93,7 +86,6 @@ app.use(async (req, res, next) => {
     }
     next();
 });
-
 
 // --- JSON API routes (consumed by React) ---
 app.use("/api", authApiRoutes);

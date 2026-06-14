@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../../../stores/AuthContext.jsx'
+import { useAuth } from '../../../stores/AuthContext'
 
 const NavCollapse = () => {
     const { user } = useAuth()
@@ -26,14 +26,14 @@ const NavCollapse = () => {
                 <div className={`collapse navbar-collapse ${open ? 'show' : ''}`} id="navbarNav">
                     <ul className="navbar-nav gap-1">
                         <Link to={user ? '/books' : '/'} className="navbar-brand text-decoration-none" onClick={close}>
-                            📚 SmartLS
+                            SmartLS
                         </Link>
 
                         {user ? (
                             <>
                                 <li className="nav-item"><NavLink className="nav-link" to="/books" onClick={close}>Books</NavLink></li>
                                 <li className="nav-item"><a className="nav-link" href="#" onClick={close}>Reserve Room</a></li>
-                                <li className="nav-item"><a className="nav-link" href="#" onClick={close}>🎒 Bag</a></li>
+                                <li className="nav-item"><NavLink className="nav-link" to="/students/bag" onClick={close}>🎒 Bag</NavLink></li>
                             </>
                         ) : (
                             <>

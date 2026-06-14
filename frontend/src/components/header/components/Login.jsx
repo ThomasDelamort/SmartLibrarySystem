@@ -39,7 +39,7 @@ const Login = () => {
                     onClick={() => setOpen((o) => !o)}
                     aria-expanded={open}
                 >
-                    <small className="user-name" style={ { marginRight: '10px'}}>{user.name}</small>
+                    <small className="user-name">{user.name}</small>
                     <img
                         className="profile-image"
                         src={user.profilePicture || '/images/user.png'}
@@ -53,7 +53,7 @@ const Login = () => {
                 >
                     {/* Links wired as each student page is built. */}
                     <li><a className="dropdown-item" href="#">My Profile</a></li>
-                    <li><a className="dropdown-item" href="#">Borrowed Books</a></li>
+                    <li><Link className="dropdown-item" to="/students/borrowed" onClick={() => setOpen(false)}>Borrowed Books</Link></li>
                     <li><a className="dropdown-item" href="#">Liked Books</a></li>
                     <li><a className="dropdown-item" href="#">My Reservations</a></li>
                     <li><a className="dropdown-item" href="#">Status</a></li>
