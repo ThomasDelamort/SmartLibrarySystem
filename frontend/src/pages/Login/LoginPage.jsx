@@ -17,10 +17,9 @@ export default function LoginPage() {
         setSubmitting(true)
         try {
             const user = await login(email, password)
-            // Role-based routing. Student goes to the books page (the EJS /Students
-            // landing); point librarian/admin at their dashboards once those exist.
+            // Role-based routing: students -> books, librarians -> their dashboard.
             if (user.role === 'admin') navigate('/')
-            else if (user.role === 'librarian') navigate('/')
+            else if (user.role === 'librarian') navigate('/librarian')
             else navigate('/books')
         } catch (err) {
             setError(err.message || 'Login failed')

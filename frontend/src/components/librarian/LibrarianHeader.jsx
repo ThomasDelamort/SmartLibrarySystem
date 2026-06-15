@@ -1,0 +1,129 @@
+import { useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../stores/AuthContext'
+import { useLibrarianNotifications } from '../../stores/useLibrarianNotifications'
+
+import '../../styles/style.css'
+import '../../styles/header.css'
+
+const formatTime = (d) =>
+    new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+
+// Shared chrome for all librarian pages. React-state dropdowns (no Bootstrap JS).
+export default function LibrarianHeader() {
+    const { user, logout } = useAuth()
+    const { notifications, unreadCount, markRead, clearAll } = useLibrarianNotifications()
+    const navigate = useNavigate()
+
+    const [navOpen, setNavOpen] = useState(false)
+    const [bellOpen, setBellOpen] = useState(false)
+    const [profileOpen, setProfileOpen] = useState(false)
+
+    const handleLogout = async () => {
+        await logout()
+        navigate('/login')
+    }
+
+    const closeNav = () => setNavOpen(false)
+
+    return (
+        <section className="container-fluid px-3">
+            <header className="main-header d-flex flex-wrap align-items-center justify-content-between">
+
+                <div className="d-flex align-items-center gap-4">
+                    <nav className="navbar navbar-expand-md navbar-light p-0">
+                        <button
+                            className="navbar-toggler" type="button"
+                            onClick={() => setNavOpen((o) => !o)}
+                            aria-label="Toggle navigation"
+                        >
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div className={`collapse navbar-collapse ${navOpen ? 'show' : ''}`}>
+                            <ul className="navbar-nav gap-1">
+                                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>📚 SmartLS</Link>
+                                <li className="nav-item"><NavLink className="nav-link" to="/librarian" end onClick={closeNav}>Home</NavLink></li>
+                                <li className="nav-item"><NavLink className="nav-link" to="/librarian/books" onClick={closeNav}>Books</NavLink></li>
+                                <li className="nav-item"><NavLink className="nav-link" to="/librarian/students" onClick={closeNav}>Students</NavLink></li>
+                                <li className="nav-item"><NavLink className="nav-link" to="/librarian/transactions" onClick={closeNav}>Transactions</NavLink></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+
+                <div className="d-flex align-items-center gap-3">
+
+                    {/* Notifications bell */}
+                    <div className="dropdown" style={{ position: 'relative' }}>
+                        <button
+                            className="btn position-relative" type="button"
+                            onClick={() => { setBellOpen((o) => !o); setProfileOpen(false) }}
+                        >
+                            <ion-icon name="notifications-outline" style={{ fontSize: '1.5rem' }}></ion-icon>
+                            {unreadCount > 0 && (
+                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {unreadCount}
+                                </span>
+                            )}
+                        </button>
+
+                        {bellOpen && (
+                            <ul className="dropdown-menu dropdown-menu-end show" style={{ minWidth: 320, position: 'absolute', right: 0 }}>
+                                <li className="px-3 py-2 d-flex justify-content-between align-items-center">
+                                    <h6 className="fw-bold mb-0">Notifications</h6>
+                                    {notifications.length > 0 && (
+                                        <button className="btn btn-sm btn-outline-secondary" style={{ fontSize: '0.75rem' }} onClick={clearAll}>
+                                            Clear All
+                                        </button>
+                                    )}
+                                </li>
+
+                                {notifications.length === 0 && (
+                                    <li className="px-3 py-2 text-muted"><small>No new notifications.</small></li>
+                                )}
+
+                                {notifications.map((notif) => (
+                                    <div key={notif.id}>
+                                        <li className="d-flex align-items-start px-3 py-2 gap-2">
+                                            <div className="flex-grow-1">
+                                                <small>{notif.message}</small>
+                                                <div className="text-muted" style={{ fontSize: '0.7rem' }}>
+                                                    {formatTime(notif.createdAt)}
+                                                </div>
+                                            </div>
+                                            <button className="btn btn-sm p-0 text-muted" title="Dismiss" onClick={() => markRead(notif.id)}>
+                                                <ion-icon name="close-outline"></ion-icon>
+                                            </button>
+                                        </li>
+                                        <li><hr className="dropdown-divider m-0" /></li>
+                                    </div>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* Profile dropdown */}
+                    <div className="dropdown" style={{ position: 'relative' }}>
+                        <button
+                            className="btn dropdown-toggle profile-btn" type="button"
+                            onClick={() => { setProfileOpen((o) => !o); setBellOpen(false) }}
+                        >
+                            <small style={{ marginRight: 5 }}>{user?.lastName}</small>
+                            <img className="profile-image" src={user?.profilePicture || '/images/user.png'} alt="user" />
+                        </button>
+
+                        {profileOpen && (
+                            <ul className="dropdown-menu dropdown-menu-end show" style={{ position: 'absolute', right: 0 }}>
+                                <li><Link className="dropdown-item" to="/librarian/profile" onClick={() => setProfileOpen(false)}>My Profile</Link></li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li><button className="dropdown-item text-danger" onClick={handleLogout}>Log Out</button></li>
+                            </ul>
+                        )}
+                    </div>
+
+                </div>
+            </header>
+        </section>
+    )
+}

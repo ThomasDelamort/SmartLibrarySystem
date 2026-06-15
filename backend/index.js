@@ -12,10 +12,11 @@ import studentRoutes from "./routes/students.js";
 import librarianRoutes from "./routes/librarian.js";
 import adminRoutes from "./routes/admin.js";
 
-
+// --- API (React/JSON) routes ---
 import authApiRoutes from "./routes/api/auth.api.js";
 import booksApiRoutes from "./routes/api/books.api.js";
 import studentsApiRoutes from "./routes/api/students.api.js";
+import librarianApiRoutes from "./routes/api/librarian.api.js";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const app = express();
 
 const isProd = process.env.NODE_ENV === "production";
 
-
+// Needed so secure cookies work when running behind a proxy (e.g. in production).
 app.set("trust proxy", 1);
 
 app.set("view engine", "ejs");
@@ -31,7 +32,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+// --- CORS for the React client ---
 app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
@@ -91,6 +92,7 @@ app.use(async (req, res, next) => {
 app.use("/api", authApiRoutes);
 app.use("/api", booksApiRoutes);
 app.use("/api", studentsApiRoutes);
+app.use("/api", librarianApiRoutes);
 
 // --- Existing EJS routes (unchanged, served in parallel during migration) ---
 app.use("/", pageRoutes);

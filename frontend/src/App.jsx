@@ -13,6 +13,8 @@ import ReservationsPage from './pages/Student/ReservationsPage'
 import LikedPage from './pages/Student/LikedPage'
 import HistoryPage from './pages/Student/HistoryPage'
 import StatusPage from './pages/Student/StatusPage'
+import LibrarianDashboardPage from './pages/Librarian/LibrarianDashboardPage'
+import LibrarianTransactionsPage from './pages/Librarian/LibrarianTransactionsPage'
 import './App.css'
 
 function App() {
@@ -85,6 +87,22 @@ function App() {
                         element={
                             <ProtectedRoute role="student">
                                 <StatusPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/librarian"
+                        element={
+                            <ProtectedRoute role="librarian">
+                                <LibrarianDashboardPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/librarian/transactions"
+                        element={
+                            <ProtectedRoute role="librarian">
+                                <LibrarianTransactionsPage />
                             </ProtectedRoute>
                         }
                     />

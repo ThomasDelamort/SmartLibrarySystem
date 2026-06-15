@@ -1,0 +1,213 @@
+body{
+    background-color: #f5f7fb;
+}
+
+
+
+/* CONTAINER */
+
+.transactions-container{
+    margin-top: 30px;
+    margin-bottom: 50px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+
+/* HEADER */
+
+.transactions-header{
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 24px 28px;
+
+    margin-bottom: 24px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+}
+
+
+
+/* STATS */
+
+.stats-card{
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+}
+
+.stats-title{
+    color: #6b7280;
+
+    margin-bottom: 12px;
+}
+
+.stats-value{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.overdue-card{
+    border-left: 5px solid #ef4444;
+}
+
+
+
+/* LIST */
+
+.transactions-list{
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+}
+
+
+
+/* ITEM */
+
+.transaction-item{
+    border: 1px solid #ececec;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    background: white;
+
+    transition: 0.25s ease;
+}
+
+.transaction-item:hover{
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+
+
+/* IMAGE */
+
+.transaction-image{
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 3px solid #e5e7eb;
+}
+
+
+
+/* TEXT */
+
+.transaction-name{
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+.transaction-book{
+    color: #6b7280;
+
+    margin-bottom: 6px;
+}
+
+.transaction-date{
+    display: inline-block;
+
+    background: #f3f4f6;
+
+    padding: 5px 12px;
+
+    border-radius: 999px;
+
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+
+
+/* STATUS */
+
+.status-borrowed{
+    background: #fde047;
+
+    padding: 6px 16px;
+
+    border-radius: 999px;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-returned{
+    background: #22c55e;
+
+    color: white;
+
+    padding: 6px 16px;
+
+    border-radius: 999px;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-overdue{
+    background: #ef4444;
+
+    color: white;
+
+    padding: 6px 16px;
+
+    border-radius: 999px;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+
+
+/* BUTTONS */
+
+.transaction-actions .btn{
+    border-radius: 12px;
+}
+
+
+
+/* MOBILE */
+
+@media(max-width: 768px){
+
+    .transaction-item{
+        text-align: center;
+    }
+
+    .transaction-image{
+        margin-bottom: 15px;
+    }
+
+    .transaction-actions{
+        margin-top: 15px;
+    }
+
+    .transaction-actions .btn{
+        width: 100%;
+    }
+
+}
