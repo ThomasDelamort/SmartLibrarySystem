@@ -1,9 +1,10 @@
-import LibrarianHeader from '../../components/librarian/LibrarianHeader.jsx'
-import LibrarianCalendar from '../../components/librarian/LibrarianCalendar.jsx'
+import LibrarianHeader from '../../components/librarian/LibrarianHeader'
+import LibrarianCalendar from '../../components/librarian/LibrarianCalendar'
 import { useAuth } from '../../stores/AuthContext'
 
 import '../../styles/layout.css'
 import '../../styles/librarian.css'
+
 
 export default function LibrarianDashboardPage() {
     const { user } = useAuth()
@@ -11,8 +12,7 @@ export default function LibrarianDashboardPage() {
     return (
         <>
             <LibrarianHeader />
-
-            <div className="container dashboard-container">
+            <div className="container dashboard-container mt-4">
                 <div className="welcome-card">
                     <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div>
