@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../stores/AuthContext'
+import { useNotifications } from '../../../stores/NotificationContext'
 
 const Login = () => {
     const { user, logout } = useAuth()
+    const { unreadCount } = useNotifications()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const ref = useRef(null)
@@ -40,18 +42,46 @@ const Login = () => {
                     aria-expanded={open}
                 >
                     <small className="user-name">{user.name}</small>
-                    <img
-                        className="profile-image"
-                        src={user.profilePicture || '/images/user.png'}
-                        alt="user"
-                    />
+                    <span style={{ position: 'relative', display: 'inline-block' }}>
+                        <img
+                            className="profile-image"
+                            src={user.profilePicture || '/images/user.png'}
+                            alt="user"
+                        />
+                        {/* Unread badge — pinned to the avatar's top-right, mobile only (bell is hidden there). */}
+                        {unreadCount > 0 && (
+                            <span
+                                className="d-md-none"
+                                style={{
+                                    position: 'absolute', top: -4, right: -4,
+                                    background: '#dc3545', color: '#fff',
+                                    borderRadius: 999, fontSize: '0.7rem', fontWeight: 600,
+                                    minWidth: 18, height: 18, lineHeight: '18px',
+                                    textAlign: 'center', padding: '0 5px',
+                                }}
+                            >
+                                {unreadCount}
+                            </span>
+                        )}
+                    </span>
                 </button>
 
                 <ul
                     className={`dropdown-menu dropdown-menu-end ${open ? 'show' : ''}`}
                     style={{ position: 'absolute', right: 0, top: '100%' }}
                 >
-                    {/* Links wired as each student page is built. */}
+                    {/* Notifications — a dedicated page link, mobile only (desktop uses the bell). */}
+                    <li className="d-md-none">
+                        <Link className="dropdown-item d-flex justify-content-between align-items-center" to="/students/notifications" onClick={() => setOpen(false)}>
+                            <span>Notifications</span>
+                            {unreadCount > 0 && (
+                                <span className="badge rounded-pill bg-danger">{unreadCount}</span>
+                            )}
+                        </Link>
+                    </li>
+                    <li className="d-md-none"><hr className="dropdown-divider" /></li>
+
+                    {/* Menu links */}
                     <li><Link className="dropdown-item" to="/students/profile" onClick={() => setOpen(false)}>My Profile</Link></li>
                     <li><Link className="dropdown-item" to="/students/borrowed" onClick={() => setOpen(false)}>Borrowed Books</Link></li>
                     <li><Link className="dropdown-item" to="/students/liked" onClick={() => setOpen(false)}>Liked Books</Link></li>

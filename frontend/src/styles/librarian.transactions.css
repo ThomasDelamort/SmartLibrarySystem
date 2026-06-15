@@ -143,7 +143,7 @@ body{
 
 /* STATUS */
 
-.status-borrowed{
+.txn-status-borrowed{
     background: #fde047;
 
     padding: 6px 16px;
@@ -154,7 +154,7 @@ body{
     font-weight: 600;
 }
 
-.status-returned{
+.txn-status-returned{
     background: #22c55e;
 
     color: white;
@@ -167,7 +167,7 @@ body{
     font-weight: 600;
 }
 
-.status-overdue{
+.txn-status-overdue{
     background: #ef4444;
 
     color: white;

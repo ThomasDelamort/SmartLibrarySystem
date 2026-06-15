@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { api } from '../../lib/api'
-import { useAuth } from '../../stores/AuthContext.jsx'
-import Header from '../../components/header/Header.jsx'
-import Footer from '../../components/footer/Footer.jsx'
-
+import { useAuth } from '../../stores/AuthContext'
+import Header from '../../components/header/Header'
+import Footer from '../../components/footer/Footer'
+import BorrowQRModal from './components/BorrowQRModal'
+import Space from "../../components/Space";
 import '../../styles/style.css'
 import '../../styles/layout.css'
 import '../../styles/book.css'
+
 
 export default function BookDetailPage() {
     const { title } = useParams()
@@ -21,6 +23,7 @@ export default function BookDetailPage() {
 
     const [notice, setNotice] = useState(null)          // { type, text }
     const [modal, setModal] = useState(null)            // { mode, dueDate, submitting, error }
+    const [borrowResult, setBorrowResult] = useState(null)  // QR data after a successful borrow
 
     useEffect(() => {
         let active = true
@@ -65,14 +68,14 @@ export default function BookDetailPage() {
         setModal((m) => ({ ...m, submitting: true, error: null }))
         const endpoint = modal.mode === 'borrow' ? '/api/students/borrow' : '/api/students/bag'
         try {
-            await api.post(endpoint, { bookId: book._id, dueDate: modal.dueDate })
+            const res = await api.post(endpoint, { bookId: book._id, dueDate: modal.dueDate })
             setModal(null)
-            setNotice({
-                type: 'success',
-                text: modal.mode === 'borrow'
-                    ? 'Borrow request submitted! Show your reference to the librarian.'
-                    : 'Added to your bag.',
-            })
+            if (modal.mode === 'borrow') {
+                // Pop the QR modal with the real reference from the API.
+                setBorrowResult(res)   // { referenceNumber, book, dueDate }
+            } else {
+                setNotice({ type: 'success', text: 'Added to your bag.' })
+            }
         } catch (err) {
             setModal((m) => ({ ...m, submitting: false, error: err.message }))
         }
@@ -83,7 +86,7 @@ export default function BookDetailPage() {
             <Header />
 
             <div className="container">
-                <div className="book-container max-auto" style={{ maxWidth: 1280 }}>
+                <div className="book-container mx-auto" style={{ maxWidth: 1280 }}>
                     {loading && <p className="text-muted mb-0">Loading…</p>}
                     {error && <div className="alert alert-danger mb-0">{error}</div>}
 
@@ -165,7 +168,7 @@ export default function BookDetailPage() {
                     )}
                 </div>
             </div>
-            <div className="space"></div>
+            <Space />
             <Footer />
 
             {/* Date modal (borrow / bag) — plain React state, no Bootstrap JS needed */}
@@ -208,6 +211,9 @@ export default function BookDetailPage() {
                     </div>
                 </div>
             )}
+
+            {/* QR popup after a successful borrow */}
+            <BorrowQRModal borrow={borrowResult} onClose={() => setBorrowResult(null)} />
         </>
     )
 }

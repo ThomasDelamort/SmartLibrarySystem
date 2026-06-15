@@ -82,7 +82,7 @@ export default function LibrarianTransactionsPage() {
                                                 <span className="transaction-date">Due: {formatDate(txn.dueDate)}</span>
                                             </div>
                                             <div className="col-md-3">
-                                                <span className={isReturn ? 'status-returned' : 'status-borrowed'}>
+                                                <span className={isReturn ? 'txn-status-returned' : 'txn-status-borrowed'}>
                                                     {isReturn ? 'Return Request' : 'Borrow Request'}
                                                 </span>
                                             </div>
@@ -143,7 +143,7 @@ export default function LibrarianTransactionsPage() {
                                                 )}
                                             </div>
                                             <div className="col-md-3">
-                                                <span className="status-borrowed">Room Request</span>
+                                                <span className="txn-status-borrowed">Room Request</span>
                                             </div>
                                             <div className="col-md-3">
                                                 <div className="transaction-actions d-flex flex-column gap-2">

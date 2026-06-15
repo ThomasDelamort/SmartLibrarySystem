@@ -20,6 +20,9 @@ import {
     getLiked,
     getHistory,
     getStatus,
+    getStudentNotifications,
+    markStudentNotificationRead,
+    clearStudentNotifications,
 } from "../../controllers/api/students.api.controller.js";
 import { requireStudent } from "../../controllers/middleware/apiAuth.middleware.js";
 import { uploadProfile } from "../../controllers/middleware/upload.middleware.js";
@@ -30,6 +33,10 @@ router.post("/students/like/:bookId", requireStudent, toggleLike);
 router.get("/students/liked", requireStudent, getLiked);
 router.get("/students/history", requireStudent, getHistory);
 router.get("/students/status", requireStudent, getStatus);
+
+router.get("/students/notifications", requireStudent, getStudentNotifications);
+router.post("/students/notifications/read/:id", requireStudent, markStudentNotificationRead);
+router.post("/students/notifications/clear", requireStudent, clearStudentNotifications);
 router.post("/students/borrow", requireStudent, borrowBook);
 
 router.get("/students/bag", requireStudent, getBag);

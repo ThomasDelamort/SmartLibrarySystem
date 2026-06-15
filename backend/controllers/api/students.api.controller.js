@@ -4,6 +4,7 @@ import Bag from "../../models/bag.model.js";
 import BookTransaction from "../../models/bookTransaction.model.js";
 import Room from "../../models/room.model.js";
 import RoomTransaction from "../../models/roomTransaction.model.js";
+import Notification from "../../models/notification.model.js";
 import { createLibrarianNotification } from "../helpers/librarianNotification.helper.js";
 import { createNotification } from "../helpers/notification.helper.js";
 import { verifyPassword, hashPassword } from "../helpers/password.helper.js";
@@ -664,5 +665,57 @@ export const getStatus = async (req, res) => {
     } catch (err) {
         console.error("getStatus error:", err);
         return res.status(500).json({ error: "Failed to load status" });
+    }
+};
+
+// ---------------------------------------------------------------------------
+// Student notifications
+// ---------------------------------------------------------------------------
+
+// GET /api/students/notifications  -> { notifications, unreadCount }
+export const getStudentNotifications = async (req, res) => {
+    try {
+        const notifications = await Notification.find({
+            student: req.session.user.id,
+            isRead: false,
+        }).sort({ createdAt: -1 }).limit(10);
+
+        return res.json({
+            notifications: notifications.map((n) => ({
+                id: n._id,
+                message: n.message,
+                type: n.type,
+                createdAt: n.createdAt,
+            })),
+            unreadCount: notifications.length,
+        });
+    } catch (err) {
+        console.error("getStudentNotifications error:", err);
+        return res.status(500).json({ error: "Failed to load notifications" });
+    }
+};
+
+// POST /api/students/notifications/read/:id  -> { success }
+export const markStudentNotificationRead = async (req, res) => {
+    try {
+        await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("markStudentNotificationRead error:", err);
+        return res.status(500).json({ error: "Failed to update notification" });
+    }
+};
+
+// POST /api/students/notifications/clear  -> { success }
+export const clearStudentNotifications = async (req, res) => {
+    try {
+        await Notification.updateMany(
+            { student: req.session.user.id, isRead: false },
+            { isRead: true }
+        );
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("clearStudentNotifications error:", err);
+        return res.status(500).json({ error: "Failed to clear notifications" });
     }
 };
