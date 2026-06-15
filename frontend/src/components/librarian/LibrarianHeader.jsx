@@ -42,8 +42,7 @@ export default function LibrarianHeader() {
 
                         <div className={`collapse navbar-collapse ${navOpen ? 'show' : ''}`}>
                             <ul className="navbar-nav gap-1">
-                                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>SmartLS</Link>
-                                <li className="nav-item"><NavLink className="nav-link" to="/librarian" end onClick={closeNav}>Home</NavLink></li>
+
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/books" onClick={closeNav}>Books</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/students" onClick={closeNav}>Students</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/transactions" onClick={closeNav}>Transactions</NavLink></li>
@@ -52,9 +51,11 @@ export default function LibrarianHeader() {
                     </nav>
                 </div>
 
+                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>SmartLS</Link>
+
                 <div className="d-flex align-items-center gap-3">
 
-                    {/* Notifications bell — hidden on mobile (moves into the profile menu there) */}
+                    {/* Notification bell — hidden on mobile (moves into the profile menu there) */}
                     <div className="dropdown d-none d-md-block" style={{ position: 'relative' }}>
                         <button
                             className="btn" type="button"

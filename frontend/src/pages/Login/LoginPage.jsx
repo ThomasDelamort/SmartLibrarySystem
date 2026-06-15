@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/AuthContext'
+import Logo from "./components/Logo.jsx";
 
 export default function LoginPage() {
     const { login } = useAuth()
@@ -33,9 +34,9 @@ export default function LoginPage() {
             <div className="card p-4 shadow" style={{ width: 350 }}>
                 <main className="form-signin w-100 m-auto">
                     <form onSubmit={handleSubmit}>
-                        <img className="mb-4 d-block mx-auto" src="/images/logo.png" alt="" width={100} height={100} />
+                        <Logo />
 
-                        <h1 className="h3 mb-3 fw-normal text-center">Please log in</h1>
+                        <h1 className="h4 mb-3 fw-normal text-center">Please log in</h1>
 
                         <div className="form-floating mb-2">
                             <input
@@ -73,7 +74,7 @@ export default function LoginPage() {
                         </button>
 
                         <p className="mt-4 mb-0 text-center text-body-secondary">
-                            © {new Date().getFullYear()} smartlibsys
+                            © {new Date().getFullYear()} SmartLS
                         </p>
                     </form>
                 </main>
