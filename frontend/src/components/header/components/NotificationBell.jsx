@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../../../stores/AuthContext'
-import { useNotifications } from '../../../stores/NotificationContext.jsx'
+import { useNotifications } from '../../../stores/NotificationContext'
 
 const formatTime = (d) =>
     new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -26,10 +26,18 @@ const NotificationBell = () => {
     return (
         // Hidden on small screens — notifications move into the profile dropdown there.
         <div className="dropdown d-none d-md-block" ref={ref} style={{ position: 'relative' }}>
-            <button className="btn position-relative" type="button" onClick={() => setOpen((o) => !o)}>
+            <button className="btn" type="button" onClick={() => setOpen((o) => !o)} style={{ position: 'relative' }}>
                 <ion-icon name="notifications-outline" style={{ fontSize: '1.5rem' }}></ion-icon>
                 {unreadCount > 0 && (
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span
+                        style={{
+                            position: 'absolute', top: 2, right: 2,
+                            background: '#dc3545', color: '#fff',
+                            borderRadius: 999, fontSize: '0.65rem', fontWeight: 600,
+                            minWidth: 16, height: 16, lineHeight: '16px',
+                            textAlign: 'center', padding: '0 4px',
+                        }}
+                    >
                         {unreadCount}
                     </span>
                 )}

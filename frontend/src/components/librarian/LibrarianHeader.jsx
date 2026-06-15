@@ -42,7 +42,7 @@ export default function LibrarianHeader() {
 
                         <div className={`collapse navbar-collapse ${navOpen ? 'show' : ''}`}>
                             <ul className="navbar-nav gap-1">
-                                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>📚 SmartLS</Link>
+                                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>SmartLS</Link>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian" end onClick={closeNav}>Home</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/books" onClick={closeNav}>Books</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/students" onClick={closeNav}>Students</NavLink></li>
@@ -54,15 +54,24 @@ export default function LibrarianHeader() {
 
                 <div className="d-flex align-items-center gap-3">
 
-                    {/* Notifications bell */}
-                    <div className="dropdown" style={{ position: 'relative' }}>
+                    {/* Notifications bell — hidden on mobile (moves into the profile menu there) */}
+                    <div className="dropdown d-none d-md-block" style={{ position: 'relative' }}>
                         <button
-                            className="btn position-relative" type="button"
+                            className="btn" type="button"
+                            style={{ position: 'relative' }}
                             onClick={() => { setBellOpen((o) => !o); setProfileOpen(false) }}
                         >
                             <ion-icon name="notifications-outline" style={{ fontSize: '1.5rem' }}></ion-icon>
                             {unreadCount > 0 && (
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span
+                                    style={{
+                                        position: 'absolute', top: 2, right: 2,
+                                        background: '#dc3545', color: '#fff',
+                                        borderRadius: 999, fontSize: '0.65rem', fontWeight: 600,
+                                        minWidth: 16, height: 16, lineHeight: '16px',
+                                        textAlign: 'center', padding: '0 4px',
+                                    }}
+                                >
                                     {unreadCount}
                                 </span>
                             )}
@@ -110,11 +119,36 @@ export default function LibrarianHeader() {
                             onClick={() => { setProfileOpen((o) => !o); setBellOpen(false) }}
                         >
                             <small style={{ marginRight: 5 }}>{user?.lastName}</small>
-                            <img className="profile-image" src={user?.profilePicture || '/images/user.png'} alt="user" />
+                            <span style={{ position: 'relative', display: 'inline-block' }}>
+                                <img className="profile-image" src={user?.profilePicture || '/images/user.png'} alt="user" />
+                                {unreadCount > 0 && (
+                                    <span
+                                        className="d-md-none"
+                                        style={{
+                                            position: 'absolute', top: -4, right: -4,
+                                            background: '#dc3545', color: '#fff',
+                                            borderRadius: 999, fontSize: '0.7rem', fontWeight: 600,
+                                            minWidth: 18, height: 18, lineHeight: '18px',
+                                            textAlign: 'center', padding: '0 5px',
+                                        }}
+                                    >
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </span>
                         </button>
 
                         {profileOpen && (
                             <ul className="dropdown-menu dropdown-menu-end show" style={{ position: 'absolute', right: 0 }}>
+                                {/* Notifications — mobile only (desktop uses the bell) */}
+                                <li className="d-md-none">
+                                    <Link className="dropdown-item d-flex justify-content-between align-items-center" to="/librarian/notifications" onClick={() => setProfileOpen(false)}>
+                                        <span>Notifications</span>
+                                        {unreadCount > 0 && <span className="badge rounded-pill bg-danger">{unreadCount}</span>}
+                                    </Link>
+                                </li>
+                                <li className="d-md-none"><hr className="dropdown-divider" /></li>
+
                                 <li><Link className="dropdown-item" to="/librarian/profile" onClick={() => setProfileOpen(false)}>My Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><button className="dropdown-item text-danger" onClick={handleLogout}>Log Out</button></li>

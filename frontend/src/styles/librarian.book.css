@@ -1,0 +1,116 @@
+/* Librarian books management — all classes prefixed `lbk-` to avoid colliding
+   with the public Books pages (which use .book-meta, .status-*, .pagination, etc.). */
+
+.lbk-container {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.lbk-header {
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.lbk-list {
+    background: white;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.lbk-item {
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    padding: 18px;
+    transition: 0.25s ease;
+    background: white;
+}
+
+.lbk-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.lbk-cover {
+    width: 90px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.lbk-img {
+    height: 95%;
+    width: 70%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.lbk-title-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lbk-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.lbk-status-borrowed {
+    background: #ffe600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.lbk-status-available {
+    background: #22c55e;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.lbk-meta {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+
+.lbk-category {
+    display: inline-block;
+    background: #f1f3f5;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.lbk-actions .btn {
+    border-radius: 12px;
+}
+
+/* Pagination scoped under the list so it never touches the public Books pagination. */
+.lbk-list .pagination .page-link {
+    border-radius: 10px !important;
+    margin: 0 4px;
+    border: none;
+    color: #212529;
+}
+
+.lbk-list .pagination .active .page-link {
+    background: #212529;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .lbk-item { text-align: center; }
+    .lbk-cover { margin-bottom: 15px; }
+    .lbk-actions { margin-top: 15px; }
+}

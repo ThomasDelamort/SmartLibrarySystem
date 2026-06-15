@@ -17,6 +17,8 @@ import StatusPage from './pages/Student/StatusPage'
 import NotificationsPage from './pages/Student/NotificationsPage'
 import LibrarianDashboardPage from './pages/Librarian/LibrarianDashboardPage'
 import LibrarianTransactionsPage from './pages/Librarian/LibrarianTransactionsPage'
+import LibrarianBooksPage from './pages/Librarian/LibrarianBooksPage'
+import LibrarianNotificationsPage from './pages/Librarian/LibrarianNotificationsPage'
 import './App.css'
 
 function App() {
@@ -114,6 +116,22 @@ function App() {
                             element={
                                 <ProtectedRoute role="librarian">
                                     <LibrarianTransactionsPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/librarian/books"
+                            element={
+                                <ProtectedRoute role="librarian">
+                                    <LibrarianBooksPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/librarian/notifications"
+                            element={
+                                <ProtectedRoute role="librarian">
+                                    <LibrarianNotificationsPage />
                                 </ProtectedRoute>
                             }
                         />

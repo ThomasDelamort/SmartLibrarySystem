@@ -5,6 +5,7 @@ import Book from "../../models/book.model.js";
 import Student from "../../models/student.model.js";
 import Room from "../../models/room.model.js";
 import { createNotification } from "../helpers/notification.helper.js";
+import { createSearchFilter } from "../helpers/book.helper.js";
 
 const FINE_PER_DAY = 4;
 
@@ -242,5 +243,126 @@ export const rejectRoomTransaction = async (req, res) => {
     } catch (err) {
         console.error("rejectRoomTransaction error:", err);
         return res.status(500).json({ error: "Failed to reject reservation" });
+    }
+};
+
+// ---------------------------------------------------------------------------
+// Book management
+// ---------------------------------------------------------------------------
+
+const BOOKS_PER_PAGE = 8;
+
+// GET /api/librarian/books?page=&q=  -> { books, pagination, searchQuery }
+export const getBooks = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const q = req.query.q || "";
+        const filter = createSearchFilter(q);
+
+        const totalBooks = await Book.countDocuments(filter);
+        const books = await Book.find(filter)
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * BOOKS_PER_PAGE)
+            .limit(BOOKS_PER_PAGE);
+
+        return res.json({
+            books: books.map((b) => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                category: b.category,
+                image: b.image,
+                status: b.status,
+                isbn: b.isbn,
+                publisher: b.publisher,
+                publishedYear: b.publishedYear,
+                description: b.description,
+                pdfUrl: b.pdfUrl,
+            })),
+            pagination: {
+                currentPage: page,
+                totalPages: Math.ceil(totalBooks / BOOKS_PER_PAGE) || 1,
+                totalBooks,
+            },
+            searchQuery: q,
+        });
+    } catch (err) {
+        console.error("getBooks error:", err);
+        return res.status(500).json({ error: "Failed to load books" });
+    }
+};
+
+const splitList = (val) => (val || "").split(",").map((s) => s.trim()).filter(Boolean);
+
+// POST /api/librarian/books  (multipart: image[required], pdf[optional])
+export const addBook = async (req, res) => {
+    try {
+        const { title, author, category, description, isbn, publisher, publishedYear } = req.body || {};
+
+        if (!title || !author || !category || !description) {
+            return res.status(400).json({ error: "Title, author, category, and description are required" });
+        }
+        if (!req.files?.image?.[0]) {
+            return res.status(400).json({ error: "A cover image is required" });
+        }
+
+        const book = await Book.create({
+            title: title.trim(),
+            author: splitList(author),
+            category: splitList(category),
+            image: req.files.image[0].location,
+            pdfUrl: req.files?.pdf?.[0]?.location || null,
+            description: description.trim(),
+            isbn: isbn?.trim(),
+            publisher: publisher?.trim(),
+            publishedYear: publishedYear ? parseInt(publishedYear, 10) : null,
+            status: "available",
+        });
+
+        return res.json({ success: true, id: book._id });
+    } catch (err) {
+        console.error("addBook error:", err);
+        return res.status(500).json({ error: "Failed to add book" });
+    }
+};
+
+// POST /api/librarian/books/:id  (multipart: image[optional], pdf[optional])
+export const editBook = async (req, res) => {
+    try {
+        const existing = await Book.findById(req.params.id);
+        if (!existing) return res.status(404).json({ error: "Book not found" });
+
+        const { title, author, category, description, isbn, publisher, publishedYear, status } = req.body || {};
+
+        await Book.findByIdAndUpdate(req.params.id, {
+            title: title?.trim() ?? existing.title,
+            author: author ? splitList(author) : existing.author,
+            category: category ? splitList(category) : existing.category,
+            // Keep the current file if a new one wasn't uploaded.
+            image: req.files?.image?.[0]?.location || existing.image,
+            pdfUrl: req.files?.pdf?.[0]?.location || existing.pdfUrl,
+            description: description?.trim() ?? existing.description,
+            isbn: isbn?.trim(),
+            publisher: publisher?.trim(),
+            publishedYear: publishedYear ? parseInt(publishedYear, 10) : null,
+            status: status || existing.status,
+        });
+
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("editBook error:", err);
+        return res.status(500).json({ error: "Failed to update book" });
+    }
+};
+
+// POST /api/librarian/books/:id/delete
+export const deleteBook = async (req, res) => {
+    try {
+        const deleted = await Book.findByIdAndDelete(req.params.id);
+        if (!deleted) return res.status(404).json({ error: "Book not found" });
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("deleteBook error:", err);
+        return res.status(500).json({ error: "Failed to delete book" });
     }
 };

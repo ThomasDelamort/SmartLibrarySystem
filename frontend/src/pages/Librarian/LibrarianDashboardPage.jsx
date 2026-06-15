@@ -1,9 +1,11 @@
 import LibrarianHeader from '../../components/librarian/LibrarianHeader'
 import LibrarianCalendar from '../../components/librarian/LibrarianCalendar'
 import { useAuth } from '../../stores/AuthContext'
-
+import Space from "../../components/Space.jsx";
+import Footer from "../../components/Footer/Footer.jsx";
 import '../../styles/layout.css'
 import '../../styles/librarian.css'
+
 
 
 export default function LibrarianDashboardPage() {
@@ -23,6 +25,8 @@ export default function LibrarianDashboardPage() {
 
                 <LibrarianCalendar />
             </div>
+            <Space />
+            <Footer />
         </>
     )
 }
