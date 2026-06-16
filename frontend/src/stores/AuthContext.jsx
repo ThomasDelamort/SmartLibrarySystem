@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api } from '../lib/api.js'
+import { api } from '../lib/api'
 
 const AuthContext = createContext(null)
 
@@ -30,8 +30,20 @@ export function AuthProvider({ children }) {
         setUser(null)
     }
 
+    // Re-pull the current user from /api/me. Used after profile/picture updates
+    // so the header reflects the change immediately.
+    const refreshUser = async () => {
+        try {
+            const res = await api.get('/api/me')
+            setUser(res.user)
+            return res.user
+        } catch {
+            return null
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
             {children}
         </AuthContext.Provider>
     )
