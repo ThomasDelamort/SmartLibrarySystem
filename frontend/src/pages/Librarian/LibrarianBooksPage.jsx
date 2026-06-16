@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import LibrarianHeader from '../../components/librarian/LibrarianHeader.jsx'
-import { useLibrarianBooks } from '../../stores/useLibrarianBooks.js'
-import BookFormModal from './components/BookFormModal.jsx'
-import Footer from '../../components/footer/Footer.jsx'
-import Space from "../../components/Space.jsx";
+import { useLibrarianBooks } from '../../stores/useLibrarianBooks'
+import BookFormModal from './components/BookFormModal'
+import LibrarianBooksSkeleton from './components/LibrarianBooksSkeleton'
 
 import '../../styles/layout.css'
 import '../../styles/librarian.css'
 import '../../styles/librarian.book.css'
-
 
 const authorText = (a) => (Array.isArray(a) ? a.join(', ') : a || '')
 const categoryList = (c) => (Array.isArray(c) ? c : c ? [c] : [])
@@ -71,7 +69,7 @@ export default function LibrarianBooksPage() {
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     <div className="lbk-list">
-                        {loading && <p className="text-muted">Loading…</p>}
+                        {loading && <LibrarianBooksSkeleton />}
 
                         {!loading && !error && books.length === 0 && (
                             <p className="text-muted mb-0">No books found.</p>
@@ -136,8 +134,6 @@ export default function LibrarianBooksPage() {
 
                 </div>
             </div>
-            <Space />
-            <Footer />
 
             {modal && (
                 <BookFormModal book={modal.book} saveBook={saveBook} onClose={onModalClose} />

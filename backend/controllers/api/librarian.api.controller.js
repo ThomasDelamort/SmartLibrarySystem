@@ -366,3 +366,58 @@ export const deleteBook = async (req, res) => {
         return res.status(500).json({ error: "Failed to delete book" });
     }
 };
+
+// ---------------------------------------------------------------------------
+// Students list
+// ---------------------------------------------------------------------------
+
+const STUDENTS_PER_PAGE = 10;
+
+// GET /api/librarian/students?page=&q=  -> { students, pagination, searchQuery }
+export const getStudents = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const q = req.query.q || "";
+
+        const filter = q
+            ? {
+                $or: [
+                    { firstName: { $regex: q, $options: "i" } },
+                    { lastName: { $regex: q, $options: "i" } },
+                    { email: { $regex: q, $options: "i" } },
+                    { studentId: { $regex: q, $options: "i" } },
+                ],
+            }
+            : {};
+
+        const totalStudents = await Student.countDocuments(filter);
+        const students = await Student.find(filter)
+            .sort({ lastName: 1 })
+            .skip((page - 1) * STUDENTS_PER_PAGE)
+            .limit(STUDENTS_PER_PAGE);
+
+        return res.json({
+            students: students.map((s) => ({
+                id: s._id,
+                studentId: s.studentId,
+                firstName: s.firstName,
+                lastName: s.lastName,
+                email: s.email,
+                sex: s.sex,
+                profilePicture: s.profilePicture || null,
+                canBorrow: s.canBorrow,
+                fines: s.fines || 0,
+                borrowedCount: s.borrowedBooks?.length || 0,
+            })),
+            pagination: {
+                currentPage: page,
+                totalPages: Math.ceil(totalStudents / STUDENTS_PER_PAGE) || 1,
+                totalStudents,
+            },
+            searchQuery: q,
+        });
+    } catch (err) {
+        console.error("getStudents error:", err);
+        return res.status(500).json({ error: "Failed to load students" });
+    }
+};

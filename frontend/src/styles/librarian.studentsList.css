@@ -1,0 +1,84 @@
+/* Librarian students list — all classes prefixed `lst-` to avoid colliding
+   with anything in the student-facing pages. (No global `body` override.) */
+
+.lst-container {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.lst-header {
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.lst-list {
+    background: white;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.lst-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    padding: 18px;
+    transition: 0.25s ease;
+}
+
+.lst-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.lst-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #dee2e6;
+}
+
+.lst-name h5 {
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.lst-email {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.lst-id {
+    display: inline-block;
+    background: #f1f3f5;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.lst-actions .btn {
+    border-radius: 12px;
+}
+
+.lst-list .pagination .page-link {
+    border-radius: 10px !important;
+    margin: 0 4px;
+    border: none;
+    color: #212529;
+}
+
+.lst-list .pagination .active .page-link {
+    background: #212529;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .lst-item { text-align: center; }
+    .lst-actions { margin-top: 15px; }
+}

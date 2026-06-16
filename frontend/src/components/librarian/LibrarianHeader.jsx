@@ -9,7 +9,6 @@ import '../../styles/header.css'
 const formatTime = (d) =>
     new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 
-// Shared chrome for all librarian pages. React-state dropdowns (no Bootstrap JS).
 export default function LibrarianHeader() {
     const { user, logout } = useAuth()
     const { notifications, unreadCount, markRead, clearAll } = useLibrarianNotifications()
@@ -42,7 +41,7 @@ export default function LibrarianHeader() {
 
                         <div className={`collapse navbar-collapse ${navOpen ? 'show' : ''}`}>
                             <ul className="navbar-nav gap-1">
-
+                                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>SmartLS</Link>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/books" onClick={closeNav}>Books</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/students" onClick={closeNav}>Students</NavLink></li>
                                 <li className="nav-item"><NavLink className="nav-link" to="/librarian/transactions" onClick={closeNav}>Transactions</NavLink></li>
@@ -51,7 +50,11 @@ export default function LibrarianHeader() {
                     </nav>
                 </div>
 
-                <Link to="/librarian" className="navbar-brand" onClick={closeNav}>SmartLS</Link>
+
+
+                {/*Blank*/}
+
+
 
                 <div className="d-flex align-items-center gap-3">
 

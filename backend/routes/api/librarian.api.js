@@ -13,6 +13,7 @@ import {
     addBook,
     editBook,
     deleteBook,
+    getStudents,
 } from "../../controllers/api/librarian.api.controller.js";
 import { requireLibrarian } from "../../controllers/middleware/apiAuth.middleware.js";
 import { upload } from "../../controllers/middleware/upload.middleware.js";
@@ -43,5 +44,8 @@ router.get("/librarian/books", requireLibrarian, getBooks);
 router.post("/librarian/books", requireLibrarian, bookUpload, addBook);
 router.post("/librarian/books/:id", requireLibrarian, bookUpload, editBook);
 router.post("/librarian/books/:id/delete", requireLibrarian, deleteBook);
+
+// Students
+router.get("/librarian/students", requireLibrarian, getStudents);
 
 export default router;
