@@ -4,8 +4,10 @@ import RoomTransaction from "../../models/roomTransaction.model.js";
 import Book from "../../models/book.model.js";
 import Student from "../../models/student.model.js";
 import Room from "../../models/room.model.js";
+import Librarian from "../../models/librarian.model.js";
 import { createNotification } from "../helpers/notification.helper.js";
 import { createSearchFilter } from "../helpers/book.helper.js";
+import { verifyPassword, hashPassword } from "../helpers/password.helper.js";
 
 const FINE_PER_DAY = 4;
 
@@ -419,5 +421,276 @@ export const getStudents = async (req, res) => {
     } catch (err) {
         console.error("getStudents error:", err);
         return res.status(500).json({ error: "Failed to load students" });
+    }
+};
+
+// ---------------------------------------------------------------------------
+// Manual transactions + settle fines
+// ---------------------------------------------------------------------------
+
+// GET /api/librarian/manual/options -> available books + rooms for the dropdowns
+export const getManualOptions = async (req, res) => {
+    try {
+        const availableBooks = await Book.find({ status: "available" }).select("title").sort({ title: 1 });
+        const rooms = await Room.find({ status: "available" }).select("number").sort({ number: 1 });
+        return res.json({
+            availableBooks: availableBooks.map((b) => ({ id: b._id, title: b.title })),
+            rooms: rooms.map((r) => ({ id: r._id, number: r.number })),
+        });
+    } catch (err) {
+        console.error("getManualOptions error:", err);
+        return res.status(500).json({ error: "Failed to load options" });
+    }
+};
+
+// GET /api/librarian/students/:id/borrowed -> the books a student currently holds
+export const getStudentBorrowed = async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id).populate("borrowedBooks", "title");
+        if (!student) return res.status(404).json({ error: "Student not found" });
+        return res.json({
+            books: (student.borrowedBooks || []).map((b) => ({ id: b._id, title: b.title })),
+        });
+    } catch (err) {
+        console.error("getStudentBorrowed error:", err);
+        return res.status(500).json({ error: "Failed to load borrowed books" });
+    }
+};
+
+const generateReference = () => `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+// POST /api/librarian/transactions/manual -> borrow | return | room (JSON, not redirect)
+export const manualTransaction = async (req, res) => {
+    try {
+        const {
+            type, studentId, bookId, dueDate,
+            roomId, reservationDate, startTime, endTime, purpose, attendeesCount,
+        } = req.body || {};
+        const librarianId = req.session.user.id;
+
+        if (!studentId) return res.status(400).json({ error: "Please select a student" });
+
+        if (type === "borrow") {
+            if (!bookId || !dueDate) return res.status(400).json({ error: "Select a book and a due date" });
+
+            const book = await Book.findById(bookId);
+            if (!book || book.status === "borrowed") return res.status(400).json({ error: "Book is unavailable" });
+
+            const referenceNumber = generateReference();
+            await BookTransaction.create({
+                referenceNumber,
+                book: bookId,
+                student: studentId,
+                librarian: librarianId,
+                transactionType: "borrow",
+                status: "approved",
+                dueDate: new Date(dueDate),
+            });
+            await Book.findByIdAndUpdate(bookId, { status: "borrowed" });
+            await Student.findByIdAndUpdate(studentId, { $push: { borrowedBooks: bookId } });
+            await createNotification(
+                studentId,
+                `A librarian has processed a borrow transaction for "${book.title}" on your behalf.`,
+                "borrow_approved"
+            );
+            return res.json({ success: true, referenceNumber });
+        }
+
+        if (type === "return") {
+            if (!bookId) return res.status(400).json({ error: "Select a book to return" });
+
+            const borrowTxn = await BookTransaction.findOne({
+                student: studentId,
+                book: bookId,
+                status: "approved",
+                transactionType: "borrow",
+            }).populate("book");
+
+            if (!borrowTxn) return res.status(400).json({ error: "No active borrow found for this student and book" });
+
+            borrowTxn.status = "returned";
+            borrowTxn.returnDate = new Date();
+            borrowTxn.librarian = librarianId;
+            await borrowTxn.save();
+
+            await Book.findByIdAndUpdate(bookId, { status: "available" });
+            await Student.findByIdAndUpdate(studentId, { $pull: { borrowedBooks: bookId } });
+            await createNotification(
+                studentId,
+                `A librarian has processed the return of "${borrowTxn.book.title}" on your behalf.`,
+                "borrow_approved"
+            );
+            return res.json({ success: true });
+        }
+
+        if (type === "room") {
+            if (!roomId || !reservationDate || !startTime || !endTime) {
+                return res.status(400).json({ error: "Fill in all room reservation fields" });
+            }
+
+            const room = await Room.findById(roomId);
+            if (!room || room.status !== "available") return res.status(400).json({ error: "Room is not available" });
+
+            await RoomTransaction.create({
+                reservee: studentId,
+                room: roomId,
+                reservationDate: new Date(reservationDate),
+                startTime,
+                endTime,
+                purpose: purpose || "",
+                attendeesCount: attendeesCount || 1,
+                status: "approved",
+                approvedBy: librarianId,
+            });
+            await Room.findByIdAndUpdate(roomId, {
+                status: "reserved",
+                reservee: studentId,
+                reserveDate: new Date(reservationDate),
+                reserveTimeStart: startTime,
+                reserveTimeEnd: endTime,
+            });
+            await createNotification(
+                studentId,
+                `A librarian has reserved Room ${room.number} for you on ${new Date(reservationDate).toLocaleDateString()}.`,
+                "borrow_approved"
+            );
+            return res.json({ success: true });
+        }
+
+        return res.status(400).json({ error: "Invalid transaction type" });
+    } catch (err) {
+        console.error("manualTransaction error:", err);
+        return res.status(500).json({ error: "Failed to process transaction" });
+    }
+};
+
+// POST /api/librarian/transactions/settle-fines -> zero fines + restore borrowing
+export const settleFines = async (req, res) => {
+    try {
+        const { studentId } = req.body || {};
+        const student = await Student.findById(studentId);
+        if (!student) return res.status(404).json({ error: "Student not found" });
+
+        const fineAmount = student.fines || 0;
+        const wasRevoked = !student.canBorrow;
+
+        await Student.findByIdAndUpdate(studentId, { fines: 0, canBorrow: true });
+
+        const message = wasRevoked
+            ? `Your fines of ₱${fineAmount} have been settled. Your borrowing privileges have been restored.`
+            : `Your fines of ₱${fineAmount} have been settled by the librarian.`;
+        await createNotification(studentId, message, "fine");
+
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("settleFines error:", err);
+        return res.status(500).json({ error: "Failed to settle fines" });
+    }
+};
+
+// ---------------------------------------------------------------------------
+// Librarian profile
+// ---------------------------------------------------------------------------
+
+// GET /api/librarian/profile -> { profile }
+export const getLibrarianProfile = async (req, res) => {
+    try {
+        const librarian = await Librarian.findById(req.session.user.id);
+        if (!librarian) return res.status(404).json({ error: "Librarian not found" });
+
+        return res.json({
+            profile: {
+                id: librarian._id,
+                firstName: librarian.firstName,
+                lastName: librarian.lastName,
+                email: librarian.email,
+                sex: librarian.sex,
+                married: librarian.married,
+                profilePicture: librarian.profilePicture || null,
+            },
+        });
+    } catch (err) {
+        console.error("getLibrarianProfile error:", err);
+        return res.status(500).json({ error: "Failed to load profile" });
+    }
+};
+
+// POST /api/librarian/profile/update  body: { firstName, lastName, email, sex, married }
+export const updateLibrarianProfile = async (req, res) => {
+    try {
+        const { firstName, lastName, email, sex, married } = req.body || {};
+        if (!firstName || !lastName || !email) {
+            return res.status(400).json({ error: "First name, last name, and email are required" });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+        const emailTaken = await Librarian.findOne({
+            email: normalizedEmail,
+            _id: { $ne: req.session.user.id },
+        });
+        if (emailTaken) return res.status(409).json({ error: "Email is already in use" });
+
+        await Librarian.findByIdAndUpdate(req.session.user.id, {
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email: normalizedEmail,
+            sex,
+            married: typeof married === "boolean" ? married : married === "on" || married === "true",
+        });
+
+        // Keep the session user in sync so the header reflects the change.
+        req.session.user.name = firstName.trim();
+        req.session.user.lastName = lastName.trim();
+        req.session.user.email = normalizedEmail;
+        req.session.user.sex = sex;
+
+        return res.json({ success: true, user: req.session.user });
+    } catch (err) {
+        console.error("updateLibrarianProfile error:", err);
+        return res.status(500).json({ error: "Failed to update profile" });
+    }
+};
+
+// POST /api/librarian/profile/password  body: { currentPassword, newPassword, confirmPassword }
+export const changeLibrarianPassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body || {};
+
+        const librarian = await Librarian.findById(req.session.user.id);
+        if (!librarian) return res.status(404).json({ error: "Librarian not found" });
+
+        const ok = await verifyPassword(currentPassword, librarian.password);
+        if (!ok) return res.status(400).json({ error: "Current password is incorrect" });
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ error: "New passwords do not match" });
+        }
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({ error: "Password must be at least 6 characters" });
+        }
+
+        // Store hashed (the legacy EJS stored plaintext — upgrade on change).
+        librarian.password = await hashPassword(newPassword);
+        await librarian.save();
+
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("changeLibrarianPassword error:", err);
+        return res.status(500).json({ error: "Failed to change password" });
+    }
+};
+
+// POST /api/librarian/profile/picture  (multipart: profilePicture) -> { success, profilePicture }
+export const uploadLibrarianProfilePicture = async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+        await Librarian.findByIdAndUpdate(req.session.user.id, { profilePicture: req.file.location });
+        req.session.user.profilePicture = req.file.location;
+
+        return res.json({ success: true, profilePicture: req.file.location });
+    } catch (err) {
+        console.error("uploadLibrarianProfilePicture error:", err);
+        return res.status(500).json({ error: "Failed to upload picture" });
     }
 };

@@ -14,9 +14,17 @@ import {
     editBook,
     deleteBook,
     getStudents,
+    getManualOptions,
+    getStudentBorrowed,
+    manualTransaction,
+    settleFines,
+    getLibrarianProfile,
+    updateLibrarianProfile,
+    changeLibrarianPassword,
+    uploadLibrarianProfilePicture,
 } from "../../controllers/api/librarian.api.controller.js";
 import { requireLibrarian } from "../../controllers/middleware/apiAuth.middleware.js";
-import { upload } from "../../controllers/middleware/upload.middleware.js";
+import { upload, uploadProfile } from "../../controllers/middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -47,5 +55,17 @@ router.post("/librarian/books/:id/delete", requireLibrarian, deleteBook);
 
 // Students
 router.get("/librarian/students", requireLibrarian, getStudents);
+router.get("/librarian/students/:id/borrowed", requireLibrarian, getStudentBorrowed);
+
+// Manual transactions + settle fines
+router.get("/librarian/manual/options", requireLibrarian, getManualOptions);
+router.post("/librarian/transactions/manual", requireLibrarian, manualTransaction);
+router.post("/librarian/transactions/settle-fines", requireLibrarian, settleFines);
+
+// Profile
+router.get("/librarian/profile", requireLibrarian, getLibrarianProfile);
+router.post("/librarian/profile/update", requireLibrarian, updateLibrarianProfile);
+router.post("/librarian/profile/password", requireLibrarian, changeLibrarianPassword);
+router.post("/librarian/profile/picture", requireLibrarian, uploadProfile.single("profilePicture"), uploadLibrarianProfilePicture);
 
 export default router;

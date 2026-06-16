@@ -48,7 +48,7 @@ export default function LibrarianBooksPage() {
                         <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <h2 className="fw-bold mb-0">Books</h2>
                             <button className="btn btn-dark btn-lg rounded-4 px-4" onClick={() => setModal({ book: null })}>
-                                Add New Book
+                                + Add New Book
                             </button>
                         </div>
 

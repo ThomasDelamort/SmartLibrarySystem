@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import LibrarianHeader from '../../components/librarian/LibrarianHeader.jsx'
 import { useLibrarianTransactions } from '../../stores/useLibrarianTransactions'
 import LibrarianTransactionsSkeleton from './components/LibrarianTransactionsSkeleton'
+import ManualTransactionModal from './components/ManualTransactionModal.jsx'
 
 import '../../styles/layout.css'
 import '../../styles/librarian.css'
@@ -17,7 +19,11 @@ export default function LibrarianTransactionsPage() {
     const {
         stats, bookTransactions, roomTransactions, loading, error, busyId,
         approveBook, rejectBook, confirmReturn, approveRoom, rejectRoom,
+        createManual, settleStudentFines,
     } = useLibrarianTransactions()
+
+    const [showManual, setShowManual] = useState(false)
+    const [notice, setNotice] = useState(null)
 
     return (
         <>
@@ -29,8 +35,13 @@ export default function LibrarianTransactionsPage() {
                     <div className="transactions-header">
                         <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <h2 className="fw-bold mb-1">Transactions</h2>
+                            <button className="btn btn-dark rounded-4 px-4" onClick={() => setShowManual(true)}>
+                                + Create Transaction
+                            </button>
                         </div>
                     </div>
+
+                    {notice && <div className="alert alert-success">{notice}</div>}
 
                     {error && <div className="alert alert-danger">{error}</div>}
 
@@ -174,6 +185,17 @@ export default function LibrarianTransactionsPage() {
 
                 </div>
             </div>
+
+            {showManual && (
+                <ManualTransactionModal
+                    createManual={createManual}
+                    settleStudentFines={settleStudentFines}
+                    onClose={(done) => {
+                        setShowManual(false)
+                        if (done) setNotice('Transaction processed successfully.')
+                    }}
+                />
+            )}
         </>
     )
 }
