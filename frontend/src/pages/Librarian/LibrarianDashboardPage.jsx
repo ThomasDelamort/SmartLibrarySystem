@@ -1,6 +1,6 @@
 import LibrarianHeader from '../../components/librarian/LibrarianHeader'
 import LibrarianCalendar from '../../components/librarian/LibrarianCalendar'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import Space from "../../components/Space.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import '../../styles/layout.css'

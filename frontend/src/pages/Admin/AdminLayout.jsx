@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import '../../styles/admin.css'
 
 const NAV = [

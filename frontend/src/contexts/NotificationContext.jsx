@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { api } from '../lib/api'
-import { useAuth } from './AuthContext'
+import { api } from '../lib/api.js'
+import { useAuth } from './AuthContext.jsx'
 
 // Shared student-notification state so the bell (desktop) and the profile
 // dropdown (mobile) read the same data — one fetch, counts always in sync.

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import LibrarianHeader from '../../components/librarian/LibrarianHeader.jsx'
 import { useLibrarianProfile } from '../../stores/useLibrarianProfile'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import LibrarianProfileSkeleton from './components/LibrarianProfileSkeleton'
 
 import '../../styles/layout.css'

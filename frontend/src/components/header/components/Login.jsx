@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../stores/AuthContext'
-import { useNotifications } from '../../../stores/NotificationContext'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
+import { useNotifications } from '../../../contexts/NotificationContext.jsx'
 
 const Login = () => {
     const { user, logout } = useAuth()

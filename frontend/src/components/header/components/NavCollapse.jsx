@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../../../stores/AuthContext'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
 
 
 const NavCollapse = () => {

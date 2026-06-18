@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import AdminDashboardSection from './AdminDashboardPage'
 import AdminStudentsSection from './AdminStudentsPage'
 import AdminLibrariansSection from './AdminLibrariansPage'
+import AdminBooksSection from './AdminBooksPage'
+import AdminRoomsSection from './AdminRoomsPage'
+import AdminTransactionsSection from './AdminTransactionsPage'
 import '../../styles/admin.css'
 
 const NAV = [
@@ -14,16 +17,6 @@ const NAV = [
     { id: 'rooms', label: 'Rooms', icon: 'ti-building' },
     { id: 'transactions', label: 'Transactions', icon: 'ti-arrow-left-right' },
 ]
-
-// Placeholder shown for sections not built yet (Books/Rooms/Transactions → Phase C/D).
-const Placeholder = ({ label }) => (
-    <div className="sec">
-        <div className="sec-label">{label}</div>
-        <div className="panel">
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Coming soon.</p>
-        </div>
-    </div>
-)
 
 // One tall scrollable admin page. The sidebar smooth-scrolls to each stacked
 // section; an IntersectionObserver highlights the active nav + topbar title.
@@ -101,9 +94,9 @@ export default function AdminPage() {
                         <section id="dashboard"><AdminDashboardSection /></section>
                         <section id="students"><AdminStudentsSection /></section>
                         <section id="librarians"><AdminLibrariansSection /></section>
-                        <section id="books"><Placeholder label="Books" /></section>
-                        <section id="rooms"><Placeholder label="Rooms" /></section>
-                        <section id="transactions"><Placeholder label="Transactions" /></section>
+                        <section id="books"><AdminBooksSection /></section>
+                        <section id="rooms"><AdminRoomsSection /></section>
+                        <section id="transactions"><AdminTransactionsSection /></section>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import { useAuth } from '../../../stores/AuthContext'
-import { useNotifications } from '../../../stores/NotificationContext'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
+import { useNotifications } from '../../../contexts/NotificationContext.jsx'
 
 const formatTime = (d) =>
     new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })

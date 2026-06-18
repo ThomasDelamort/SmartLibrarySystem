@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './stores/AuthContext'
-import { NotificationProvider } from './stores/NotificationContext'
+import { AuthProvider } from './contexts/AuthContext.jsx'
+import { NotificationProvider } from './contexts/NotificationContext.jsx'
 import ProtectedRoute from './components/ProtectedRoute'
 import MainPage from './pages/MainPage/MainPage'
 import BooksPage from './pages/Books/BooksPage'

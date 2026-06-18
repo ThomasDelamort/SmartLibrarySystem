@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import { useLibrarianNotifications } from '../../stores/useLibrarianNotifications'
 
 import '../../styles/style.css'

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../stores/AuthContext.jsx'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 // Gate a route behind auth (and optionally a specific role).
 //   <ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>

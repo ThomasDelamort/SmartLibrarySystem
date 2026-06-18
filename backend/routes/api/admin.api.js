@@ -14,6 +14,9 @@ import {
     addRoom,
     deleteRoom,
     updateRoomStatus,
+    getTransactions,
+    downloadDailyLog,
+    downloadMonthlyReport,
 } from "../../controllers/api/admin.api.controller.js";
 import { requireAdmin } from "../../controllers/middleware/apiAuth.middleware.js";
 
@@ -41,5 +44,10 @@ router.get("/admin/rooms", requireAdmin, getRooms);
 router.post("/admin/rooms", requireAdmin, addRoom);
 router.post("/admin/rooms/:id/delete", requireAdmin, deleteRoom);
 router.post("/admin/rooms/:id/status", requireAdmin, updateRoomStatus);
+
+// Transactions + reports
+router.get("/admin/transactions", requireAdmin, getTransactions);
+router.get("/admin/log/download", requireAdmin, downloadDailyLog);
+router.get("/admin/report/monthly", requireAdmin, downloadMonthlyReport);
 
 export default router;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { api } from '../../lib/api'
-import { useAuth } from '../../stores/AuthContext'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import BorrowQRModal from './components/BorrowQRModal'
