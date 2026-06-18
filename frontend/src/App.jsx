@@ -20,7 +20,8 @@ import LibrarianTransactionsPage from './pages/Librarian/LibrarianTransactionsPa
 import LibrarianBooksPage from './pages/Librarian/LibrarianBooksPage'
 import LibrarianNotificationsPage from './pages/Librarian/LibrarianNotificationsPage'
 import LibrarianStudentsPage from './pages/Librarian/LibrarianStudentsPage'
-import LibrarianProfilePage from './pages/Librarian/LibrarianProfilePage.jsx'
+import LibrarianProfilePage from './pages/Librarian/LibrarianProfilePage'
+import AdminPage from './pages/Admin/AdminPage'
 import './App.css'
 
 function App() {
@@ -150,6 +151,14 @@ function App() {
                             element={
                                 <ProtectedRoute role="librarian">
                                     <LibrarianProfilePage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin"
+                            element={
+                                <ProtectedRoute role="admin">
+                                    <AdminPage />
                                 </ProtectedRoute>
                             }
                         />

@@ -19,7 +19,7 @@ export default function LoginPage() {
         try {
             const user = await login(email, password)
             // Role-based routing: students -> books, librarians -> their dashboard.
-            if (user.role === 'admin') navigate('/')
+            if (user.role === 'admin') navigate('/admin')
             else if (user.role === 'librarian') navigate('/librarian')
             else navigate('/books')
         } catch (err) {

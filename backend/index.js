@@ -17,6 +17,7 @@ import authApiRoutes from "./routes/api/auth.api.js";
 import booksApiRoutes from "./routes/api/books.api.js";
 import studentsApiRoutes from "./routes/api/students.api.js";
 import librarianApiRoutes from "./routes/api/librarian.api.js";
+import adminApiRoutes from "./routes/api/admin.api.js";
 
 dotenv.config();
 
@@ -93,6 +94,7 @@ app.use("/api", authApiRoutes);
 app.use("/api", booksApiRoutes);
 app.use("/api", studentsApiRoutes);
 app.use("/api", librarianApiRoutes);
+app.use("/api", adminApiRoutes);
 
 // --- Existing EJS routes (unchanged, served in parallel during migration) ---
 app.use("/", pageRoutes);

@@ -1,0 +1,631 @@
+/* Admin theme — scoped under .admin-scope so none of these generic
+   class names (.nav-item, .main, .content, .sidebar, .legend, etc.) leak
+   onto the rest of the app. Wrap the admin layout root in .admin-scope. */
+
+.admin-scope * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+:root {
+    --nav: #1a2035;
+    --nav-active: #1e293b;
+    --page: #f1f5f9;
+    --card: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --btn-dark: #1e293b;
+}
+
+.admin-scope {
+    background: var(--page);
+    color: var(--text-primary);
+}
+
+.admin-scope .shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-scope .sidebar {
+    width: 200px;
+    background: var(--nav);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-scope .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px 20px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.admin-scope .logo-icon {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0f172a;
+}
+
+.admin-scope .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.admin-scope .nav-item:hover {
+    color: white;
+    background: #1e293b;
+}
+
+.admin-scope .nav-item.active {
+    background: white;
+    color: #0f172a;
+    margin: 0 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.admin-scope .nav-item i {
+    font-size: 16px;
+}
+
+.admin-scope .sidebar-bottom {
+    margin-top: auto;
+    padding: 0 0 8px;
+}
+
+.admin-scope .user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+}
+
+.admin-scope .uavatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.admin-scope .user-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.admin-scope .user-role {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.admin-scope .logout-btn {
+    margin: 6px 12px 0;
+    background: #1e293b;
+    color: #f87171;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: calc(100% - 24px);
+    text-decoration: none;
+    transition: .2s;
+}
+
+.admin-scope .logout-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.admin-scope .main {
+    flex: 1;
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-scope .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--page);
+}
+
+.admin-scope .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-scope .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-scope .bell-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.admin-scope .gen-btn {
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-scope .content {
+    flex: 1;
+    padding: 0 20px 20px;
+    overflow-y: auto;
+}
+
+.admin-scope .sec {
+    margin-bottom: 16px;
+}
+
+.admin-scope .sec-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 8px;
+}
+
+.admin-scope .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.admin-scope .stat-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+}
+
+.admin-scope .stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-scope .stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-scope .stat-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.admin-scope .panel {
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 14px;
+}
+
+.admin-scope .panel-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.admin-scope .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-scope .pbtn-group {
+    display: flex;
+    gap: 4px;
+}
+
+.admin-scope .pbtn {
+    font-size: 11px;
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.admin-scope .pbtn.active {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+}
+
+.admin-scope .view-all {
+    font-size: 11px;
+    color: #0f172a;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    background: #f8fafc;
+    text-decoration: none;
+}
+
+.admin-scope .legend {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.admin-scope .ldot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+.admin-scope .sum-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.admin-scope .sum-card {
+    flex: 1;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+}
+
+.admin-scope .sum-lbl {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+}
+
+.admin-scope .sum-val {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-scope .sum-sub {
+    font-size: 11px;
+    margin-top: 1px;
+}
+
+.admin-scope .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.admin-scope .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.admin-scope .dl-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
+    color: var(--text-primary);
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.admin-scope .stat-book {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-scope .stat-book:last-child {
+    border-bottom: none;
+}
+
+.admin-scope .book-rank {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 14px;
+}
+
+.admin-scope .book-info {
+    flex: 1;
+}
+
+.admin-scope .book-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.admin-scope .book-author {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.admin-scope .book-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.admin-scope .acct-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.admin-scope .acct-row:last-child {
+    border-bottom: none;
+}
+
+.admin-scope .avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.admin-scope .av-blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.admin-scope .av-green {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.admin-scope .av-warn {
+    background: #fef9c3;
+    color: #92400e;
+}
+
+.admin-scope .acct-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.admin-scope .acct-email {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.admin-scope .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.admin-scope .badge-blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.admin-scope .badge-green {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.admin-scope .badge-warn {
+    background: #fef9c3;
+    color: #92400e;
+}
+
+.admin-scope .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-scope .activity-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.admin-scope .act-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.admin-scope .sec-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+}
+
+.admin-scope .mb-10 {
+    margin-bottom: 10px;
+}
+
+.admin-scope .ic-blue {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.admin-scope .ic-green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.admin-scope .ic-red {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.admin-scope .act-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.admin-scope .act-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+}
+
+.admin-scope .act-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+    white-space: nowrap;
+    padding-left: 6px;
+}
+
+.admin-scope .qa-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 7px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.admin-scope .qa-btn:last-child {
+    margin-bottom: 0;
+}
+
+.admin-scope .qa-btn:hover {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+}
+
+.admin-scope .qa-btn i {
+    font-size: 14px;
+}
+
+.admin-scope .badge-red { background: #fee2e2; color: #e11d48; }
+
+.admin-scope .badge-gray { background: #f1f5f9; color: #64748b }
+
+@media (max-width: 992px) {
+    .admin-scope .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-scope .main {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .admin-scope .stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-scope .two-col {
+        grid-template-columns: 1fr;
+    }
+}
