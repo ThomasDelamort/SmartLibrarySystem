@@ -15,21 +15,38 @@
 </p>
 
 <p align="center">
-  <i>A smart web-based library system for seamless borrowing, tracking, reservations, and approvals.</i>
+  <i>A smart web-based library system for seamless borrowing, tracking, reservations, approvals, and administration.</i>
 </p>
 
 ## 📌 Features
 
-- 📚 **Book management** — librarians add, edit, and delete books, with cover image and PDF uploads to AWS S3
-- 👤 **Role-based access** — separate experiences for students, librarians, and admins
-- 🔄 **Borrow & return workflow** — students request, librarians approve/reject and confirm returns
-- 📷 **QR pickup** — a QR code is generated on borrow for the student to present at the desk
-- 🏢 **Room reservations** — students reserve rooms (with attendee invites); librarians approve
-- 🔔 **In-app notifications** — students and librarians get notified as requests change state
-- ⏰ **Automated overdue & fines** — handled on a schedule via `node-cron`
-- ❤️ **Liked books, history & status** — students track liked titles, past transactions, and outstanding fines
-- 🔍 **Search, category filters, and pagination**
-- 🖥️ **Responsive single-page interface** built in React
+### Students
+- 📚 Browse, search, and filter the catalogue; view book details
+- 🔄 Request to borrow with a due date, or add to a bag for later
+- 📷 A **QR code** is generated on borrow to present at the desk for pickup
+- 🏢 Reserve study rooms (with attendee details)
+- ❤️ Like books, and track borrowing history, liked titles, and account status/fines
+- 🔔 In-app notifications and profile management
+
+### Librarians
+- 📋 Dashboard with calendar overview
+- ✅ Approve / reject borrow requests, confirm returns, approve room reservations
+- ➕ Manual transactions (borrow / return / room) and **settle fines** on a student's behalf
+- 📕 Full book management — add, edit, delete, with cover image + PDF uploads to AWS S3
+- 👥 Students list and per-student detail
+- 🔔 Notifications and profile management
+
+### Admins
+- 📊 Single-page dashboard with live charts (user traffic, reservations) built on Recharts
+- 👤 Manage students (revoke/restore borrowing, delete) and librarians (delete)
+- 📚 Manage books and rooms (add rooms, update status, delete)
+- 🧾 View all book and room transactions
+- 📄 Export a **daily activity log** and a **monthly usage report** as CSV
+
+### System
+- ⏰ Automated overdue and fine handling via `node-cron`
+- 🔐 Role-based access for students, librarians, and admins
+- 🖥️ Responsive single-page interface built in React
 
 ---
 
@@ -42,7 +59,9 @@ The project is a **monorepo** with two apps:
 | `backend/` | Node + Express 5 (ESM) + Mongoose + MongoDB Atlas | `3000` |
 | `frontend/` | React + Vite + React Router + Bootstrap | `5173` |
 
-The frontend is a React **SPA** that talks to the backend over a JSON API under `/api/*`. In development, Vite proxies `/api` to the backend so the browser stays same-origin and the session cookie flows automatically. Authentication uses `express-session` + `connect-mongo` (sessions stored in MongoDB), and file uploads (book covers, PDFs, profile pictures) go to **AWS S3** via `multer-s3`.
+The frontend is a React **SPA** that talks to the backend over a JSON API under `/api/*`. The migration followed the **strangler pattern**: JSON API routes were added alongside the original server-rendered EJS routes, and the React app was built on top area by area, leaving the legacy views untouched.
+
+In development, Vite proxies `/api` to the backend so the browser stays same-origin and the session cookie flows automatically. Authentication uses `express-session` + `connect-mongo` (sessions stored in MongoDB) with bcrypt-hashed passwords, and file uploads (book covers, PDFs, profile pictures) go to **AWS S3** via `multer-s3`.
 
 ---
 
@@ -77,7 +96,8 @@ The frontend is a React **SPA** that talks to the backend over a JSON API under 
 - **React** — UI library (single-page app)
 - **Vite** — build tool & dev server
 - **React Router** — client-side routing
-- **Bootstrap 5** — styling (Ionicons via CDN)
+- **Bootstrap 5** — styling (Ionicons + Tabler Icons via CDN)
+- **Recharts** — admin dashboard charts
 - **qrcode** — borrow QR generation
 
 ### Backend
@@ -85,9 +105,10 @@ The frontend is a React **SPA** that talks to the backend over a JSON API under 
 - **Express.js 5** — API & server framework
 - **MongoDB + Mongoose** — database & ODM
 - **express-session + connect-mongo** — session auth stored in MongoDB
+- **bcryptjs** — password hashing
 - **multer-s3 + AWS S3** — file uploads (covers, PDFs, avatars)
 - **node-cron** — scheduled overdue/fine handling
-- **EJS** — templating (legacy views, being phased out)
+- **EJS** — templating (legacy views, retained under the strangler pattern)
 
 ---
 
@@ -183,7 +204,8 @@ If omitted, it defaults to `http://localhost:3000`.
   "qrcode": "^1.5.1",
   "react": "^19.0.0",
   "react-dom": "^19.0.0",
-  "react-router-dom": "^7.0.0"
+  "react-router-dom": "^7.0.0",
+  "recharts": "^2.12.0"
 },
 "devDependencies": {
   "@vitejs/plugin-react": "^5.0.0",
@@ -197,11 +219,10 @@ If omitted, it defaults to `http://localhost:3000`.
 
 ## 🔮 Future Improvements
 
-- Admin dashboard (manage librarians and students)
-- Librarian manual transactions & fine settlement
-- Full notification history (read + unread, paginated)
 - Email notifications for due dates and approvals
-- Finish phasing out the legacy EJS views
+- Full notification history (read + unread, paginated)
+- Live sync of librarian notifications across the header and the dedicated page
+- Retire the remaining legacy EJS views once parity is confirmed
 
 ---
 
